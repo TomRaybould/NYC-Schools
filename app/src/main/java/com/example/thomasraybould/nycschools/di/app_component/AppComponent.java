@@ -1,6 +1,6 @@
 package com.example.thomasraybould.nycschools.di.app_component;
 
-import com.example.thomasraybould.nycschools.view.MainActivity;
+import com.example.thomasraybould.nycschools.view.school_list_activity.SchoolListPresenterImpl;
 
 import dagger.Component;
 
@@ -8,5 +8,5 @@ import dagger.Component;
 @AppScope
 public interface AppComponent {
 
-    void inject(MainActivity mainActivity);
+    void inject(SchoolListPresenterImpl schoolListActivity);
 }
