@@ -1,6 +1,6 @@
-package com.example.thomasraybould.nycschools.di.app_component;
+package com.example.thomasraybould.nycschools.di;
 
-import com.example.thomasraybould.nycschools.di.ComponentProvider;
+import com.example.thomasraybould.nycschools.di.app_component.AppComponent;
 
 /**
  * Holds reference to all dagger components for dependency injection in the app.
