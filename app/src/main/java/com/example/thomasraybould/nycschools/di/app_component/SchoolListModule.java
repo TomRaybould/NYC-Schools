@@ -11,16 +11,16 @@ import dagger.Provides;
 @Module
 class SchoolListModule {
 
-    @Provides
     @AppScope
-    static GetSchoolListInteractor getSchoolListInteractor(GetSchoolListInteractorImpl getSchoolListInteractor){
-        return getSchoolListInteractor;
+    @Provides
+    static SchoolListRepo getSchoolListRepo(SchoolListWebRepoImpl schoolListWebRepo){
+        return schoolListWebRepo;
     }
 
-    @Provides
     @AppScope
-    static SchoolListRepo getSchoolListRepo(SchoolListWebRepoImpl schoolListWebRepo){
-        return getSchoolListRepo(schoolListWebRepo);
+    @Provides
+    static GetSchoolListInteractor getSchoolListInteractor(GetSchoolListInteractorImpl getSchoolListInteractor){
+        return getSchoolListInteractor;
     }
 
 }
