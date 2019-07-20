@@ -10,6 +10,8 @@ import org.json.JSONObject;
 
 import java.io.IOException;
 
+import javax.inject.Inject;
+
 import io.reactivex.Single;
 import okhttp3.Headers;
 import okhttp3.OkHttpClient;
@@ -19,6 +21,7 @@ import okhttp3.ResponseBody;
 
 public class HttpClientImpl implements HttpClient {
 
+    @Inject
     public HttpClientImpl(OkHttpClient okHttpClient) {
         this.okHttpClient = okHttpClient;
     }

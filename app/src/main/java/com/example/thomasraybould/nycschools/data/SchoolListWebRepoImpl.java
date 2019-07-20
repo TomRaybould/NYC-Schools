@@ -18,11 +18,14 @@ import java.util.ArrayList;
 import java.util.List;
 import java.util.Map;
 
+import javax.inject.Inject;
+
 import io.reactivex.Single;
 
 public class SchoolListWebRepoImpl extends AbstractWebRepo implements SchoolListRepo {
 
-    public SchoolListWebRepoImpl(HttpClient httpClient, AuthTokenProvider authTokenProvider, ApiUrlProvider apiUrlProvider) {
+    @Inject
+    SchoolListWebRepoImpl(HttpClient httpClient, AuthTokenProvider authTokenProvider, ApiUrlProvider apiUrlProvider) {
         super(httpClient, authTokenProvider, apiUrlProvider);
     }
 

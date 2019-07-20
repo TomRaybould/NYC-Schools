@@ -4,12 +4,15 @@ import com.example.thomasraybould.nycschools.domain.get_school_list_interactor.G
 import com.example.thomasraybould.nycschools.domain.get_school_list_interactor.SchoolListRepo;
 import com.example.thomasraybould.nycschools.domain.get_school_list_interactor.data.SchoolListResponse;
 
+import javax.inject.Inject;
+
 import io.reactivex.Single;
 
 public class GetSchoolListInteractorImpl implements GetSchoolListInteractor{
 
     private final SchoolListRepo schoolListRepo;
 
+    @Inject
     public GetSchoolListInteractorImpl(SchoolListRepo schoolListRepo) {
         this.schoolListRepo = schoolListRepo;
     }
