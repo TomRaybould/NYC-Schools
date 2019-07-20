@@ -20,7 +20,7 @@ public class NetworkRequest {
         return headers;
     }
 
-    public NetworkRequest createNetworkRequest(String url, Map<String, String> headers){
+    public static NetworkRequest createNetworkRequest(String url, Map<String, String> headers){
         return new NetworkRequest(url, headers);
     }
 }

@@ -4,7 +4,6 @@ import org.json.JSONException;
 import org.json.JSONObject;
 
 import java.io.IOException;
-import java.util.concurrent.Callable;
 
 import io.reactivex.Single;
 import okhttp3.Headers;
@@ -25,14 +24,10 @@ public class HttpClientImpl implements HttpClient{
     public Single<NetworkResponse<JSONObject>> getJson(final NetworkRequest networkRequest) {
 
         NetworkResponse<JSONObject> failure = NetworkResponse.failure();
-        return Single.fromCallable(new Callable<NetworkResponse<JSONObject>>() {
-            @Override
-            public NetworkResponse<JSONObject> call() throws Exception {
-
-                Request okRequest = networkRequestToOkRequest(networkRequest);
-                Response response = okHttpClient.newCall(okRequest).execute();
-                return parseResponse(response);
-            }
+        return Single.fromCallable(() -> {
+            Request okRequest = networkRequestToOkRequest(networkRequest);
+            Response response = okHttpClient.newCall(okRequest).execute();
+            return parseResponse(response);
         }).onErrorReturnItem(failure);
 
     }
