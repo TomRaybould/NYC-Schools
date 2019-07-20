@@ -1,4 +1,4 @@
-package com.example.thomasraybould.nycschools.RxUtil;
+package com.example.thomasraybould.nycschools.rx_util;
 
 import io.reactivex.Scheduler;
 

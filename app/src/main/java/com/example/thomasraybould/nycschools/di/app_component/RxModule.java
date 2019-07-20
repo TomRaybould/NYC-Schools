@@ -1,6 +1,6 @@
 package com.example.thomasraybould.nycschools.di.app_component;
 
-import com.example.thomasraybould.nycschools.RxUtil.SchedulerProvider;
+import com.example.thomasraybould.nycschools.rx_util.SchedulerProvider;
 
 import dagger.Module;
 import dagger.Provides;

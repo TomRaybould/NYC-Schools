@@ -5,17 +5,13 @@ import android.os.Bundle;
 import android.widget.Toast;
 
 import com.example.thomasraybould.nycschools.R;
-import com.example.thomasraybould.nycschools.RxUtil.SchedulerProvider;
-import com.example.thomasraybould.nycschools.di.ComponentProvider;
+import com.example.thomasraybould.nycschools.rx_util.SchedulerProvider;
 import com.example.thomasraybould.nycschools.di.ComponentProviderImpl;
 import com.example.thomasraybould.nycschools.domain.get_school_list_interactor.GetSchoolListInteractor;
-import com.example.thomasraybould.nycschools.domain.get_school_list_interactor.data.SchoolListResponse;
 
 import javax.inject.Inject;
 
-import io.reactivex.Scheduler;
 import io.reactivex.disposables.Disposable;
-import io.reactivex.functions.Consumer;
 
 public class MainActivity extends AppCompatActivity {
 
