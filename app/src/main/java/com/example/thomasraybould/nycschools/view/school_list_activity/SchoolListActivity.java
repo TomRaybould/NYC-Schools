@@ -2,31 +2,40 @@ package com.example.thomasraybould.nycschools.view.school_list_activity;
 
 import android.support.v7.app.AppCompatActivity;
 import android.os.Bundle;
+import android.support.v7.widget.LinearLayoutManager;
+import android.support.v7.widget.RecyclerView;
+import android.view.LayoutInflater;
 import android.widget.Toast;
 
 import com.example.thomasraybould.nycschools.R;
+import com.example.thomasraybould.nycschools.adapters.school_list_adapter.SchoolListAdapter;
 import com.example.thomasraybould.nycschools.entities.School;
-import com.example.thomasraybould.nycschools.rx_util.SchedulerProvider;
-import com.example.thomasraybould.nycschools.di.ComponentProviderImpl;
-import com.example.thomasraybould.nycschools.domain.get_school_list_interactor.GetSchoolListInteractor;
 
 import java.util.List;
 
-import javax.inject.Inject;
-
-import io.reactivex.disposables.Disposable;
-
 public class SchoolListActivity extends AppCompatActivity implements SchoolListView {
+
+    private RecyclerView recyclerView;
 
     SchoolListPresenter schoolListPresenter;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
-        setContentView(R.layout.activity_main);
+        setContentView(R.layout.school_list_activity);
+
+        initViews();
 
         schoolListPresenter = new SchoolListPresenterImpl();
         schoolListPresenter.onCreate(this);
+    }
+
+    private void initViews() {
+        recyclerView = findViewById(R.id.recyclerView);
+
+        LinearLayoutManager linearLayoutManager = new LinearLayoutManager(this);
+        recyclerView.setLayoutManager(linearLayoutManager);
+
     }
 
 
@@ -49,7 +58,8 @@ public class SchoolListActivity extends AppCompatActivity implements SchoolListV
     @Override
     public void setSchoolList(List<School> schools) {
         if (!schools.isEmpty()) {
-            toast("loaded list");
+            SchoolListAdapter schoolListAdapter = SchoolListAdapter.createSchoolListAdapter(this, schools);
+            recyclerView.setAdapter(schoolListAdapter);
         } else {
             toast("failed to load");
         }
