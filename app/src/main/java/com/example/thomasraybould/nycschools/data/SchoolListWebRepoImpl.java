@@ -16,6 +16,8 @@ import org.json.JSONArray;
 import org.json.JSONObject;
 
 import java.util.ArrayList;
+import java.util.Collections;
+import java.util.Comparator;
 import java.util.List;
 import java.util.Map;
 
@@ -75,6 +77,8 @@ public class SchoolListWebRepoImpl extends AbstractWebRepo implements SchoolList
             School school = new School(dbn, schoolName, borough);
             schoolList.add(school);
         }
+
+        Collections.sort(schoolList, (sch1, sch2) -> sch1.getName().compareTo(sch2.getName()));
 
         return SchoolListResponse.success(schoolList);
     }
