@@ -73,7 +73,15 @@ public class SchoolListWebRepoImpl extends AbstractWebRepo implements SchoolList
                 continue;
             }
 
-            School school = new School(dbn, schoolName, boroughFromJson);
+            String webPageLink = jsonObject.optString("website");
+
+            School school = School.newBuilder()
+                    .borough(borough)
+                    .dbn(dbn)
+                    .name(schoolName)
+                    .webpageLink(webPageLink)
+                    .build();
+
             schoolList.add(school);
         }
 

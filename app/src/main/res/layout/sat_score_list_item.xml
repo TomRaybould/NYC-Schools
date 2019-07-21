@@ -1,6 +1,7 @@
 <?xml version="1.0" encoding="utf-8"?>
 <android.support.constraint.ConstraintLayout xmlns:android="http://schemas.android.com/apk/res/android"
     xmlns:app="http://schemas.android.com/apk/res-auto"
+    xmlns:tools="http://schemas.android.com/tools"
     android:layout_width="match_parent"
     android:layout_height="wrap_content"
     android:background="@color/school_item_bg_color">
@@ -106,7 +107,7 @@
         android:layout_height="wrap_content"
         android:layout_marginBottom="8dp"
         android:progressTint="@color/progress_bar_color"
-        app:layout_constraintBottom_toBottomOf="@+id/view3"
+        app:layout_constraintBottom_toTopOf="@+id/webPageTextView"
         app:layout_constraintEnd_toEndOf="@+id/mathScoreTextView"
         app:layout_constraintStart_toStartOf="@+id/mathScoreTextView"
         app:layout_constraintTop_toBottomOf="@+id/mathScoreTextView" />
@@ -133,6 +134,19 @@
         app:layout_constraintHorizontal_bias="0.6"
         app:layout_constraintStart_toStartOf="@+id/writingScoreTextView"
         app:layout_constraintTop_toTopOf="@+id/readingProgressBar" />
+
+    <TextView
+        android:id="@+id/webPageTextView"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_marginBottom="8dp"
+        android:layout_marginEnd="8dp"
+        android:layout_marginRight="8dp"
+        android:text="TextView"
+        android:textColorLink="#0000EE"
+        android:visibility="visible"
+        app:layout_constraintBottom_toBottomOf="@+id/view3"
+        app:layout_constraintEnd_toEndOf="@+id/view3" />
 
 
 </android.support.constraint.ConstraintLayout>

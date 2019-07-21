@@ -5,6 +5,7 @@ import android.support.annotation.NonNull;
 import android.support.v7.widget.RecyclerView;
 import android.text.Html;
 import android.text.Spanned;
+import android.text.method.LinkMovementMethod;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
@@ -17,6 +18,8 @@ import com.bumptech.glide.request.RequestOptions;
 import com.example.thomasraybould.nycschools.R;
 import com.example.thomasraybould.nycschools.entities.Borough;
 import com.example.thomasraybould.nycschools.entities.SatScoreData;
+import com.example.thomasraybould.nycschools.entities.School;
+import com.example.thomasraybould.nycschools.util.StringUtil;
 
 import java.util.List;
 
@@ -168,6 +171,7 @@ public class SchoolListAdapter extends RecyclerView.Adapter<SchoolListAdapter.Vi
 
         TextView mathScoreTextView, readingScoreTextView, writingScoreTextView;
         ProgressBar mathScoreProgressBar, readingScoreProgressBar, writingScoreProgressBar;
+        TextView webPageLinkTextView;
 
         ViewHolder(View itemView) {
             super(itemView);
@@ -179,6 +183,7 @@ public class SchoolListAdapter extends RecyclerView.Adapter<SchoolListAdapter.Vi
             mathScoreProgressBar    = itemView.findViewById(R.id.mathProgressBar);
             readingScoreProgressBar    = itemView.findViewById(R.id.readingProgressBar);
             writingScoreProgressBar    = itemView.findViewById(R.id.writingProgressBar);
+            webPageLinkTextView        = itemView.findViewById(R.id.webPageTextView);
 
         }
 
@@ -234,6 +239,21 @@ public class SchoolListAdapter extends RecyclerView.Adapter<SchoolListAdapter.Vi
             readingScoreProgressBar.setProgress(readingPercent);
             writingScoreProgressBar.setProgress(writingPercent);
 
+            String webPageLink = schoolListItem.getSchool().getWebPageLink();
+            if(StringUtil.isStringValid(webPageLink)){
+
+                if(!webPageLink.contains("http")) {
+                    webPageLink = "http://" + webPageLink;
+                }
+
+                String text = "<a href='" + webPageLink + "'>Visit Website</a>";
+                webPageLinkTextView.setText(Html.fromHtml(text));
+                webPageLinkTextView.setVisibility(View.VISIBLE);
+                webPageLinkTextView.setMovementMethod(LinkMovementMethod.getInstance());
+            }
+            else{
+                webPageLinkTextView.setVisibility(View.GONE);
+            }
         }
 
         private static String addBlackStyleToString(String string){
