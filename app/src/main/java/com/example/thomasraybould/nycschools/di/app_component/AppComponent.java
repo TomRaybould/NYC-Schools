@@ -4,7 +4,10 @@ import com.example.thomasraybould.nycschools.view.school_list_activity.SchoolLis
 
 import dagger.Component;
 
-@Component(modules = {NetworkModule.class, SchoolListModule.class, RxModule.class})
+@Component(modules = {NetworkModule.class,
+        SchoolListModule.class,
+        SatScoreModule.class,
+        RxModule.class})
 @AppScope
 public interface AppComponent {
 

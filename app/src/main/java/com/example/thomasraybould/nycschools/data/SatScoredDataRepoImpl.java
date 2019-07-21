@@ -16,11 +16,14 @@ import org.json.JSONObject;
 
 import java.util.Map;
 
+import javax.inject.Inject;
+
 import io.reactivex.Single;
 
 public class SatScoredDataRepoImpl extends AbstractWebRepo implements SatScoredDataRepo {
 
-    public SatScoredDataRepoImpl(HttpClient httpClient, AuthTokenProvider authTokenProvider, ApiUrlProvider apiUrlProvider) {
+    @Inject
+    SatScoredDataRepoImpl(HttpClient httpClient, AuthTokenProvider authTokenProvider, ApiUrlProvider apiUrlProvider) {
         super(httpClient, authTokenProvider, apiUrlProvider);
     }
 

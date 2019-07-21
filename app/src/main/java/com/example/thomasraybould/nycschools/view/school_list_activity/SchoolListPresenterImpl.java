@@ -1,6 +1,7 @@
 package com.example.thomasraybould.nycschools.view.school_list_activity;
 
 import com.example.thomasraybould.nycschools.adapters.school_list_adapter.SchoolListItem;
+import com.example.thomasraybould.nycschools.domain.get_sat_score_interactor.GetSatScoreDataInteractor;
 import com.example.thomasraybould.nycschools.domain.get_school_list_interactor.GetSchoolListInteractor;
 import com.example.thomasraybould.nycschools.domain.get_school_list_interactor.data.SchoolListResponse;
 import com.example.thomasraybould.nycschools.entities.Borough;
@@ -19,6 +20,9 @@ public class SchoolListPresenterImpl extends AbstractRxPresenter<SchoolListView>
 
     @Inject
     GetSchoolListInteractor getSchoolListInteractor;
+
+    @Inject
+    GetSatScoreDataInteractor getSatScoreDataInteractor;
 
     @Inject
     SchedulerProvider schedulerProvider;
