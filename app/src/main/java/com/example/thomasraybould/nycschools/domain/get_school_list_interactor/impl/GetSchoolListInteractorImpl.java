@@ -3,6 +3,7 @@ package com.example.thomasraybould.nycschools.domain.get_school_list_interactor.
 import com.example.thomasraybould.nycschools.domain.get_school_list_interactor.GetSchoolListInteractor;
 import com.example.thomasraybould.nycschools.domain.get_school_list_interactor.SchoolListRepo;
 import com.example.thomasraybould.nycschools.domain.get_school_list_interactor.data.SchoolListResponse;
+import com.example.thomasraybould.nycschools.entities.Borough;
 
 import javax.inject.Inject;
 
@@ -13,12 +14,12 @@ public class GetSchoolListInteractorImpl implements GetSchoolListInteractor{
     private final SchoolListRepo schoolListRepo;
 
     @Inject
-    public GetSchoolListInteractorImpl(SchoolListRepo schoolListRepo) {
+    GetSchoolListInteractorImpl(SchoolListRepo schoolListRepo) {
         this.schoolListRepo = schoolListRepo;
     }
 
     @Override
-    public Single<SchoolListResponse> getSchools() {
-        return schoolListRepo.getSchools();
+    public Single<SchoolListResponse> getSchoolsByBorough(Borough borough) {
+        return schoolListRepo.getSchoolsByBorough(borough);
     }
 }

@@ -3,6 +3,7 @@ package com.example.thomasraybould.nycschools.data;
 import com.example.thomasraybould.nycschools.data.base.AbstractWebRepo;
 import com.example.thomasraybould.nycschools.domain.get_school_list_interactor.SchoolListRepo;
 import com.example.thomasraybould.nycschools.domain.get_school_list_interactor.data.SchoolListResponse;
+import com.example.thomasraybould.nycschools.entities.Borough;
 import com.example.thomasraybould.nycschools.entities.School;
 import com.example.thomasraybould.nycschools.network.api_url_provider.ApiUrlProvider;
 import com.example.thomasraybould.nycschools.network.auth_token_provider.AuthTokenProvider;
@@ -30,8 +31,10 @@ public class SchoolListWebRepoImpl extends AbstractWebRepo implements SchoolList
     }
 
     @Override
-    public Single<SchoolListResponse> getSchools() {
+    public Single<SchoolListResponse> getSchoolsByBorough(Borough borough) {
         String schoolListApi = apiUrlProvider.getSchoolListApi();
+        schoolListApi += "?boro=" + borough.code;
+
         Map<String, String> authTokenHeaders = authTokenProvider.getAuthTokenHeaders();
 
         NetworkRequest networkRequest = NetworkRequest.createNetworkRequest(schoolListApi, authTokenHeaders);
@@ -57,11 +60,19 @@ public class SchoolListWebRepoImpl extends AbstractWebRepo implements SchoolList
 
             String dbn = jsonObject.optString("dbn");
             String schoolName = jsonObject.optString("school_name");
+            String BoroughCode = jsonObject.optString("boro");
 
-            if(!StringUtil.areStringsValid(dbn, schoolName)){
+            if(!StringUtil.areStringsValid(dbn, schoolName, BoroughCode)){
                 continue;
             }
-            School school = new School(dbn, schoolName);
+
+            Borough borough = Borough.fromCode(BoroughCode);
+
+            if(borough == null){
+                continue;
+            }
+
+            School school = new School(dbn, schoolName, borough);
             schoolList.add(school);
         }
 

@@ -2,6 +2,7 @@ package com.example.thomasraybould.nycschools.view.school_list_activity;
 
 import com.example.thomasraybould.nycschools.domain.get_school_list_interactor.GetSchoolListInteractor;
 import com.example.thomasraybould.nycschools.domain.get_school_list_interactor.data.SchoolListResponse;
+import com.example.thomasraybould.nycschools.entities.Borough;
 import com.example.thomasraybould.nycschools.entities.School;
 import com.example.thomasraybould.nycschools.rx_util.SchedulerProvider;
 import com.example.thomasraybould.nycschools.view.base.AbstractRxPresenter;
@@ -30,7 +31,7 @@ public class SchoolListPresenterImpl extends AbstractRxPresenter<SchoolListView>
         componentProvider.getAppComponent()
                 .inject(this);
 
-        Disposable disposable = getSchoolListInteractor.getSchools()
+        Disposable disposable = getSchoolListInteractor.getSchoolsByBorough(Borough.MANHATTAN)
                 .subscribeOn(schedulerProvider.io())
                 .observeOn(schedulerProvider.main())
                 .subscribe(this::processGetSchoolListResponse);
