@@ -1,7 +1,7 @@
 package com.example.thomasraybould.nycschools.data;
 
 import com.example.thomasraybould.nycschools.data.base.AbstractWebRepo;
-import com.example.thomasraybould.nycschools.domain.get_sat_score_interactor.SatScoredDataRepo;
+import com.example.thomasraybould.nycschools.domain.get_sat_score_interactor.SatScoreDataRepo;
 import com.example.thomasraybould.nycschools.domain.get_sat_score_interactor.data.SatDataResponse;
 import com.example.thomasraybould.nycschools.entities.SatScoreData;
 import com.example.thomasraybould.nycschools.network.api_url_provider.ApiUrlProvider;
@@ -20,10 +20,10 @@ import javax.inject.Inject;
 
 import io.reactivex.Single;
 
-public class SatScoredDataRepoImpl extends AbstractWebRepo implements SatScoredDataRepo {
+public class SatScoreDataRepoImpl extends AbstractWebRepo implements SatScoreDataRepo {
 
     @Inject
-    SatScoredDataRepoImpl(HttpClient httpClient, AuthTokenProvider authTokenProvider, ApiUrlProvider apiUrlProvider) {
+    SatScoreDataRepoImpl(HttpClient httpClient, AuthTokenProvider authTokenProvider, ApiUrlProvider apiUrlProvider) {
         super(httpClient, authTokenProvider, apiUrlProvider);
     }
 

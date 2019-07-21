@@ -1,7 +1,7 @@
 package com.example.thomasraybould.nycschools.data;
 
 
-import com.example.thomasraybould.nycschools.domain.get_sat_score_interactor.SatScoredDataRepo;
+import com.example.thomasraybould.nycschools.domain.get_sat_score_interactor.SatScoreDataRepo;
 import com.example.thomasraybould.nycschools.domain.get_sat_score_interactor.data.SatDataResponse;
 import com.example.thomasraybould.nycschools.network.FakeApiUrlProvider;
 import com.example.thomasraybould.nycschools.network.TestHttpClient;
@@ -14,7 +14,7 @@ import org.junit.Test;
 
 import java.util.HashMap;
 
-public class SatScoredDataRepoImplTest {
+public class SatScoreDataRepoImplTest {
 
     private HttpClient httpClient;
     private AuthTokenProvider authTokenProvider;
@@ -30,11 +30,11 @@ public class SatScoredDataRepoImplTest {
 
     @Test
     public void getSatScores() {
-        SatScoredDataRepo satScoredDataRepo = new SatScoredDataRepoImpl(httpClient, authTokenProvider, apiUrlProvider);
+        SatScoreDataRepo satScoreDataRepo = new SatScoreDataRepoImpl(httpClient, authTokenProvider, apiUrlProvider);
 
         String dbn = "01M292";
 
-        satScoredDataRepo.getSatScoreDataByDbn(dbn)
+        satScoreDataRepo.getSatScoreDataByDbn(dbn)
                 .test()
                 .assertValue(SatDataResponse::isSuccessful)
                 .assertValue(satDataResponse -> satDataResponse.getSatScoreData().getDbn().equals(dbn))
