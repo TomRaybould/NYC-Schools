@@ -106,7 +106,7 @@ public class HttpClientImpl implements HttpClient {
         try {
             jsonObject = new JSONObject(string);
         }
-        catch (JSONException e){
+        catch (Exception e){
             e.printStackTrace();
         }
         return jsonObject;
@@ -117,7 +117,7 @@ public class HttpClientImpl implements HttpClient {
         try {
             jsonArray = new JSONArray(string);
         }
-        catch (JSONException e){
+        catch (Exception e){
             e.printStackTrace();
         }
         return jsonArray;
