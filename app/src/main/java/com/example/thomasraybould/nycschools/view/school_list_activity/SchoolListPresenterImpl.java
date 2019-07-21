@@ -149,7 +149,7 @@ public class SchoolListPresenterImpl extends AbstractRxPresenter<SchoolListView>
                 .subscribeOn(schedulerProvider.io())
                 .observeOn(schedulerProvider.main())
                 .subscribe(satDataResponse -> processSatScoreResponse(satDataResponse, school),
-                        throwable -> failedToGetSatData());
+                        throwable -> failedToGetSatData(school));
 
         pendingDownloads.put(school.getDbn(), disposable);
 
@@ -163,7 +163,8 @@ public class SchoolListPresenterImpl extends AbstractRxPresenter<SchoolListView>
 
         SatScoreData satScoreData = satDataResponse.getSatScoreData();
         if(!satDataResponse.isSuccessful() || satScoreData == null){
-            failedToGetSatData();
+            failedToGetSatData(school);
+            return;
         }
 
         SchoolListItem scoreListItem = satDataToSchoolListItem(satScoreData, school);
@@ -171,8 +172,9 @@ public class SchoolListPresenterImpl extends AbstractRxPresenter<SchoolListView>
         view.addScoreItem(scoreListItem);
     }
 
-    private void failedToGetSatData(){
-
+    private void failedToGetSatData(School school){
+        selectedSchools.remove(school);
+        view.toast("Failed to load SAT scores");
     }
 
     private static SchoolListItem satDataToSchoolListItem(SatScoreData satScoreData, School school){

@@ -60,7 +60,8 @@ public class SchoolListActivity extends AppCompatActivity implements SchoolListV
         super.onPause();
     }
 
-    private void toast(String message){
+    @Override
+    public void toast(String message){
         Toast.makeText(this, message, Toast.LENGTH_SHORT).show();
     }
 
