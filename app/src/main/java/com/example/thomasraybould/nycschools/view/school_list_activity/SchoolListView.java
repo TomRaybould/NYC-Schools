@@ -11,4 +11,6 @@ public interface SchoolListView {
 
     void addItemsForBorough(List<SchoolListItem> schoolListItems, Borough borough);
 
+    void removeItemsForBorough(Borough borough);
+
 }

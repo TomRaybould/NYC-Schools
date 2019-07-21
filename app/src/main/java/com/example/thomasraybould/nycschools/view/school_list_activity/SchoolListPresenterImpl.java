@@ -23,6 +23,7 @@ public class SchoolListPresenterImpl extends AbstractRxPresenter<SchoolListView>
     @Inject
     SchedulerProvider schedulerProvider;
 
+    private final List<Borough> selectedBoroughs = new ArrayList<>();
 
     @Override
     public void onCreate(SchoolListView view) {
@@ -50,6 +51,14 @@ public class SchoolListPresenterImpl extends AbstractRxPresenter<SchoolListView>
 
     @Override
     public void onBoroughSelected(Borough borough) {
+
+        if(selectedBoroughs.contains(borough)){
+            view.removeItemsForBorough(borough);
+            selectedBoroughs.remove(borough);
+            return;
+        }
+
+        selectedBoroughs.add(borough);
 
         Disposable disposable = getSchoolListInteractor.getSchoolsByBorough(borough)
                 .subscribeOn(schedulerProvider.io())
@@ -81,7 +90,7 @@ public class SchoolListPresenterImpl extends AbstractRxPresenter<SchoolListView>
     private static List<SchoolListItem> schoolsToListItems(List<School> schools){
         List<SchoolListItem> schoolListItems = new ArrayList<>();
         for (School school: schools) {
-            schoolListItems.add(SchoolListItem.createSchoolItem(school.getName()));
+            schoolListItems.add(SchoolListItem.createSchoolItem(school.getName(), school.getBorough()));
         }
         return schoolListItems;
     }

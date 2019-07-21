@@ -14,6 +14,7 @@ import com.example.thomasraybould.nycschools.entities.Borough;
 import java.util.List;
 
 import static com.example.thomasraybould.nycschools.adapters.school_list_adapter.SchoolListItemType.BOROUGH_TITLE;
+import static com.example.thomasraybould.nycschools.adapters.school_list_adapter.SchoolListItemType.SCHOOL_ITEM;
 
 public class SchoolListAdapter extends RecyclerView.Adapter<SchoolListAdapter.ViewHolder>{
 
@@ -46,6 +47,18 @@ public class SchoolListAdapter extends RecyclerView.Adapter<SchoolListAdapter.Vi
         }
 
         return insertTarget;
+    }
+
+    public void removeItemsForBorough(Borough borough) {
+        //go through list in reverse to remove items
+        for (int i = schoolListItems.size() - 1; i >= 0; i--) {
+            SchoolListItem schoolListItem = schoolListItems.get(i);
+
+            if(schoolListItem.getType() == SCHOOL_ITEM && schoolListItem.getBorough() == borough){
+                schoolListItems.remove(i);
+                notifyItemRemoved(i);
+            }
+        }
     }
 
     @NonNull

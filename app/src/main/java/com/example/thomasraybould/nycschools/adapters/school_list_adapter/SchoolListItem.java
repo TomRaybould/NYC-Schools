@@ -37,10 +37,11 @@ public class SchoolListItem {
     }
 
 
-    public static SchoolListItem createSchoolItem(String titleText) {
+    public static SchoolListItem createSchoolItem(String titleText, Borough borough) {
         return new Builder()
                 .type(SchoolListItemType.SCHOOL_ITEM)
                 .titleText(titleText)
+                .borough(borough)
                 .build();
     }
 

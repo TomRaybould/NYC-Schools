@@ -76,4 +76,9 @@ public class SchoolListActivity extends AppCompatActivity implements SchoolListV
         int insertTarget = schoolListAdapter.addItemsForBorough(schoolListItems, borough);
         linearLayoutManager.scrollToPositionWithOffset(insertTarget - 1, 0);
     }
+
+    @Override
+    public void removeItemsForBorough(Borough borough) {
+        schoolListAdapter.removeItemsForBorough(borough);
+    }
 }
