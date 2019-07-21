@@ -66,7 +66,7 @@ public class SchoolListPresenterImpl extends AbstractRxPresenter<SchoolListView>
         List<School> schools = schoolListResponse.getSchools();
 
         List<SchoolListItem> schoolListItems = schoolsToListItems(schools);
-        view.setSchoolList(schoolListItems);
+        view.addItemsForBorough(schoolListItems, schoolListResponse.getBorough());
     }
 
 

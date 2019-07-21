@@ -9,8 +9,11 @@ import android.view.ViewGroup;
 import android.widget.TextView;
 
 import com.example.thomasraybould.nycschools.R;
+import com.example.thomasraybould.nycschools.entities.Borough;
 
 import java.util.List;
+
+import static com.example.thomasraybould.nycschools.adapters.school_list_adapter.SchoolListItemType.BOROUGH_TITLE;
 
 public class SchoolListAdapter extends RecyclerView.Adapter<SchoolListAdapter.ViewHolder>{
 
@@ -26,12 +29,31 @@ public class SchoolListAdapter extends RecyclerView.Adapter<SchoolListAdapter.Vi
         return new SchoolListAdapter(context, schoolListItems);
     }
 
+    public int addItemsForBorough(List<SchoolListItem> newItems, Borough borough){
+
+        //find the title for the borough and add new items underneath
+        int insertTarget = - 1;
+        for (int i = 0; i < schoolListItems.size(); i++) {
+            SchoolListItem schoolListItem = schoolListItems.get(i);
+            if(schoolListItem.getType() == BOROUGH_TITLE && schoolListItem.getBorough() == borough){
+                insertTarget = i + 1;
+            }
+        }
+
+        if(insertTarget > - 1) {
+            schoolListItems.addAll(insertTarget, newItems);
+            notifyItemRangeInserted(insertTarget, newItems.size());
+        }
+
+        return insertTarget;
+    }
+
     @NonNull
     @Override
     public ViewHolder onCreateViewHolder(@NonNull ViewGroup parent, int viewType) {
 
         int viewId;
-        if(viewType == SchoolListItemType.BOROUGH_TITLE.ordinal()){
+        if(viewType == BOROUGH_TITLE.ordinal()){
             viewId = R.layout.borough_list_item;
         }
         else{
@@ -45,7 +67,7 @@ public class SchoolListAdapter extends RecyclerView.Adapter<SchoolListAdapter.Vi
     @Override
     public void onBindViewHolder(@NonNull ViewHolder holder, int position) {
         SchoolListItem schoolListItem = schoolListItems.get(position);
-        if(schoolListItem.getType() == SchoolListItemType.BOROUGH_TITLE){
+        if(schoolListItem.getType() == BOROUGH_TITLE){
             holder.bindBorough(schoolListItem);
         }
         else{
