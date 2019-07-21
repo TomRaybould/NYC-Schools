@@ -7,6 +7,7 @@ import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
 import android.widget.ImageView;
+import android.widget.ProgressBar;
 import android.widget.TextView;
 
 import com.bumptech.glide.Glide;
@@ -164,6 +165,7 @@ public class SchoolListAdapter extends RecyclerView.Adapter<SchoolListAdapter.Vi
         ImageView imageView;
 
         TextView mathScoreTextView, readingScoreTextView, writingScoreTextView;
+        ProgressBar mathScoreProgressBar, readingScoreProgressBar, writingScoreProgressBar;
 
         ViewHolder(View itemView) {
             super(itemView);
@@ -172,6 +174,10 @@ public class SchoolListAdapter extends RecyclerView.Adapter<SchoolListAdapter.Vi
             mathScoreTextView       = itemView.findViewById(R.id.mathScoreTextView);
             readingScoreTextView    = itemView.findViewById(R.id.readingScoreTextView);
             writingScoreTextView    = itemView.findViewById(R.id.writingScoreTextView);
+            mathScoreProgressBar    = itemView.findViewById(R.id.mathProgressBar);
+            readingScoreProgressBar    = itemView.findViewById(R.id.readingProgressBar);
+            writingScoreProgressBar    = itemView.findViewById(R.id.writingProgressBar);
+
         }
 
         void bindSchool(SchoolListItem schoolListItem){
@@ -201,9 +207,18 @@ public class SchoolListAdapter extends RecyclerView.Adapter<SchoolListAdapter.Vi
 
         void bindScore(SchoolListItem schoolListItem) {
             SatScoreData satScoreData = schoolListItem.getSatScoreData();
-            mathScoreTextView.setText(satScoreData.getMath()+"");
-            readingScoreTextView.setText(satScoreData.getReading()+"");
-            writingScoreTextView.setText(satScoreData.getWriting()+"");
+            mathScoreTextView.setText(satScoreData.getMath()+"/600");
+            readingScoreTextView.setText(satScoreData.getReading()+"/600");
+            writingScoreTextView.setText(satScoreData.getWriting()+"/600");
+
+            int mathPercent    = (int)(100 * satScoreData.getMath() / 600f);
+            int readingPercent = (int)(100 * satScoreData.getReading() / 600f);
+            int writingPercent = (int)(100 * satScoreData.getWriting() / 600f);
+
+            mathScoreProgressBar.setProgress(mathPercent);
+            readingScoreProgressBar.setProgress(readingPercent);
+            writingScoreProgressBar.setProgress(writingPercent);
+
         }
     }
 

@@ -10,6 +10,7 @@
     <color name="school_item_bg_color">#fff</color>
     <color name="borough_separator_color">#ccc</color>
     <color name="school_separator_color">#ccc</color>
+    <color name="progress_bar_color">#2E86C1</color>
 
 
 </resources>
