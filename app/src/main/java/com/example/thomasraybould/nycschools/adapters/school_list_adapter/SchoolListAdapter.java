@@ -32,8 +32,7 @@ public class SchoolListAdapter extends RecyclerView.Adapter<SchoolListAdapter.Vi
 
         int viewId;
         if(viewType == SchoolListItemType.BOROUGH_TITLE.ordinal()){
-            // TODO: 7/20/19 create a borough layout
-            viewId = R.layout.school_list_item;
+            viewId = R.layout.borough_list_item;
         }
         else{
             viewId = R.layout.school_list_item;
@@ -79,6 +78,12 @@ public class SchoolListAdapter extends RecyclerView.Adapter<SchoolListAdapter.Vi
 
         void bindBorough(SchoolListItem schoolListItem){
             textView.setText(schoolListItem.getBorough().boroughTitle);
+
+            Runnable onClickRunnable = schoolListItem.getOnClickRunnable();
+
+            if(onClickRunnable != null) {
+                itemView.setOnClickListener(view -> onClickRunnable.run());
+            }
         }
 
     }

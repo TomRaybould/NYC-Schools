@@ -1,14 +1,14 @@
 package com.example.thomasraybould.nycschools.view.school_list_activity;
 
-import android.support.v7.app.AppCompatActivity;
 import android.os.Bundle;
+import android.support.v7.app.AppCompatActivity;
 import android.support.v7.widget.LinearLayoutManager;
 import android.support.v7.widget.RecyclerView;
 import android.widget.Toast;
 
 import com.example.thomasraybould.nycschools.R;
 import com.example.thomasraybould.nycschools.adapters.school_list_adapter.SchoolListAdapter;
-import com.example.thomasraybould.nycschools.entities.School;
+import com.example.thomasraybould.nycschools.adapters.school_list_adapter.SchoolListItem;
 
 import java.util.List;
 
@@ -54,12 +54,10 @@ public class SchoolListActivity extends AppCompatActivity implements SchoolListV
         Toast.makeText(this, message, Toast.LENGTH_SHORT).show();
     }
 
-    @Override
-    public void setSchoolList(List<School> schools) {
-        if (!schools.isEmpty()) {
 
-        } else {
-            toast("failed to load");
-        }
+    @Override
+    public void setSchoolList(List<SchoolListItem> schoolListItems) {
+        SchoolListAdapter schoolListAdapter = SchoolListAdapter.createSchoolListAdapter(this, schoolListItems);
+        recyclerView.setAdapter(schoolListAdapter);
     }
 }

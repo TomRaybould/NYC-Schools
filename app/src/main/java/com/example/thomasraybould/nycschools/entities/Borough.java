@@ -5,8 +5,8 @@ public enum Borough {
     MANHATTAN("M"       ,"Manhattan"),
     BROOKLYN("K"        ,"Brooklyn"),
     QUEENS("Q"          ,"Queens"),
-    BRONX("X"           ,"Bronx"),
-    STATEN_ISLAND("R"   ,"Staten Island");
+    STATEN_ISLAND("R"   ,"Staten Island"),
+    BRONX("X"           ,"Bronx");
 
     public final String code;
     public final String boroughTitle;

@@ -7,12 +7,17 @@ public class SchoolListItem {
     private final SchoolListItemType type;
     private final Borough borough;
     private final String titleText;
+    private final Runnable onClickRunnable;
 
+    private SchoolListItem(Builder builder) {
+        type = builder.type;
+        borough = builder.borough;
+        titleText = builder.titleText;
+        onClickRunnable = builder.runnable;
+    }
 
-    private SchoolListItem(SchoolListItemType type, Borough borough, String titleText) {
-        this.type = type;
-        this.borough = borough;
-        this.titleText = titleText;
+    public static Builder newBuilder() {
+        return new Builder();
     }
 
     public String getTitleText() {
@@ -23,20 +28,63 @@ public class SchoolListItem {
         return type;
     }
 
+    public Runnable getOnClickRunnable() {
+        return onClickRunnable;
+    }
+
     public Borough getBorough() {
         return borough;
     }
 
-    public static SchoolListItem createSchoolListItem(SchoolListItemType type, Borough borough, String titleText) {
-        return new SchoolListItem(type, borough, titleText);
-    }
 
     public static SchoolListItem createSchoolItem(String titleText) {
-        return new SchoolListItem(SchoolListItemType.SCHOOL_ITEM, null, titleText);
+        return new Builder()
+                .type(SchoolListItemType.SCHOOL_ITEM)
+                .titleText(titleText)
+                .build();
     }
 
-    public static SchoolListItem createBoroughItem(String titleText, Borough borough) {
-        return new SchoolListItem(SchoolListItemType.BOROUGH_TITLE, borough, titleText);
+    public static SchoolListItem createBoroughItem(Borough borough, Runnable onClickRunnable) {
+        return SchoolListItem.newBuilder()
+                .type(SchoolListItemType.BOROUGH_TITLE)
+                .borough(borough)
+                .titleText(borough.boroughTitle)
+                .runnable(onClickRunnable)
+                .build();
     }
 
+
+    public static final class Builder {
+        private SchoolListItemType type;
+        private Borough borough;
+        private String titleText;
+        private Runnable runnable;
+
+        public Builder() {
+        }
+
+        public Builder type(SchoolListItemType val) {
+            type = val;
+            return this;
+        }
+
+        public Builder borough(Borough val) {
+            borough = val;
+            return this;
+        }
+
+        public Builder titleText(String val) {
+            titleText = val;
+            return this;
+        }
+
+        public Builder runnable(Runnable val) {
+            runnable = val;
+            return this;
+        }
+
+        public SchoolListItem build() {
+            return new SchoolListItem(this);
+        }
+    }
 }
