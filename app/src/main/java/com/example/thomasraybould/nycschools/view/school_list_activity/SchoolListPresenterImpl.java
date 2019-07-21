@@ -1,10 +1,13 @@
 package com.example.thomasraybould.nycschools.view.school_list_activity;
 
 import com.example.thomasraybould.nycschools.adapters.school_list_adapter.SchoolListItem;
+import com.example.thomasraybould.nycschools.adapters.school_list_adapter.SchoolListItemType;
 import com.example.thomasraybould.nycschools.domain.get_sat_score_interactor.GetSatScoreDataInteractor;
+import com.example.thomasraybould.nycschools.domain.get_sat_score_interactor.data.SatDataResponse;
 import com.example.thomasraybould.nycschools.domain.get_school_list_interactor.GetSchoolListInteractor;
 import com.example.thomasraybould.nycschools.domain.get_school_list_interactor.data.SchoolListResponse;
 import com.example.thomasraybould.nycschools.entities.Borough;
+import com.example.thomasraybould.nycschools.entities.SatScoreData;
 import com.example.thomasraybould.nycschools.entities.School;
 import com.example.thomasraybould.nycschools.rx_util.SchedulerProvider;
 import com.example.thomasraybould.nycschools.view.base.AbstractRxPresenter;
@@ -28,6 +31,7 @@ public class SchoolListPresenterImpl extends AbstractRxPresenter<SchoolListView>
     SchedulerProvider schedulerProvider;
 
     private final List<Borough> selectedBoroughs = new ArrayList<>();
+    private final List<School>  selectedSchools = new ArrayList<>();
 
     @Override
     public void onCreate(SchoolListView view) {
@@ -55,10 +59,10 @@ public class SchoolListPresenterImpl extends AbstractRxPresenter<SchoolListView>
 
     @Override
     public void onBoroughSelected(Borough borough) {
-
         if(selectedBoroughs.contains(borough)){
-            view.removeItemsForBorough(borough);
             selectedBoroughs.remove(borough);
+            removeSelectSchoolsForBorough(borough);
+            view.removeItemsForBorough(borough);
             return;
         }
 
@@ -67,12 +71,25 @@ public class SchoolListPresenterImpl extends AbstractRxPresenter<SchoolListView>
         Disposable disposable = getSchoolListInteractor.getSchoolsByBorough(borough)
                 .subscribeOn(schedulerProvider.io())
                 .observeOn(schedulerProvider.main())
-                .subscribe(this::processGetSchoolListResponse);
+                .subscribe(this::processGetSchoolListResponse,
+                        throwable -> failedToLoadList());
 
         onPauseDisposable.add(disposable);
     }
 
+    private void removeSelectSchoolsForBorough(Borough borough) {
+        for (int i = selectedSchools.size() - 1; i >= 0; i--){
+            School school = selectedSchools.get(i);
+            if(school.getBorough().equals(borough)){
+                selectedSchools.remove(i);
+            }
+        }
+    }
+
     private void processGetSchoolListResponse(SchoolListResponse schoolListResponse){
+        if(view == null){
+            return;
+        }
         if(!schoolListResponse.isSuccessful()){
             failedToLoadList();
         }
@@ -82,8 +99,6 @@ public class SchoolListPresenterImpl extends AbstractRxPresenter<SchoolListView>
         view.addItemsForBorough(schoolListItems, schoolListResponse.getBorough());
     }
 
-
-
     private void failedToLoadList(){
         if(view == null){
             return;
@@ -91,12 +106,61 @@ public class SchoolListPresenterImpl extends AbstractRxPresenter<SchoolListView>
         view.setSchoolList(new ArrayList<>());
     }
 
-    private static List<SchoolListItem> schoolsToListItems(List<School> schools){
+    private List<SchoolListItem> schoolsToListItems(List<School> schools){
         List<SchoolListItem> schoolListItems = new ArrayList<>();
         for (School school: schools) {
-            schoolListItems.add(SchoolListItem.createSchoolItem(school.getName(), school.getBorough()));
+            SchoolListItem schoolItem = SchoolListItem.createSchoolItem(school, school.getBorough(), () -> this.onSchoolSelected(school));
+            schoolListItems.add(schoolItem);
         }
         return schoolListItems;
+    }
+
+    @Override
+    public void onSchoolSelected(School school) {
+        if(selectedSchools.contains(school)){
+            view.removeScoreItem(school.getDbn());
+            selectedSchools.remove(school);
+            return;
+        }
+        selectedSchools.add(school);
+
+        Disposable disposable = getSatScoreDataInteractor.getSatScoreDataByDbn(school.getDbn())
+                .subscribeOn(schedulerProvider.io())
+                .observeOn(schedulerProvider.main())
+                .subscribe(satDataResponse -> processSatScoreResponse(satDataResponse, school),
+                        throwable -> failedToGetSatData());
+
+        onPauseDisposable.add(disposable);
+    }
+
+    private void processSatScoreResponse(SatDataResponse satDataResponse, School school){
+        if(view == null){
+            return;
+        }
+
+        SatScoreData satScoreData = satDataResponse.getSatScoreData();
+        if(!satDataResponse.isSuccessful() || satScoreData == null){
+            failedToGetSatData();
+        }
+
+        SchoolListItem scoreListItem = satDataToSchoolListItem(satScoreData, school);
+
+        view.addScoreItem(scoreListItem);
+    }
+
+    private void failedToGetSatData(){
+
+    }
+
+    private static SchoolListItem satDataToSchoolListItem(SatScoreData satScoreData, School school){
+
+        return SchoolListItem.newBuilder()
+                .borough(school.getBorough())
+                .type(SchoolListItemType.SAT_SCORE_ITEM)
+                .school(school)
+                .satScoreData(satScoreData)
+                .build();
+
     }
 
 }

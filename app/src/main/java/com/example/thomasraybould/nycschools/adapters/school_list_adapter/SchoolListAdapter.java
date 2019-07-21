@@ -13,10 +13,12 @@ import com.bumptech.glide.Glide;
 import com.bumptech.glide.request.RequestOptions;
 import com.example.thomasraybould.nycschools.R;
 import com.example.thomasraybould.nycschools.entities.Borough;
+import com.example.thomasraybould.nycschools.entities.SatScoreData;
 
 import java.util.List;
 
 import static com.example.thomasraybould.nycschools.adapters.school_list_adapter.SchoolListItemType.BOROUGH_TITLE;
+import static com.example.thomasraybould.nycschools.adapters.school_list_adapter.SchoolListItemType.SAT_SCORE_ITEM;
 import static com.example.thomasraybould.nycschools.adapters.school_list_adapter.SchoolListItemType.SCHOOL_ITEM;
 
 public class SchoolListAdapter extends RecyclerView.Adapter<SchoolListAdapter.ViewHolder>{
@@ -33,7 +35,7 @@ public class SchoolListAdapter extends RecyclerView.Adapter<SchoolListAdapter.Vi
         return new SchoolListAdapter(context, schoolListItems);
     }
 
-    public int addItemsForBorough(List<SchoolListItem> newItems, Borough borough){
+    public int addSchoolItemsForBorough(List<SchoolListItem> newItems, Borough borough){
 
         //find the title for the borough and add new items underneath
         int insertTarget = - 1;
@@ -52,15 +54,64 @@ public class SchoolListAdapter extends RecyclerView.Adapter<SchoolListAdapter.Vi
         return insertTarget;
     }
 
+
+    /**
+     * Searching for the target school that was selected and then
+     * adding a score item underneath and then returning the position
+     * of the school.
+     * @param scoreItem
+     * @return
+     */
+    public int addScoreItemForSchool(SchoolListItem scoreItem){
+        String targetDbn = scoreItem.getSchool().getDbn();
+
+        int insertTarget = - 1;
+        for (int i = 0; i < schoolListItems.size(); i++) {
+            SchoolListItem schoolListItem = schoolListItems.get(i);
+            if(schoolListItem.getType() != SCHOOL_ITEM){
+                continue;
+            }
+            if(targetDbn.equals(schoolListItem.getSchool().getDbn())){
+                insertTarget = i + 1;
+            }
+        }
+
+        if(insertTarget > - 1) {
+            schoolListItems.add(insertTarget, scoreItem);
+            notifyItemInserted(insertTarget);
+        }
+
+        return insertTarget;
+    }
+
+    public void removeScoreItem(String targetDbn){
+
+        for (int i = 0; i < schoolListItems.size(); i++) {
+            SchoolListItem schoolListItem = schoolListItems.get(i);
+            if(schoolListItem.getType() != SAT_SCORE_ITEM){
+                continue;
+            }
+            if(targetDbn.equals(schoolListItem.getSchool().getDbn())){
+                schoolListItems.remove(i);
+                notifyItemRemoved(i);
+                break;
+            }
+        }
+
+
+    }
+
+
     public void removeItemsForBorough(Borough borough) {
         //go through list in reverse to remove items
         for (int i = schoolListItems.size() - 1; i >= 0; i--) {
             SchoolListItem schoolListItem = schoolListItems.get(i);
 
-            if(schoolListItem.getType() == SCHOOL_ITEM && schoolListItem.getBorough() == borough){
+            if(schoolListItem.getType() != BOROUGH_TITLE && schoolListItem.getBorough() == borough){
                 schoolListItems.remove(i);
                 notifyItemRemoved(i);
             }
+
         }
     }
 
@@ -71,6 +122,9 @@ public class SchoolListAdapter extends RecyclerView.Adapter<SchoolListAdapter.Vi
         int viewId;
         if(viewType == BOROUGH_TITLE.ordinal()){
             viewId = R.layout.borough_list_item;
+        }
+        else if(viewType == SAT_SCORE_ITEM.ordinal()){
+            viewId = R.layout.sat_score_list_item;
         }
         else{
             viewId = R.layout.school_list_item;
@@ -85,6 +139,9 @@ public class SchoolListAdapter extends RecyclerView.Adapter<SchoolListAdapter.Vi
         SchoolListItem schoolListItem = schoolListItems.get(position);
         if(schoolListItem.getType() == BOROUGH_TITLE){
             holder.bindBorough(schoolListItem, context);
+        }
+        else if(schoolListItem.getType() == SAT_SCORE_ITEM){
+            holder.bindScore(schoolListItem);
         }
         else{
             holder.bindSchool(schoolListItem);
@@ -106,14 +163,23 @@ public class SchoolListAdapter extends RecyclerView.Adapter<SchoolListAdapter.Vi
         TextView textView;
         ImageView imageView;
 
+        TextView mathScoreTextView, readingScoreTextView, writingScoreTextView;
+
         ViewHolder(View itemView) {
             super(itemView);
             textView = itemView.findViewById(R.id.schoolNameTextView);
             imageView = itemView.findViewById(R.id.imageView);
+            mathScoreTextView       = itemView.findViewById(R.id.mathScoreTextView);
+            readingScoreTextView    = itemView.findViewById(R.id.readingScoreTextView);
+            writingScoreTextView    = itemView.findViewById(R.id.writingScoreTextView);
         }
 
         void bindSchool(SchoolListItem schoolListItem){
-            textView.setText(schoolListItem.getTitleText());
+            textView.setText(schoolListItem.getSchool().getName());
+            Runnable onClickRunnable = schoolListItem.getOnClickRunnable();
+            if(onClickRunnable != null) {
+                itemView.setOnClickListener(view -> onClickRunnable.run());
+            }
         }
 
         void bindBorough(SchoolListItem schoolListItem, Context context){
@@ -133,6 +199,12 @@ public class SchoolListAdapter extends RecyclerView.Adapter<SchoolListAdapter.Vi
             }
         }
 
+        void bindScore(SchoolListItem schoolListItem) {
+            SatScoreData satScoreData = schoolListItem.getSatScoreData();
+            mathScoreTextView.setText(satScoreData.getMath()+"");
+            readingScoreTextView.setText(satScoreData.getReading()+"");
+            writingScoreTextView.setText(satScoreData.getWriting()+"");
+        }
     }
 
 }

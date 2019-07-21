@@ -4,6 +4,8 @@ public enum SchoolListItemType {
 
     BOROUGH_TITLE,
 
-    SCHOOL_ITEM;
+    SCHOOL_ITEM,
+
+    SAT_SCORE_ITEM
 
 }

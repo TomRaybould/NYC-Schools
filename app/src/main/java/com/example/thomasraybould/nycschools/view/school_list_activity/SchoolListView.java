@@ -13,4 +13,8 @@ public interface SchoolListView {
 
     void removeItemsForBorough(Borough borough);
 
+    void addScoreItem(SchoolListItem scoreItem);
+
+    void removeScoreItem(String schooldbn);
+
 }

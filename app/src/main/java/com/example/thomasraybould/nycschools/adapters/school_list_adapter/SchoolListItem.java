@@ -2,31 +2,34 @@ package com.example.thomasraybould.nycschools.adapters.school_list_adapter;
 
 import com.example.thomasraybould.nycschools.R;
 import com.example.thomasraybould.nycschools.entities.Borough;
-
-import java.io.BufferedReader;
+import com.example.thomasraybould.nycschools.entities.SatScoreData;
+import com.example.thomasraybould.nycschools.entities.School;
 
 public class SchoolListItem {
 
     private final SchoolListItemType    type;
+    private final SatScoreData          satScoreData;
     private final Borough               borough;
-    private final String                titleText;
+    private final School                school;
     private final int                   imageResId;
     private final Runnable              onClickRunnable;
 
     private SchoolListItem(Builder builder) {
         type = builder.type;
+        satScoreData = builder.satScoreData;
         borough = builder.borough;
-        titleText = builder.titleText;
-        onClickRunnable = builder.runnable;
+        school = builder.school;
         imageResId = builder.imageResId;
+        onClickRunnable = builder.onClickRunnable;
     }
+
 
     public static Builder newBuilder() {
         return new Builder();
     }
 
-    public String getTitleText() {
-        return titleText;
+    public School getSchool() {
+        return school;
     }
 
     public SchoolListItemType getType() {
@@ -45,11 +48,16 @@ public class SchoolListItem {
         return imageResId;
     }
 
-    public static SchoolListItem createSchoolItem(String titleText, Borough borough) {
+    public SatScoreData getSatScoreData() {
+        return satScoreData;
+    }
+
+    public static SchoolListItem createSchoolItem(School school, Borough borough, Runnable onClickRunnable) {
         return new Builder()
                 .type(SchoolListItemType.SCHOOL_ITEM)
-                .titleText(titleText)
+                .school(school)
                 .borough(borough)
+                .onClickRunnable(onClickRunnable)
                 .build();
     }
 
@@ -83,8 +91,7 @@ public class SchoolListItem {
         return SchoolListItem.newBuilder()
                 .type(SchoolListItemType.BOROUGH_TITLE)
                 .borough(borough)
-                .titleText(borough.boroughTitle)
-                .runnable(onClickRunnable)
+                .onClickRunnable(onClickRunnable)
                 .imageResId(imageResId)
                 .build();
     }
@@ -92,21 +99,22 @@ public class SchoolListItem {
 
     public static final class Builder {
         private SchoolListItemType type;
+        private SatScoreData satScoreData;
         private Borough borough;
-        private String titleText;
-        private Runnable runnable;
+        private School school;
         private int imageResId;
+        private Runnable onClickRunnable;
 
-        public Builder() {
-        }
-
-        public Builder imageResId(int val) {
-            imageResId = val;
-            return this;
+        private Builder() {
         }
 
         public Builder type(SchoolListItemType val) {
             type = val;
+            return this;
+        }
+
+        public Builder satScoreData(SatScoreData val) {
+            satScoreData = val;
             return this;
         }
 
@@ -115,13 +123,18 @@ public class SchoolListItem {
             return this;
         }
 
-        public Builder titleText(String val) {
-            titleText = val;
+        public Builder school(School val) {
+            school = val;
             return this;
         }
 
-        public Builder runnable(Runnable val) {
-            runnable = val;
+        public Builder imageResId(int val) {
+            imageResId = val;
+            return this;
+        }
+
+        public Builder onClickRunnable(Runnable val) {
+            onClickRunnable = val;
             return this;
         }
 

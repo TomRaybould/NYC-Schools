@@ -73,7 +73,7 @@ public class SchoolListActivity extends AppCompatActivity implements SchoolListV
 
     @Override
     public void addItemsForBorough(List<SchoolListItem> schoolListItems, Borough borough) {
-        int insertTarget = schoolListAdapter.addItemsForBorough(schoolListItems, borough);
+        int insertTarget = schoolListAdapter.addSchoolItemsForBorough(schoolListItems, borough);
         linearLayoutManager.scrollToPositionWithOffset(insertTarget - 1, 0);
     }
 
@@ -81,4 +81,15 @@ public class SchoolListActivity extends AppCompatActivity implements SchoolListV
     public void removeItemsForBorough(Borough borough) {
         schoolListAdapter.removeItemsForBorough(borough);
     }
+
+    @Override
+    public void addScoreItem(SchoolListItem scoreItem) {
+        schoolListAdapter.addScoreItemForSchool(scoreItem);
+    }
+
+    @Override
+    public void removeScoreItem(String schoolDbn) {
+        schoolListAdapter.removeScoreItem(schoolDbn);
+    }
+
 }
