@@ -3,6 +3,8 @@ package com.example.thomasraybould.nycschools.adapters.school_list_adapter;
 import android.content.Context;
 import android.support.annotation.NonNull;
 import android.support.v7.widget.RecyclerView;
+import android.text.Html;
+import android.text.Spanned;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
@@ -209,15 +211,21 @@ public class SchoolListAdapter extends RecyclerView.Adapter<SchoolListAdapter.Vi
             SatScoreData satScoreData = schoolListItem.getSatScoreData();
 
             if(satScoreData.isDataAvailable()) {
-                mathScoreTextView.setText(satScoreData.getMath() + "/600");
-                readingScoreTextView.setText(satScoreData.getReading() + "/600");
-                writingScoreTextView.setText(satScoreData.getWriting() + "/600");
+                Spanned mathSpanned = Html.fromHtml(addBlackStyleToString(satScoreData.getMath() + ""));
+                mathScoreTextView.setText(mathSpanned);
+
+                Spanned readingSpanned = Html.fromHtml(addBlackStyleToString(satScoreData.getReading()+ ""));
+                readingScoreTextView.setText(readingSpanned);
+
+                Spanned writingSpanned = Html.fromHtml(addBlackStyleToString(satScoreData.getWriting() + ""));
+                writingScoreTextView.setText(writingSpanned);
             }
             else{
                 mathScoreTextView.setText("N/A");
                 readingScoreTextView.setText("N/A");
                 writingScoreTextView.setText("N/A");
             }
+
             int mathPercent    = (int)(100 * satScoreData.getMath() / 600f);
             int readingPercent = (int)(100 * satScoreData.getReading() / 600f);
             int writingPercent = (int)(100 * satScoreData.getWriting() / 600f);
@@ -228,6 +236,9 @@ public class SchoolListAdapter extends RecyclerView.Adapter<SchoolListAdapter.Vi
 
         }
 
+        private static String addBlackStyleToString(String string){
+            return "<b><font color='black'>"+string+"</font></b>/600";
+        }
 
     }
 
