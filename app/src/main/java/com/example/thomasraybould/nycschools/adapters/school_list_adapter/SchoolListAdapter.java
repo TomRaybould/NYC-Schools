@@ -191,7 +191,7 @@ public class SchoolListAdapter extends RecyclerView.Adapter<SchoolListAdapter.Vi
             textView.setText(schoolListItem.getSchool().getName());
             Runnable onClickRunnable = schoolListItem.getOnClickRunnable();
             if(onClickRunnable != null) {
-                textView.setOnClickListener(view -> onClickRunnable.run());
+                itemView.setOnClickListener(view -> onClickRunnable.run());
             }
         }
 
