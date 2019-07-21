@@ -4,7 +4,6 @@ import android.support.v7.app.AppCompatActivity;
 import android.os.Bundle;
 import android.support.v7.widget.LinearLayoutManager;
 import android.support.v7.widget.RecyclerView;
-import android.view.LayoutInflater;
 import android.widget.Toast;
 
 import com.example.thomasraybould.nycschools.R;
@@ -58,8 +57,7 @@ public class SchoolListActivity extends AppCompatActivity implements SchoolListV
     @Override
     public void setSchoolList(List<School> schools) {
         if (!schools.isEmpty()) {
-            SchoolListAdapter schoolListAdapter = SchoolListAdapter.createSchoolListAdapter(this, schools);
-            recyclerView.setAdapter(schoolListAdapter);
+
         } else {
             toast("failed to load");
         }
