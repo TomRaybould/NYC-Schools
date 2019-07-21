@@ -6,8 +6,11 @@ import android.support.v7.widget.RecyclerView;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
+import android.widget.ImageView;
 import android.widget.TextView;
 
+import com.bumptech.glide.Glide;
+import com.bumptech.glide.request.RequestOptions;
 import com.example.thomasraybould.nycschools.R;
 import com.example.thomasraybould.nycschools.entities.Borough;
 
@@ -81,7 +84,7 @@ public class SchoolListAdapter extends RecyclerView.Adapter<SchoolListAdapter.Vi
     public void onBindViewHolder(@NonNull ViewHolder holder, int position) {
         SchoolListItem schoolListItem = schoolListItems.get(position);
         if(schoolListItem.getType() == BOROUGH_TITLE){
-            holder.bindBorough(schoolListItem);
+            holder.bindBorough(schoolListItem, context);
         }
         else{
             holder.bindSchool(schoolListItem);
@@ -101,18 +104,27 @@ public class SchoolListAdapter extends RecyclerView.Adapter<SchoolListAdapter.Vi
     static class ViewHolder extends RecyclerView.ViewHolder{
 
         TextView textView;
+        ImageView imageView;
 
         ViewHolder(View itemView) {
             super(itemView);
             textView = itemView.findViewById(R.id.schoolNameTextView);
+            imageView = itemView.findViewById(R.id.imageView);
         }
 
         void bindSchool(SchoolListItem schoolListItem){
             textView.setText(schoolListItem.getTitleText());
         }
 
-        void bindBorough(SchoolListItem schoolListItem){
+        void bindBorough(SchoolListItem schoolListItem, Context context){
             textView.setText(schoolListItem.getBorough().boroughTitle);
+
+            Glide.with(context)
+                    .applyDefaultRequestOptions(RequestOptions.centerCropTransform())
+                    .applyDefaultRequestOptions(RequestOptions.circleCropTransform())
+                    .load(schoolListItem.getImageResId())
+                    .into(imageView);
+
 
             Runnable onClickRunnable = schoolListItem.getOnClickRunnable();
 

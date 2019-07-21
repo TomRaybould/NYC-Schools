@@ -1,19 +1,24 @@
 package com.example.thomasraybould.nycschools.adapters.school_list_adapter;
 
+import com.example.thomasraybould.nycschools.R;
 import com.example.thomasraybould.nycschools.entities.Borough;
+
+import java.io.BufferedReader;
 
 public class SchoolListItem {
 
-    private final SchoolListItemType type;
-    private final Borough borough;
-    private final String titleText;
-    private final Runnable onClickRunnable;
+    private final SchoolListItemType    type;
+    private final Borough               borough;
+    private final String                titleText;
+    private final int                   imageResId;
+    private final Runnable              onClickRunnable;
 
     private SchoolListItem(Builder builder) {
         type = builder.type;
         borough = builder.borough;
         titleText = builder.titleText;
         onClickRunnable = builder.runnable;
+        imageResId = builder.imageResId;
     }
 
     public static Builder newBuilder() {
@@ -36,6 +41,9 @@ public class SchoolListItem {
         return borough;
     }
 
+    public int getImageResId() {
+        return imageResId;
+    }
 
     public static SchoolListItem createSchoolItem(String titleText, Borough borough) {
         return new Builder()
@@ -46,11 +54,38 @@ public class SchoolListItem {
     }
 
     public static SchoolListItem createBoroughItem(Borough borough, Runnable onClickRunnable) {
+
+        int imageResId;
+
+        switch (borough.code){
+            case "M":
+                imageResId = R.drawable.manhattan;
+                break;
+            case "K":
+                imageResId = R.drawable.brooklyn;
+                break;
+            case "Q":
+                imageResId = R.drawable.queens;
+                break;
+            case "X":
+                imageResId = R.drawable.bronx;
+                break;
+            case "R":
+                imageResId = R.drawable.statenisland;
+                break;
+
+            default:
+                imageResId = R.drawable.manhattan;
+
+        }
+
+
         return SchoolListItem.newBuilder()
                 .type(SchoolListItemType.BOROUGH_TITLE)
                 .borough(borough)
                 .titleText(borough.boroughTitle)
                 .runnable(onClickRunnable)
+                .imageResId(imageResId)
                 .build();
     }
 
@@ -60,8 +95,14 @@ public class SchoolListItem {
         private Borough borough;
         private String titleText;
         private Runnable runnable;
+        private int imageResId;
 
         public Builder() {
+        }
+
+        public Builder imageResId(int val) {
+            imageResId = val;
+            return this;
         }
 
         public Builder type(SchoolListItemType val) {
