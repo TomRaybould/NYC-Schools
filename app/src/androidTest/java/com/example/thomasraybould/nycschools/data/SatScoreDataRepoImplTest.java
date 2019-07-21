@@ -38,6 +38,22 @@ public class SatScoreDataRepoImplTest {
                 .test()
                 .assertValue(SatDataResponse::isSuccessful)
                 .assertValue(satDataResponse -> satDataResponse.getSatScoreData().getDbn().equals(dbn))
+                .assertValue(satDataResponse -> satDataResponse.getSatScoreData().isDataAvailable())
+                .assertComplete();
+
+    }
+
+    @Test
+    public void getSatScoresNoDataForSchool() {
+        SatScoreDataRepo satScoreDataRepo = new SatScoreDataRepoImpl(httpClient, authTokenProvider, apiUrlProvider);
+
+        String dbn = "03M417";
+
+        satScoreDataRepo.getSatScoreDataByDbn(dbn)
+                .test()
+                .assertValue(SatDataResponse::isSuccessful)
+                .assertValue(satDataResponse -> satDataResponse.getSatScoreData().getDbn().equals(dbn))
+                .assertValue(satDataResponse -> !satDataResponse.getSatScoreData().isDataAvailable())
                 .assertComplete();
 
     }

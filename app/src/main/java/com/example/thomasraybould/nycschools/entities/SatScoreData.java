@@ -3,12 +3,15 @@ package com.example.thomasraybould.nycschools.entities;
 public class SatScoreData {
 
     private final String dbn;
+    //not all schools have data listed
+    private final boolean isDataAvailable;
     private final int math;
     private final int reading;
     private final int writing;
 
     private SatScoreData(Builder builder) {
         dbn = builder.dbn;
+        isDataAvailable = builder.isDataAvailable;
         math = builder.math;
         reading = builder.reading;
         writing = builder.writing;
@@ -30,6 +33,10 @@ public class SatScoreData {
         return dbn;
     }
 
+    public boolean isDataAvailable() {
+        return isDataAvailable;
+    }
+
     public static Builder newBuilder() {
         return new Builder();
     }
@@ -37,6 +44,7 @@ public class SatScoreData {
 
     public static final class Builder {
         private String dbn;
+        private boolean isDataAvailable;
         private int math;
         private int reading;
         private int writing;
@@ -46,6 +54,11 @@ public class SatScoreData {
 
         public Builder dbn(String val) {
             dbn = val;
+            return this;
+        }
+
+        public Builder isDataAvailable(boolean val) {
+            isDataAvailable = val;
             return this;
         }
 

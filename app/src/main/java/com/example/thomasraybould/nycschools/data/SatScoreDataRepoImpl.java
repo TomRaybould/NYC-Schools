@@ -67,12 +67,14 @@ public class SatScoreDataRepoImpl extends AbstractWebRepo implements SatScoreDat
         int readingScore    = satDataObject.optInt("sat_critical_reading_avg_score", -1);
         int writingScore    = satDataObject.optInt("sat_writing_avg_score", -1);
 
+        boolean isDataAvailable = true;
         if (mathScore == -1 || readingScore == -1 || writingScore == -1){
-            return SatDataResponse.failure();
+            isDataAvailable = false;
         }
 
         SatScoreData satScoreData = SatScoreData.newBuilder()
                 .dbn(dbn)
+                .isDataAvailable(isDataAvailable)
                 .math(mathScore)
                 .reading(readingScore)
                 .writing(writingScore)

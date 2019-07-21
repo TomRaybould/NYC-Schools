@@ -207,10 +207,17 @@ public class SchoolListAdapter extends RecyclerView.Adapter<SchoolListAdapter.Vi
 
         void bindScore(SchoolListItem schoolListItem) {
             SatScoreData satScoreData = schoolListItem.getSatScoreData();
-            mathScoreTextView.setText(satScoreData.getMath()+"/600");
-            readingScoreTextView.setText(satScoreData.getReading()+"/600");
-            writingScoreTextView.setText(satScoreData.getWriting()+"/600");
 
+            if(satScoreData.isDataAvailable()) {
+                mathScoreTextView.setText(satScoreData.getMath() + "/600");
+                readingScoreTextView.setText(satScoreData.getReading() + "/600");
+                writingScoreTextView.setText(satScoreData.getWriting() + "/600");
+            }
+            else{
+                mathScoreTextView.setText("N/A");
+                readingScoreTextView.setText("N/A");
+                writingScoreTextView.setText("N/A");
+            }
             int mathPercent    = (int)(100 * satScoreData.getMath() / 600f);
             int readingPercent = (int)(100 * satScoreData.getReading() / 600f);
             int writingPercent = (int)(100 * satScoreData.getWriting() / 600f);
@@ -220,6 +227,8 @@ public class SchoolListAdapter extends RecyclerView.Adapter<SchoolListAdapter.Vi
             writingScoreProgressBar.setProgress(writingPercent);
 
         }
+
+
     }
 
 }
