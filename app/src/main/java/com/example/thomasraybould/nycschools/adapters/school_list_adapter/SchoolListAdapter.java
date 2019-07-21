@@ -231,9 +231,9 @@ public class SchoolListAdapter extends RecyclerView.Adapter<SchoolListAdapter.Vi
                 writingScoreTextView.setText("N/A");
             }
 
-            int mathPercent    = (int)(100 * satScoreData.getMath() / 600f);
-            int readingPercent = (int)(100 * satScoreData.getReading() / 600f);
-            int writingPercent = (int)(100 * satScoreData.getWriting() / 600f);
+            int mathPercent    = (int)(100 * satScoreData.getMath() / 800f);
+            int readingPercent = (int)(100 * satScoreData.getReading() / 800f);
+            int writingPercent = (int)(100 * satScoreData.getWriting() / 800f);
 
             mathScoreProgressBar.setProgress(mathPercent);
             readingScoreProgressBar.setProgress(readingPercent);
@@ -257,7 +257,7 @@ public class SchoolListAdapter extends RecyclerView.Adapter<SchoolListAdapter.Vi
         }
 
         private static String addBlackStyleToString(String string){
-            return "<b><font color='black'>"+string+"</font></b>/600";
+            return "<b><font color='black'>"+string+"</font></b>/800";
         }
 
     }
