@@ -13,7 +13,9 @@ import com.example.thomasraybould.nycschools.rx_util.SchedulerProvider;
 import com.example.thomasraybould.nycschools.view.base.AbstractRxPresenter;
 
 import java.util.ArrayList;
+import java.util.HashMap;
 import java.util.List;
+import java.util.Map;
 
 import javax.inject.Inject;
 
@@ -32,6 +34,8 @@ public class SchoolListPresenterImpl extends AbstractRxPresenter<SchoolListView>
 
     private final List<Borough> selectedBoroughs = new ArrayList<>();
     private final List<School>  selectedSchools = new ArrayList<>();
+
+    private final Map<String, Disposable> pendingDownloads = new HashMap<>();
 
     @Override
     public void onCreate(SchoolListView view) {
@@ -59,10 +63,16 @@ public class SchoolListPresenterImpl extends AbstractRxPresenter<SchoolListView>
 
     @Override
     public void onBoroughSelected(Borough borough) {
+
+        //cancel download of json and remove school cells from list
         if(selectedBoroughs.contains(borough)){
             selectedBoroughs.remove(borough);
             removeSelectSchoolsForBorough(borough);
             view.removeItemsForBorough(borough);
+            Disposable disposable = pendingDownloads.get(borough.code);
+            if(disposable!= null){
+                disposable.dispose();
+            }
             return;
         }
 
@@ -74,6 +84,8 @@ public class SchoolListPresenterImpl extends AbstractRxPresenter<SchoolListView>
                 .subscribe(this::processGetSchoolListResponse,
                         throwable -> failedToLoadList());
 
+        pendingDownloads.put(borough.code, disposable);
+
         onPauseDisposable.add(disposable);
     }
 
@@ -81,8 +93,16 @@ public class SchoolListPresenterImpl extends AbstractRxPresenter<SchoolListView>
         for (int i = selectedSchools.size() - 1; i >= 0; i--){
             School school = selectedSchools.get(i);
             if(school.getBorough().equals(borough)){
+                stopSatScoreRequest(school.getDbn());
                 selectedSchools.remove(i);
             }
+        }
+    }
+
+    private void stopSatScoreRequest(String dbn){
+        Disposable disposable = pendingDownloads.get(dbn);
+        if(disposable != null){
+            disposable.dispose();
         }
     }
 
@@ -118,6 +138,7 @@ public class SchoolListPresenterImpl extends AbstractRxPresenter<SchoolListView>
     @Override
     public void onSchoolSelected(School school) {
         if(selectedSchools.contains(school)){
+            stopSatScoreRequest(school.getDbn());
             view.removeScoreItem(school.getDbn());
             selectedSchools.remove(school);
             return;
@@ -129,6 +150,8 @@ public class SchoolListPresenterImpl extends AbstractRxPresenter<SchoolListView>
                 .observeOn(schedulerProvider.main())
                 .subscribe(satDataResponse -> processSatScoreResponse(satDataResponse, school),
                         throwable -> failedToGetSatData());
+
+        pendingDownloads.put(school.getDbn(), disposable);
 
         onPauseDisposable.add(disposable);
     }
