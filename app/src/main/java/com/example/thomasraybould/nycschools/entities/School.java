@@ -23,4 +23,12 @@ public class School {
     public Borough getBorough() {
         return borough;
     }
+
+    @Override
+    public boolean equals(Object obj) {
+        if(!(obj instanceof School)){
+            return false;
+        }
+        return ((School) obj).dbn.equals(this.dbn);
+    }
 }
