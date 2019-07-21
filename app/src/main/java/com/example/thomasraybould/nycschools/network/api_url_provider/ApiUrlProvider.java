@@ -4,4 +4,6 @@ public interface ApiUrlProvider {
 
     String getSchoolListApi();
 
+    String getSchoolSatApi();
+
 }

@@ -3,6 +3,7 @@ package com.example.thomasraybould.nycschools.data;
 import com.example.thomasraybould.nycschools.domain.get_school_list_interactor.data.SchoolListResponse;
 import com.example.thomasraybould.nycschools.entities.Borough;
 import com.example.thomasraybould.nycschools.entities.School;
+import com.example.thomasraybould.nycschools.network.FakeApiUrlProvider;
 import com.example.thomasraybould.nycschools.network.TestHttpClient;
 import com.example.thomasraybould.nycschools.network.api_url_provider.ApiUrlProvider;
 import com.example.thomasraybould.nycschools.network.auth_token_provider.AuthTokenProvider;
@@ -23,7 +24,7 @@ public class SchoolListWebRepoImplTest {
         httpClient = TestHttpClient.getHttpClient();
 
         authTokenProvider = HashMap::new;
-        apiUrlProvider = () -> "https://data.cityofnewyork.us/resource/s3k6-pzi2.json";
+        apiUrlProvider = FakeApiUrlProvider.getApiUrlProvider();
     }
 
     @Test
