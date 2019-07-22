@@ -53,14 +53,14 @@ public class SatScoreDataRepoImpl extends AbstractWebRepo implements SatScoreDat
         JSONObject satDataObject = data.optJSONObject(0);
 
         if(satDataObject == null){
-            return SatDataResponse.failure();
+            return SatDataResponse.noDataAvailable(dbn);
         }
 
         String dbnFromJson = satDataObject.optString("dbn");
 
         //wrong school or null in response
         if(!dbn.equals(dbnFromJson)){
-            return SatDataResponse.failure();
+            return SatDataResponse.noDataAvailable(dbn);
         }
 
         int mathScore       = satDataObject.optInt("sat_math_avg_score", -1);

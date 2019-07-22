@@ -58,5 +58,21 @@ public class SatScoreDataRepoImplTest {
 
     }
 
+    @Test
+    public void getSatScoresServerResponseWithEmptyArr() {
+        SatScoreDataRepo satScoreDataRepo = new SatScoreDataRepoImpl(httpClient, authTokenProvider, apiUrlProvider);
+
+        String dbn = "02M546";
+
+        satScoreDataRepo.getSatScoreDataByDbn(dbn)
+                .test()
+                .assertValue(SatDataResponse::isSuccessful)
+                .assertValue(satDataResponse -> satDataResponse.getSatScoreData().getDbn().equals(dbn))
+                .assertValue(satDataResponse -> !satDataResponse.getSatScoreData().isDataAvailable())
+                .assertComplete();
+
+    }
+
+
 
 }
