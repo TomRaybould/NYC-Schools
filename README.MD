@@ -40,5 +40,9 @@
 
 * Storage and security of auth token for API.
 
+<p>
+    I have tagged this project in four working stages of development, inorder
+    to show the progression of the app.
+<p/>
 
 ![Architecture drawing](https://res.cloudinary.com/dgrwnfwr2/image/upload/v1563769706/nycschoolsproject_cu492w.jpg)
