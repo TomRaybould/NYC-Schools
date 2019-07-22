@@ -73,8 +73,11 @@ public class SchoolListPresenterImpl extends AbstractRxPresenter<SchoolListView>
             if(disposable!= null){
                 disposable.dispose();
             }
+            view.changeBoroughLoadingStatus(borough, false);
             return;
         }
+
+        view.changeBoroughLoadingStatus(borough, true);
 
         selectedBoroughs.add(borough);
 
@@ -82,7 +85,7 @@ public class SchoolListPresenterImpl extends AbstractRxPresenter<SchoolListView>
                 .subscribeOn(schedulerProvider.io())
                 .observeOn(schedulerProvider.main())
                 .subscribe(this::processGetSchoolListResponse,
-                        throwable -> failedToLoadList());
+                        throwable -> failedToLoadList(borough));
 
         pendingDownloads.put(borough.code, disposable);
 
@@ -111,19 +114,24 @@ public class SchoolListPresenterImpl extends AbstractRxPresenter<SchoolListView>
             return;
         }
         if(!schoolListResponse.isSuccessful()){
-            failedToLoadList();
+            failedToLoadList(schoolListResponse.getBorough());
+            return;
         }
         List<School> schools = schoolListResponse.getSchools();
 
         List<SchoolListItem> schoolListItems = schoolsToListItems(schools);
         view.addItemsForBorough(schoolListItems, schoolListResponse.getBorough());
+        view.changeBoroughLoadingStatus(schoolListResponse.getBorough(), false);
     }
 
-    private void failedToLoadList(){
+    private void failedToLoadList(Borough borough){
         if(view == null){
             return;
         }
-        view.setSchoolList(new ArrayList<>());
+
+        selectedBoroughs.remove(borough);
+        view.changeBoroughLoadingStatus(borough, false);
+        view.toast("Failed to load schools");
     }
 
     private List<SchoolListItem> schoolsToListItems(List<School> schools){

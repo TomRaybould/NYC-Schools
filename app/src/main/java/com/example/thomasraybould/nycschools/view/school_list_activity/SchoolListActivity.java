@@ -93,4 +93,8 @@ public class SchoolListActivity extends AppCompatActivity implements SchoolListV
         schoolListAdapter.removeScoreItem(schoolDbn);
     }
 
+    @Override
+    public void changeBoroughLoadingStatus(Borough borough, boolean isLoading) {
+        schoolListAdapter.changeLoadingStatusOfBorough(borough, isLoading);
+    }
 }

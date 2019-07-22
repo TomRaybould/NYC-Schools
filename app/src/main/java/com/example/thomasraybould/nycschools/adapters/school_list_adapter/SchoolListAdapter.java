@@ -1,7 +1,9 @@
 package com.example.thomasraybould.nycschools.adapters.school_list_adapter;
 
 import android.content.Context;
+import android.graphics.PorterDuff;
 import android.support.annotation.NonNull;
+import android.support.v4.content.ContextCompat;
 import android.support.v7.widget.RecyclerView;
 import android.text.Html;
 import android.text.Spanned;
@@ -18,7 +20,6 @@ import com.bumptech.glide.request.RequestOptions;
 import com.example.thomasraybould.nycschools.R;
 import com.example.thomasraybould.nycschools.entities.Borough;
 import com.example.thomasraybould.nycschools.entities.SatScoreData;
-import com.example.thomasraybould.nycschools.entities.School;
 import com.example.thomasraybould.nycschools.util.StringUtil;
 
 import java.util.List;
@@ -31,6 +32,10 @@ public class SchoolListAdapter extends RecyclerView.Adapter<SchoolListAdapter.Vi
 
     private final List<SchoolListItem> schoolListItems;
     private final Context context;
+
+    private enum LoadingPayLoad{
+        LOADING_PAY_LOAD
+    }
 
     private SchoolListAdapter(Context context, List<SchoolListItem> schoolListItems) {
         this.schoolListItems = schoolListItems;
@@ -104,9 +109,18 @@ public class SchoolListAdapter extends RecyclerView.Adapter<SchoolListAdapter.Vi
             }
         }
 
-
     }
 
+    public void changeLoadingStatusOfBorough(Borough borough, boolean isLoading){
+        for(int i = 0; i < schoolListItems.size(); i++){
+            SchoolListItem schoolListItem = schoolListItems.get(i);
+            if(schoolListItem.getType() == BOROUGH_TITLE && schoolListItem.getBorough() == borough){
+                schoolListItem.setLoading(isLoading);
+                notifyItemChanged(i, LoadingPayLoad.LOADING_PAY_LOAD);
+                break;
+            }
+        }
+    }
 
     public void removeItemsForBorough(Borough borough) {
         //go through list in reverse to remove items
@@ -141,13 +155,25 @@ public class SchoolListAdapter extends RecyclerView.Adapter<SchoolListAdapter.Vi
     }
 
     @Override
+    public void onBindViewHolder(@NonNull ViewHolder holder, int position, @NonNull List<Object> payloads) {
+        if(!payloads.isEmpty() && payloads.get(0) == LoadingPayLoad.LOADING_PAY_LOAD){
+            SchoolListItem schoolListItem = schoolListItems.get(position);
+            if(schoolListItem.getType() == BOROUGH_TITLE){
+                holder.bindLoadingStatus(schoolListItem);
+            }
+            return;
+        }
+        super.onBindViewHolder(holder, position, payloads);
+    }
+
+    @Override
     public void onBindViewHolder(@NonNull ViewHolder holder, int position) {
         SchoolListItem schoolListItem = schoolListItems.get(position);
         if(schoolListItem.getType() == BOROUGH_TITLE){
             holder.bindBorough(schoolListItem, context);
         }
         else if(schoolListItem.getType() == SAT_SCORE_ITEM){
-            holder.bindScore(schoolListItem);
+            holder.bindScore(schoolListItem, context);
         }
         else{
             holder.bindSchool(schoolListItem);
@@ -168,6 +194,7 @@ public class SchoolListAdapter extends RecyclerView.Adapter<SchoolListAdapter.Vi
 
         TextView textView;
         ImageView imageView;
+        ProgressBar boroughLoadingProgressBar;
 
         TextView mathScoreTextView, readingScoreTextView, writingScoreTextView;
         ProgressBar mathScoreProgressBar, readingScoreProgressBar, writingScoreProgressBar;
@@ -184,7 +211,7 @@ public class SchoolListAdapter extends RecyclerView.Adapter<SchoolListAdapter.Vi
             readingScoreProgressBar    = itemView.findViewById(R.id.readingProgressBar);
             writingScoreProgressBar    = itemView.findViewById(R.id.writingProgressBar);
             webPageLinkTextView        = itemView.findViewById(R.id.webPageTextView);
-
+            boroughLoadingProgressBar  = itemView.findViewById(R.id.progressBar);
         }
 
         void bindSchool(SchoolListItem schoolListItem){
@@ -204,15 +231,16 @@ public class SchoolListAdapter extends RecyclerView.Adapter<SchoolListAdapter.Vi
                     .load(schoolListItem.getImageResId())
                     .into(imageView);
 
-
             Runnable onClickRunnable = schoolListItem.getOnClickRunnable();
 
             if(onClickRunnable != null) {
                 itemView.setOnClickListener(view -> onClickRunnable.run());
             }
+            setProgressBarColor(boroughLoadingProgressBar, context);
+            bindLoadingStatus(schoolListItem);
         }
 
-        void bindScore(SchoolListItem schoolListItem) {
+        void bindScore(SchoolListItem schoolListItem, Context context) {
             SatScoreData satScoreData = schoolListItem.getSatScoreData();
 
             if(satScoreData.isDataAvailable()) {
@@ -235,6 +263,10 @@ public class SchoolListAdapter extends RecyclerView.Adapter<SchoolListAdapter.Vi
             int readingPercent = (int)(100 * satScoreData.getReading() / 800f);
             int writingPercent = (int)(100 * satScoreData.getWriting() / 800f);
 
+            setProgressBarColorDeterminate(mathScoreProgressBar, context);
+            setProgressBarColorDeterminate(readingScoreProgressBar, context);
+            setProgressBarColorDeterminate(writingScoreProgressBar, context);
+
             mathScoreProgressBar.setProgress(mathPercent);
             readingScoreProgressBar.setProgress(readingPercent);
             writingScoreProgressBar.setProgress(writingPercent);
@@ -256,8 +288,24 @@ public class SchoolListAdapter extends RecyclerView.Adapter<SchoolListAdapter.Vi
             }
         }
 
+        void bindLoadingStatus(SchoolListItem schoolListItem) {
+            if(schoolListItem.isLoading()){
+                boroughLoadingProgressBar.setVisibility(View.VISIBLE);
+            }
+            else{
+                boroughLoadingProgressBar.setVisibility(View.GONE);
+            }
+        }
+
         private static String addBlackStyleToString(String string){
             return "<b><font color='black'>"+string+"</font></b>/800";
+        }
+
+        private static void setProgressBarColor(ProgressBar progressBar, Context context){
+            progressBar.getIndeterminateDrawable().setColorFilter(ContextCompat.getColor(context, R.color.progress_bar_color), PorterDuff.Mode.SRC_IN);
+        }
+        private static void setProgressBarColorDeterminate(ProgressBar progressBar, Context context){
+            progressBar.getProgressDrawable().setColorFilter(ContextCompat.getColor(context, R.color.progress_bar_color), PorterDuff.Mode.SRC_IN);
         }
 
     }

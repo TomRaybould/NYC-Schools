@@ -12,6 +12,7 @@ public class SchoolListItem {
     private final Borough               borough;
     private final School                school;
     private final int                   imageResId;
+    private boolean                     isLoading;
     private final Runnable              onClickRunnable;
 
     private SchoolListItem(Builder builder) {
@@ -20,6 +21,7 @@ public class SchoolListItem {
         borough = builder.borough;
         school = builder.school;
         imageResId = builder.imageResId;
+        isLoading = builder.isLoading;
         onClickRunnable = builder.onClickRunnable;
     }
 
@@ -50,6 +52,14 @@ public class SchoolListItem {
 
     public SatScoreData getSatScoreData() {
         return satScoreData;
+    }
+
+    public boolean isLoading() {
+        return isLoading;
+    }
+
+    public void setLoading(boolean loading) {
+        isLoading = loading;
     }
 
     public static SchoolListItem createSchoolItem(School school, Borough borough, Runnable onClickRunnable) {
@@ -103,6 +113,7 @@ public class SchoolListItem {
         private Borough borough;
         private School school;
         private int imageResId;
+        private boolean isLoading;
         private Runnable onClickRunnable;
 
         private Builder() {
@@ -130,6 +141,11 @@ public class SchoolListItem {
 
         public Builder imageResId(int val) {
             imageResId = val;
+            return this;
+        }
+
+        public Builder isLoading(boolean val) {
+            isLoading = val;
             return this;
         }
 
