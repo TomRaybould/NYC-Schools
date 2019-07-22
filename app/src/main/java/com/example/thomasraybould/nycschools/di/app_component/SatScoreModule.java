@@ -1,7 +1,9 @@
 package com.example.thomasraybould.nycschools.di.app_component;
 
+import com.example.thomasraybould.nycschools.data.SatScoreDataDbRepoImpl;
 import com.example.thomasraybould.nycschools.data.SatScoreDataRepoImpl;
 import com.example.thomasraybould.nycschools.domain.get_sat_score_interactor.GetSatScoreDataInteractor;
+import com.example.thomasraybould.nycschools.domain.get_sat_score_interactor.SatScoreDataDbRepo;
 import com.example.thomasraybould.nycschools.domain.get_sat_score_interactor.SatScoreDataRepo;
 import com.example.thomasraybould.nycschools.domain.get_sat_score_interactor.impl.GetSatScoreDataInteractorImpl;
 
@@ -20,6 +22,12 @@ public class SatScoreModule {
     @AppScope
     @Provides
     static SatScoreDataRepo satScoredDataRepo(SatScoreDataRepoImpl satScoredDataRepo){
+        return satScoredDataRepo;
+    }
+
+    @AppScope
+    @Provides
+    static SatScoreDataDbRepo satScoredDataDbRepo(SatScoreDataDbRepoImpl satScoredDataRepo){
         return satScoredDataRepo;
     }
 

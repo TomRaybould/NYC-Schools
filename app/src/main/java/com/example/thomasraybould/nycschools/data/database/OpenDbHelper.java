@@ -41,7 +41,7 @@ public class OpenDbHelper extends SQLiteOpenHelper {
     private static final String createScoreTable =
             "CREATE TABLE " + SCORE_DATA_TABLE +" ( "
                     + SCORE_DATA_DBN          + " VARCHAR UNIQUE, "
-                    + SCORE_DATA_IS_AVAILABLE + " VARCHAR, "
+                    + SCORE_DATA_IS_AVAILABLE + " INTEGER, " // 1 for true, 0 for false
                     + SCORE_DATA_MATH         + " INTEGER, "
                     + SCORE_DATA_READING      + " INTEGER, "
                     + SCORE_DATA_WRITING      + " INTEGER"

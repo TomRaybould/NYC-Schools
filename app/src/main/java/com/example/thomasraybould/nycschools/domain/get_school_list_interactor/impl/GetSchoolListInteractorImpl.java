@@ -29,7 +29,7 @@ public class GetSchoolListInteractorImpl implements GetSchoolListInteractor{
     @Override
     public Single<SchoolListResponse> getSchoolsByBorough(Borough borough) {
         return schoolListDbRepo.getSchoolsByBorough(borough)
-                .flatMap((Function<SchoolListResponse, SingleSource<SchoolListResponse>>) schoolListResponse -> {
+                .flatMap(schoolListResponse -> {
                     if (schoolListResponse.isSuccessful()) {
                         return Single.just(schoolListResponse);
                     }
