@@ -7,7 +7,8 @@ import dagger.Component;
 @Component(modules = {NetworkModule.class,
         SchoolListModule.class,
         SatScoreModule.class,
-        RxModule.class})
+        RxModule.class,
+        DbModule.class})
 @AppScope
 public interface AppComponent {
 

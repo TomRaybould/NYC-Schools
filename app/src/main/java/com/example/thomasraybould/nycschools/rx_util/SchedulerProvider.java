@@ -10,4 +10,6 @@ public interface SchedulerProvider {
 
     Scheduler main();
 
+    Scheduler db();
+
 }

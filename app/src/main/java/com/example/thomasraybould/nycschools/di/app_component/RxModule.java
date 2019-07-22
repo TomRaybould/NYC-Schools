@@ -29,6 +29,15 @@ public class RxModule {
             public Scheduler main() {
                 return AndroidSchedulers.mainThread();
             }
+
+            @Override
+            public Scheduler db() {
+                /*
+                    ensure that all db actions occur of same thread to avoid,
+                    closed database issues.
+                 */
+                return Schedulers.single();
+            }
         };
     }
 
