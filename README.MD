@@ -24,6 +24,8 @@
 
 * SQLite for caching all requests. Once the list of schools for a borough is downloaded the app will no longer hit the api for this borough again. Same with the SAT data for a school.
 
+* There are also some unit tests to check that I am properly receiving and parsing the data from the api.
+
 
 ### What's left
 
@@ -39,6 +41,8 @@
 * Displaying more interesting data and creating more Activities. Along with more styling.
 
 * Storage and security of auth token for API.
+
+* More tests.
 
 <p>
     I have tagged this project in four working stages of development, inorder
