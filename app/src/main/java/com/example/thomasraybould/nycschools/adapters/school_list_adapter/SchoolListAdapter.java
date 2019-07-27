@@ -20,6 +20,7 @@ import com.bumptech.glide.request.RequestOptions;
 import com.example.thomasraybould.nycschools.R;
 import com.example.thomasraybould.nycschools.entities.Borough;
 import com.example.thomasraybould.nycschools.entities.SatScoreData;
+import com.example.thomasraybould.nycschools.entities.School;
 import com.example.thomasraybould.nycschools.util.StringUtil;
 
 import java.util.List;
@@ -30,6 +31,7 @@ import static com.example.thomasraybould.nycschools.adapters.school_list_adapter
 
 public class SchoolListAdapter extends RecyclerView.Adapter<SchoolListAdapter.ViewHolder>{
 
+    private final OnSchoolListItemSelectedListener listener;
     private final List<SchoolListItem> schoolListItems;
     private final Context context;
 
@@ -37,13 +39,14 @@ public class SchoolListAdapter extends RecyclerView.Adapter<SchoolListAdapter.Vi
         LOADING_PAY_LOAD
     }
 
-    private SchoolListAdapter(Context context, List<SchoolListItem> schoolListItems) {
+    private SchoolListAdapter(OnSchoolListItemSelectedListener listener, Context context, List<SchoolListItem> schoolListItems) {
+        this.listener = listener;
         this.schoolListItems = schoolListItems;
         this.context = context;
     }
 
-    public static SchoolListAdapter createSchoolListAdapter(Context context, List<SchoolListItem> schoolListItems) {
-        return new SchoolListAdapter(context, schoolListItems);
+    public static SchoolListAdapter createSchoolListAdapter(OnSchoolListItemSelectedListener listener, Context context, List<SchoolListItem> schoolListItems) {
+        return new SchoolListAdapter(listener, context, schoolListItems);
     }
 
     public int addSchoolItemsForBorough(List<SchoolListItem> newItems, Borough borough){
@@ -53,6 +56,7 @@ public class SchoolListAdapter extends RecyclerView.Adapter<SchoolListAdapter.Vi
         for (int i = 0; i < schoolListItems.size(); i++) {
             SchoolListItem schoolListItem = schoolListItems.get(i);
             if(schoolListItem.getType() == BOROUGH_TITLE && schoolListItem.getBorough() == borough){
+                schoolListItem.setSelected(true);
                 insertTarget = i + 1;
             }
         }
@@ -99,13 +103,19 @@ public class SchoolListAdapter extends RecyclerView.Adapter<SchoolListAdapter.Vi
 
         for (int i = 0; i < schoolListItems.size(); i++) {
             SchoolListItem schoolListItem = schoolListItems.get(i);
-            if(schoolListItem.getType() != SAT_SCORE_ITEM){
-                continue;
-            }
-            if(targetDbn.equals(schoolListItem.getSchool().getDbn())){
-                schoolListItems.remove(i);
-                notifyItemRemoved(i);
-                break;
+            School school = schoolListItem.getSchool();
+
+            String schoolItemDbn = null;
+
+            schoolItemDbn = school != null ? school.getDbn() : null;
+
+            if(targetDbn.equals(schoolItemDbn)) {
+                if (schoolListItem.getType() == SAT_SCORE_ITEM) {
+                    schoolListItems.remove(i);
+                    notifyItemRemoved(i);
+                    break;
+                }
+
             }
         }
 
@@ -133,6 +143,10 @@ public class SchoolListAdapter extends RecyclerView.Adapter<SchoolListAdapter.Vi
             }
 
         }
+    }
+
+    public List<SchoolListItem> getCurrentList() {
+        return schoolListItems;
     }
 
     @NonNull
@@ -170,13 +184,13 @@ public class SchoolListAdapter extends RecyclerView.Adapter<SchoolListAdapter.Vi
     public void onBindViewHolder(@NonNull ViewHolder holder, int position) {
         SchoolListItem schoolListItem = schoolListItems.get(position);
         if(schoolListItem.getType() == BOROUGH_TITLE){
-            holder.bindBorough(schoolListItem, context);
+            holder.bindBorough(schoolListItem, context, listener);
         }
         else if(schoolListItem.getType() == SAT_SCORE_ITEM){
             holder.bindScore(schoolListItem, context);
         }
         else{
-            holder.bindSchool(schoolListItem);
+            holder.bindSchool(schoolListItem, listener);
         }
     }
 
@@ -214,15 +228,15 @@ public class SchoolListAdapter extends RecyclerView.Adapter<SchoolListAdapter.Vi
             boroughLoadingProgressBar  = itemView.findViewById(R.id.progressBar);
         }
 
-        void bindSchool(SchoolListItem schoolListItem){
+        void bindSchool(SchoolListItem schoolListItem, OnSchoolListItemSelectedListener listener){
             textView.setText(schoolListItem.getSchool().getName());
-            Runnable onClickRunnable = schoolListItem.getOnClickRunnable();
-            if(onClickRunnable != null) {
-                itemView.setOnClickListener(view -> onClickRunnable.run());
-            }
+            itemView.setOnClickListener((v)->{
+                listener.onSchoolListItemSelected(schoolListItem);
+                schoolListItem.setSelected(!schoolListItem.isSelected());
+            });
         }
 
-        void bindBorough(SchoolListItem schoolListItem, Context context){
+        void bindBorough(SchoolListItem schoolListItem, Context context, OnSchoolListItemSelectedListener listener){
             textView.setText(schoolListItem.getBorough().boroughTitle);
 
             Glide.with(context)
@@ -231,11 +245,11 @@ public class SchoolListAdapter extends RecyclerView.Adapter<SchoolListAdapter.Vi
                     .load(schoolListItem.getImageResId())
                     .into(imageView);
 
-            Runnable onClickRunnable = schoolListItem.getOnClickRunnable();
+            itemView.setOnClickListener((v)->{
+                listener.onSchoolListItemSelected(schoolListItem);
+                schoolListItem.setSelected(!schoolListItem.isSelected());
+            });
 
-            if(onClickRunnable != null) {
-                itemView.setOnClickListener(view -> onClickRunnable.run());
-            }
             setProgressBarColor(boroughLoadingProgressBar, context);
             bindLoadingStatus(schoolListItem);
         }

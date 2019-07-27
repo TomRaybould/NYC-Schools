@@ -10,6 +10,7 @@ import com.example.thomasraybould.nycschools.entities.Borough;
 import com.example.thomasraybould.nycschools.entities.SatScoreData;
 import com.example.thomasraybould.nycschools.entities.School;
 import com.example.thomasraybould.nycschools.rx_util.SchedulerProvider;
+import com.example.thomasraybould.nycschools.util.cache.Cache;
 import com.example.thomasraybould.nycschools.view.base.AbstractRxPresenter;
 
 import java.util.ArrayList;
@@ -32,10 +33,12 @@ public class SchoolListPresenterImpl extends AbstractRxPresenter<SchoolListView>
     @Inject
     SchedulerProvider schedulerProvider;
 
-    private final List<Borough> selectedBoroughs = new ArrayList<>();
-    private final List<School>  selectedSchools = new ArrayList<>();
+    @Inject
+    SchoolListCache schoolListItemCache;
 
     private final Map<String, Disposable> pendingDownloads = new HashMap<>();
+
+    private final static String LIST_ITEMS_CACHE_KEY = "list_items_cache_key";
 
     @Override
     public void onCreate(SchoolListView view) {
@@ -51,23 +54,41 @@ public class SchoolListPresenterImpl extends AbstractRxPresenter<SchoolListView>
     }
 
     private void setInitList() {
-        List<SchoolListItem> schoolListItems = new ArrayList<>();
-        for(Borough borough : Borough.values()){
-            SchoolListItem boroughItem = SchoolListItem.createBoroughItem(borough, ()-> onBoroughSelected(borough));
-            schoolListItems.add(boroughItem);
+        List<SchoolListItem> schoolListItems = schoolListItemCache.get(LIST_ITEMS_CACHE_KEY);
+
+        if(schoolListItems == null || schoolListItems.isEmpty()) {
+            schoolListItems = new ArrayList<>();
+            for (Borough borough : Borough.values()) {
+                SchoolListItem boroughItem = SchoolListItem.createBoroughItem(borough);
+                schoolListItems.add(boroughItem);
+            }
         }
 
         view.setSchoolList(schoolListItems);
     }
 
+    @Override
+    public void onPause() {
+        List<SchoolListItem> currentListItems = view.getCurrentListItems();
+        schoolListItemCache.put(LIST_ITEMS_CACHE_KEY, currentListItems);
+        pendingDownloads.clear();
+        super.onPause();
+    }
 
     @Override
-    public void onBoroughSelected(Borough borough) {
+    public void onSchoolListItemSelected(SchoolListItem schoolListItem) {
+        if(schoolListItem.getType() == SchoolListItemType.BOROUGH_TITLE){
+            onBoroughSelected(schoolListItem);
+        }
+        else if (schoolListItem.getType() == SchoolListItemType.SCHOOL_ITEM){
+            onSchoolSelected(schoolListItem);
+        }
+    }
 
+    private void onBoroughSelected(SchoolListItem schoolListItem) {
+        Borough borough = schoolListItem.getBorough();
         //cancel download of json and remove school cells from list
-        if(selectedBoroughs.contains(borough)){
-            selectedBoroughs.remove(borough);
-            removeSelectSchoolsForBorough(borough);
+        if(schoolListItem.isSelected()){
             view.removeItemsForBorough(borough);
             Disposable disposable = pendingDownloads.get(borough.code);
             if(disposable!= null){
@@ -78,8 +99,6 @@ public class SchoolListPresenterImpl extends AbstractRxPresenter<SchoolListView>
         }
 
         view.changeBoroughLoadingStatus(borough, true);
-
-        selectedBoroughs.add(borough);
 
         Disposable disposable = getSchoolListInteractor.getSchoolsByBorough(borough)
                 .subscribeOn(schedulerProvider.io())
@@ -92,15 +111,6 @@ public class SchoolListPresenterImpl extends AbstractRxPresenter<SchoolListView>
         onPauseDisposable.add(disposable);
     }
 
-    private void removeSelectSchoolsForBorough(Borough borough) {
-        for (int i = selectedSchools.size() - 1; i >= 0; i--){
-            School school = selectedSchools.get(i);
-            if(school.getBorough().equals(borough)){
-                stopSatScoreRequest(school.getDbn());
-                selectedSchools.remove(i);
-            }
-        }
-    }
 
     private void stopSatScoreRequest(String dbn){
         Disposable disposable = pendingDownloads.get(dbn);
@@ -129,7 +139,6 @@ public class SchoolListPresenterImpl extends AbstractRxPresenter<SchoolListView>
             return;
         }
 
-        selectedBoroughs.remove(borough);
         view.changeBoroughLoadingStatus(borough, false);
         view.toast("Failed to load schools");
     }
@@ -137,21 +146,19 @@ public class SchoolListPresenterImpl extends AbstractRxPresenter<SchoolListView>
     private List<SchoolListItem> schoolsToListItems(List<School> schools){
         List<SchoolListItem> schoolListItems = new ArrayList<>();
         for (School school: schools) {
-            SchoolListItem schoolItem = SchoolListItem.createSchoolItem(school, school.getBorough(), () -> this.onSchoolSelected(school));
+            SchoolListItem schoolItem = SchoolListItem.createSchoolItem(school, school.getBorough());
             schoolListItems.add(schoolItem);
         }
         return schoolListItems;
     }
 
-    @Override
-    public void onSchoolSelected(School school) {
-        if(selectedSchools.contains(school)){
+    private void onSchoolSelected(SchoolListItem schoolListItem){
+        School school = schoolListItem.getSchool();
+        if(schoolListItem.isSelected()){
             stopSatScoreRequest(school.getDbn());
             view.removeScoreItem(school.getDbn());
-            selectedSchools.remove(school);
             return;
         }
-        selectedSchools.add(school);
 
         Disposable disposable = getSatScoreDataInteractor.getSatScoreDataByDbn(school.getDbn())
                 .subscribeOn(schedulerProvider.io())
@@ -181,7 +188,6 @@ public class SchoolListPresenterImpl extends AbstractRxPresenter<SchoolListView>
     }
 
     private void failedToGetSatData(School school){
-        selectedSchools.remove(school);
         view.toast("Failed to load SAT scores");
     }
 

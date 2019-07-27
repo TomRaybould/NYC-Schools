@@ -7,10 +7,11 @@ import dagger.Component;
 @Component(modules = {NetworkModule.class,
         SchoolListModule.class,
         SatScoreModule.class,
+        SchoolListActivityModule.class,
         RxModule.class,
         DbModule.class})
 @AppScope
 public interface AppComponent {
 
-    void inject(SchoolListPresenterImpl schoolListActivity);
+    void inject(SchoolListPresenterImpl schoolListPresenter);
 }

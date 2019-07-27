@@ -21,4 +21,5 @@ public interface SchoolListView {
 
     void changeBoroughLoadingStatus(Borough borough, boolean isLoading);
 
+    List<SchoolListItem> getCurrentListItems();
 }

@@ -8,13 +8,14 @@ import android.support.v7.widget.RecyclerView;
 import android.widget.Toast;
 
 import com.example.thomasraybould.nycschools.R;
+import com.example.thomasraybould.nycschools.adapters.school_list_adapter.OnSchoolListItemSelectedListener;
 import com.example.thomasraybould.nycschools.adapters.school_list_adapter.SchoolListAdapter;
 import com.example.thomasraybould.nycschools.adapters.school_list_adapter.SchoolListItem;
 import com.example.thomasraybould.nycschools.entities.Borough;
 
 import java.util.List;
 
-public class SchoolListActivity extends AppCompatActivity implements SchoolListView {
+public class SchoolListActivity extends AppCompatActivity implements SchoolListView, OnSchoolListItemSelectedListener {
 
     private RecyclerView recyclerView;
     private LinearLayoutManager linearLayoutManager;
@@ -68,7 +69,7 @@ public class SchoolListActivity extends AppCompatActivity implements SchoolListV
 
     @Override
     public void setSchoolList(List<SchoolListItem> schoolListItems) {
-        schoolListAdapter = SchoolListAdapter.createSchoolListAdapter(this, schoolListItems);
+        schoolListAdapter = SchoolListAdapter.createSchoolListAdapter(this, this, schoolListItems);
         recyclerView.setAdapter(schoolListAdapter);
     }
 
@@ -96,5 +97,15 @@ public class SchoolListActivity extends AppCompatActivity implements SchoolListV
     @Override
     public void changeBoroughLoadingStatus(Borough borough, boolean isLoading) {
         schoolListAdapter.changeLoadingStatusOfBorough(borough, isLoading);
+    }
+
+    @Override
+    public List<SchoolListItem> getCurrentListItems() {
+        return schoolListAdapter.getCurrentList();
+    }
+
+    @Override
+    public void onSchoolListItemSelected(SchoolListItem schoolListItem) {
+        schoolListPresenter.onSchoolListItemSelected(schoolListItem);
     }
 }

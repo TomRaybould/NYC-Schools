@@ -11,9 +11,9 @@ public class SchoolListItem {
     private final SatScoreData          satScoreData;
     private final Borough               borough;
     private final School                school;
+    private boolean                     isSelected;
     private final int                   imageResId;
     private boolean                     isLoading;
-    private final Runnable              onClickRunnable;
 
     private SchoolListItem(Builder builder) {
         type = builder.type;
@@ -22,7 +22,6 @@ public class SchoolListItem {
         school = builder.school;
         imageResId = builder.imageResId;
         isLoading = builder.isLoading;
-        onClickRunnable = builder.onClickRunnable;
     }
 
 
@@ -36,10 +35,6 @@ public class SchoolListItem {
 
     public SchoolListItemType getType() {
         return type;
-    }
-
-    public Runnable getOnClickRunnable() {
-        return onClickRunnable;
     }
 
     public Borough getBorough() {
@@ -58,20 +53,27 @@ public class SchoolListItem {
         return isLoading;
     }
 
+    public boolean isSelected() {
+        return isSelected;
+    }
+
+    public void setSelected(boolean selected) {
+        isSelected = selected;
+    }
+
     public void setLoading(boolean loading) {
         isLoading = loading;
     }
 
-    public static SchoolListItem createSchoolItem(School school, Borough borough, Runnable onClickRunnable) {
+    public static SchoolListItem createSchoolItem(School school, Borough borough) {
         return new Builder()
                 .type(SchoolListItemType.SCHOOL_ITEM)
                 .school(school)
                 .borough(borough)
-                .onClickRunnable(onClickRunnable)
                 .build();
     }
 
-    public static SchoolListItem createBoroughItem(Borough borough, Runnable onClickRunnable) {
+    public static SchoolListItem createBoroughItem(Borough borough) {
 
         int imageResId;
 
@@ -101,7 +103,6 @@ public class SchoolListItem {
         return SchoolListItem.newBuilder()
                 .type(SchoolListItemType.BOROUGH_TITLE)
                 .borough(borough)
-                .onClickRunnable(onClickRunnable)
                 .imageResId(imageResId)
                 .build();
     }
@@ -114,7 +115,6 @@ public class SchoolListItem {
         private School school;
         private int imageResId;
         private boolean isLoading;
-        private Runnable onClickRunnable;
 
         private Builder() {
         }
@@ -146,11 +146,6 @@ public class SchoolListItem {
 
         public Builder isLoading(boolean val) {
             isLoading = val;
-            return this;
-        }
-
-        public Builder onClickRunnable(Runnable val) {
-            onClickRunnable = val;
             return this;
         }
 

@@ -38,7 +38,7 @@
 
 - [ ] Handling multiple screen sizes. (This app was developed using a pixel 1) No tablet resources were made.
 
-- [ ] Handling orientation change. As it stands when the user changes to landscape the state of the list is lost and thus reloads as new. With more time, this would be an issue I could definitely fix.
+- [x] Handling orientation change. As it stands when the user changes to landscape the state of the list is lost and thus reloads as new. With more time, this would be an issue I could definitely fix.
 
 - [ ] Displaying more interesting data and creating more Activities. Along with more styling.
 
