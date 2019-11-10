@@ -15,7 +15,7 @@ import com.example.thomasraybould.nycschools.entities.Borough
 import java.util.*
 
 class SchoolListAdapter constructor(private val listener: OnSchoolListItemSelectedListener, private val context: Context) : RecyclerView.Adapter<SchoolListAdapter.ViewHolder>() {
-    private val schoolListItemUiModels : MutableList<SchoolListItemUiModel> = ArrayList()
+    private val schoolListItemUiModels: MutableList<SchoolListItemUiModel> = ArrayList()
 
     val currentList: List<SchoolListItemUiModel>
         get() = schoolListItemUiModels
@@ -24,18 +24,33 @@ class SchoolListAdapter constructor(private val listener: OnSchoolListItemSelect
         LOADING_PAY_LOAD
     }
 
-    fun updateList(schoolListItems: List<SchoolListItemUiModel>) {
+    fun updateList(newSchoolListItems: List<SchoolListItemUiModel>) {
         if (this.schoolListItemUiModels.isEmpty()) {
-            this.schoolListItemUiModels.addAll(schoolListItems)
+            this.schoolListItemUiModels.addAll(newSchoolListItems)
             this.notifyDataSetChanged()
             return
         }
-        removeItemsAsNeeded(schoolListItems)
+        removeItemsAsNeeded(newSchoolListItems)
+        addItemsAsNeeded(newSchoolListItems)
+    }
+
+    private fun addItemsAsNeeded(newSchoolListItems: List<SchoolListItemUiModel>) {
+        val sizeDiff = newSchoolListItems.size - schoolListItemUiModels.size
+        if (sizeDiff <= 0) return
+
+        newSchoolListItems.forEachIndexed { index, schoolListItemUiModel ->
+            if (index > schoolListItemUiModels.lastIndex || schoolListItemUiModels[index] != schoolListItemUiModel) {
+                schoolListItemUiModels.clear()
+                schoolListItemUiModels.addAll(newSchoolListItems)
+                notifyItemRangeInserted(index, sizeDiff)
+                return
+            }
+        }
     }
 
     private fun removeItemsAsNeeded(schoolListItems: List<SchoolListItemUiModel>) {
-        for(i in this.schoolListItemUiModels.size - 1 downTo  0){
-            if(!schoolListItems.contains(schoolListItemUiModels[i])){
+        for (i in this.schoolListItemUiModels.size - 1 downTo 0) {
+            if (!schoolListItems.contains(schoolListItemUiModels[i])) {
                 schoolListItemUiModels.removeAt(i)
                 notifyItemRemoved(i)
             }

@@ -21,7 +21,6 @@ import java.util.HashMap
 import javax.inject.Inject
 
 import io.reactivex.disposables.Disposable
-import io.reactivex.functions.Consumer
 
 class SchoolListPresenterImpl : AbstractRxPresenter<SchoolListView>(), SchoolListPresenter {
 
@@ -62,25 +61,9 @@ class SchoolListPresenterImpl : AbstractRxPresenter<SchoolListView>(), SchoolLis
         return schoolListUiModelLiveData
     }
 
-
-    private fun setInitList() {
-        var schoolListItemUiModels: MutableList<SchoolListItemUiModel>? = schoolListItemCache!!.get(LIST_ITEMS_CACHE_KEY)
-
-        if (schoolListItemUiModels == null || schoolListItemUiModels.isEmpty()) {
-            schoolListItemUiModels = ArrayList()
-            for (borough in Borough.values()) {
-                val boroughItem = SchoolListItemUiModel.createBoroughItem(borough)
-                schoolListItemUiModels.add(boroughItem)
-            }
-        }
-
-        view.setSchoolList(schoolListItemUiModels)
-    }
-
-
     override fun onPause() {
         val currentListItems = view.currentListItems
-        schoolListItemCache!!.put(LIST_ITEMS_CACHE_KEY, currentListItems)
+        schoolListItemCache.put(LIST_ITEMS_CACHE_KEY, currentListItems)
         pendingDownloads.clear()
         super.onPause()
     }
@@ -97,30 +80,32 @@ class SchoolListPresenterImpl : AbstractRxPresenter<SchoolListView>(), SchoolLis
         val borough = schoolListItemUiModel.borough
         //cancel download of json and remove school cells from list
         if (schoolListItemUiModel.isSelected) {
-            view.removeItemsForBorough(borough)
+            for (i in schoolListItemUiModels.size - 1 downTo 0) {
+                if (schoolListItemUiModels[i].borough == borough) {
+                    if (schoolListItemUiModels[i].type == SchoolListItemType.BOROUGH_TITLE) {
+                        schoolListItemUiModels[i].isLoading = false
+                    } else {
+                        schoolListItemUiModels.removeAt(i)
+                    }
+                }
+            }
+            schoolListUiModelLiveData.postValue(SchoolListUiModel(schoolListItemUiModels))
             val disposable = pendingDownloads[borough.code]
             disposable?.dispose()
-            view.changeBoroughLoadingStatus(borough, false)
             return
         }
 
         view.changeBoroughLoadingStatus(borough, true)
 
-        val disposable = getSchoolListInteractor!!.getSchoolsByBorough(borough)
-                .subscribeOn(schedulerProvider!!.io())
-                .observeOn(schedulerProvider!!.main())
+        val disposable = getSchoolListInteractor.getSchoolsByBorough(borough)
+                .subscribeOn(schedulerProvider.io())
+                .observeOn(schedulerProvider.main())
                 .subscribe({ this.processGetSchoolListResponse(it) },
                         { failedToLoadList(borough) })
 
         pendingDownloads[borough.code] = disposable
 
         onPauseDisposable.add(disposable)
-    }
-
-
-    private fun stopSatScoreRequest(dbn: String) {
-        val disposable = pendingDownloads[dbn]
-        disposable?.dispose()
     }
 
     private fun processGetSchoolListResponse(schoolListResponse: SchoolListResponse) {
@@ -135,17 +120,16 @@ class SchoolListPresenterImpl : AbstractRxPresenter<SchoolListView>(), SchoolLis
         val schools = schoolListResponse.schools
 
         var targetIdx = 0
-        schoolListItemUiModels.forEachIndexed{index, schoolListItemUiModel ->
-            if(schoolListItemUiModel.borough == schoolListResponse.borough){
+        schoolListItemUiModels.forEachIndexed { index, schoolListItemUiModel ->
+            if (schoolListItemUiModel.borough == schoolListResponse.borough) {
+                schoolListItemUiModel.isLoading = false
                 targetIdx = index
             }
         }
 
-        val schoolListItemUiModels = schoolsToListItems(schools)
-        this.schoolListItemUiModels.addAll(targetIdx+1,schoolListItemUiModels)
-
-        view.addItemsForBorough(schoolListItemUiModels, schoolListResponse.borough)
-        view.changeBoroughLoadingStatus(schoolListResponse.borough, false)
+        val newSchoolListItemUiModels = schoolsToListItems(schools)
+        schoolListItemUiModels.addAll(targetIdx + 1, newSchoolListItemUiModels)
+        schoolListUiModelLiveData.postValue(SchoolListUiModel(schoolListItemUiModels))
     }
 
     private fun failedToLoadList(borough: Borough) {
@@ -175,8 +159,8 @@ class SchoolListPresenterImpl : AbstractRxPresenter<SchoolListView>(), SchoolLis
         }
 
         val disposable = getSatScoreDataInteractor!!.getSatScoreDataByDbn(school.dbn)
-                .subscribeOn(schedulerProvider!!.io())
-                .observeOn(schedulerProvider!!.main())
+                .subscribeOn(schedulerProvider.io())
+                .observeOn(schedulerProvider.main())
                 .subscribe({ satDataResponse -> processSatScoreResponse(satDataResponse, school) },
                         { throwable -> failedToGetSatData(school) })
 
