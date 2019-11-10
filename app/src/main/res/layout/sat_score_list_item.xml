@@ -1,149 +1,175 @@
 <?xml version="1.0" encoding="utf-8"?>
-<androidx.constraintlayout.widget.ConstraintLayout xmlns:android="http://schemas.android.com/apk/res/android"
-    xmlns:app="http://schemas.android.com/apk/res-auto"
-    xmlns:tools="http://schemas.android.com/tools"
-    android:layout_width="match_parent"
-    android:layout_height="wrap_content"
-    android:background="@color/school_item_bg_color">
+<layout>
 
-    <View
-        android:id="@+id/view3"
-        android:layout_width="0dp"
-        android:layout_height="0dp"
-        android:layout_marginEnd="16dp"
-        android:layout_marginLeft="16dp"
-        android:layout_marginRight="16dp"
-        android:layout_marginStart="16dp"
-        android:background="@color/sat_score_bg_color"
-        app:layout_constraintBottom_toBottomOf="parent"
-        app:layout_constraintEnd_toEndOf="parent"
-        app:layout_constraintHorizontal_bias="0.0"
-        app:layout_constraintStart_toStartOf="parent"
-        app:layout_constraintTop_toTopOf="parent"
-        app:layout_constraintVertical_bias="0.0" />
+    <data>
+        <variable
+            name="uiModel"
+            type="com.example.thomasraybould.nycschools.adapters.school_list_adapter.SchoolListItemUiModel"
+            />
+    </data>
 
-    <TextView
-        android:id="@+id/textView5"
-        android:layout_width="wrap_content"
+    <androidx.constraintlayout.widget.ConstraintLayout xmlns:android="http://schemas.android.com/apk/res/android"
+        xmlns:app="http://schemas.android.com/apk/res-auto"
+        xmlns:tools="http://schemas.android.com/tools"
+        android:layout_width="match_parent"
         android:layout_height="wrap_content"
-        android:layout_marginLeft="16dp"
-        android:layout_marginStart="16dp"
-        android:layout_marginTop="8dp"
-        android:text="Math"
-        android:textAlignment="center"
-        android:textSize="15sp"
-        android:textStyle="italic"
-        app:layout_constraintEnd_toStartOf="@+id/textView6"
-        app:layout_constraintHorizontal_bias="0.5"
-        app:layout_constraintHorizontal_chainStyle="spread"
-        app:layout_constraintStart_toStartOf="parent"
-        app:layout_constraintTop_toTopOf="parent" />
+        android:background="@color/school_item_bg_color">
 
-    <TextView
-        android:id="@+id/textView6"
-        android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
-        android:text="Reading"
-        android:textAlignment="center"
-        android:textSize="15sp"
-        android:textStyle="italic"
-        app:layout_constraintEnd_toStartOf="@+id/textView4"
-        app:layout_constraintHorizontal_bias="0.5"
-        app:layout_constraintStart_toEndOf="@+id/textView5"
-        app:layout_constraintTop_toTopOf="@+id/textView5" />
+        <View
+            android:id="@+id/view3"
+            android:layout_width="0dp"
+            android:layout_height="0dp"
+            android:layout_marginEnd="16dp"
+            android:layout_marginLeft="16dp"
+            android:layout_marginRight="16dp"
+            android:layout_marginStart="16dp"
+            android:background="@color/sat_score_bg_color"
+            app:layout_constraintBottom_toBottomOf="parent"
+            app:layout_constraintEnd_toEndOf="parent"
+            app:layout_constraintHorizontal_bias="0.0"
+            app:layout_constraintStart_toStartOf="parent"
+            app:layout_constraintTop_toTopOf="parent"
+            app:layout_constraintVertical_bias="0.0" />
 
-    <TextView
-        android:id="@+id/textView4"
-        android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
-        android:layout_marginEnd="16dp"
-        android:layout_marginRight="16dp"
-        android:text="Writing"
-        android:textAlignment="center"
-        android:textSize="15sp"
-        android:textStyle="italic"
-        app:layout_constraintEnd_toEndOf="parent"
-        app:layout_constraintHorizontal_bias="0.5"
-        app:layout_constraintStart_toEndOf="@+id/textView6"
-        app:layout_constraintTop_toTopOf="@+id/textView6" />
+        <TextView
+            android:id="@+id/textView5"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_marginLeft="16dp"
+            android:layout_marginStart="16dp"
+            android:layout_marginTop="8dp"
+            android:textAlignment="center"
+            android:textSize="15sp"
+            android:textStyle="italic"
+            android:text="@string/math"
+            tools:text="@string/math"
+            app:layout_constraintEnd_toStartOf="@+id/textView6"
+            app:layout_constraintHorizontal_bias="0.5"
+            app:layout_constraintHorizontal_chainStyle="spread"
+            app:layout_constraintStart_toStartOf="parent"
+            app:layout_constraintTop_toTopOf="parent" />
 
-    <TextView
-        android:id="@+id/mathScoreTextView"
-        android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
-        android:layout_marginTop="4dp"
-        android:text="TextView"
-        android:textAlignment="center"
-        app:layout_constraintEnd_toEndOf="@+id/textView5"
-        app:layout_constraintStart_toStartOf="@+id/textView5"
-        app:layout_constraintTop_toBottomOf="@+id/textView5" />
+        <TextView
+            android:id="@+id/textView6"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            tools:text="Reading"
+            android:text="@string/reading"
+            android:textAlignment="center"
+            android:textSize="15sp"
+            android:textStyle="italic"
+            app:layout_constraintEnd_toStartOf="@+id/textView4"
+            app:layout_constraintHorizontal_bias="0.5"
+            app:layout_constraintStart_toEndOf="@+id/textView5"
+            app:layout_constraintTop_toTopOf="@+id/textView5" />
 
-    <TextView
-        android:id="@+id/readingScoreTextView"
-        android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
-        android:text="TextView"
-        android:textAlignment="center"
-        app:layout_constraintBottom_toBottomOf="@+id/mathScoreTextView"
-        app:layout_constraintEnd_toEndOf="@+id/textView6"
-        app:layout_constraintStart_toStartOf="@+id/textView6"
-        app:layout_constraintTop_toTopOf="@+id/mathScoreTextView" />
+        <TextView
+            android:id="@+id/textView4"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_marginEnd="16dp"
+            android:layout_marginRight="16dp"
+            tools:text="@string/writing"
+            android:text="@string/writing"
+            android:textAlignment="center"
+            android:textSize="15sp"
+            android:textStyle="italic"
+            app:layout_constraintEnd_toEndOf="parent"
+            app:layout_constraintHorizontal_bias="0.5"
+            app:layout_constraintStart_toEndOf="@+id/textView6"
+            app:layout_constraintTop_toTopOf="@+id/textView6" />
 
-    <TextView
-        android:id="@+id/writingScoreTextView"
-        android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
-        android:text="TextView"
-        android:textAlignment="center"
-        app:layout_constraintBottom_toBottomOf="@+id/readingScoreTextView"
-        app:layout_constraintEnd_toEndOf="@+id/textView4"
-        app:layout_constraintStart_toStartOf="@+id/textView4"
-        app:layout_constraintTop_toTopOf="@+id/readingScoreTextView" />
+        <TextView
+            android:id="@+id/mathScoreTextView"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_marginTop="4dp"
+            tools:text="400/600"
+            setScoreTextForSubject="@{uiModel.satScoreData.math}"
+            isDataAvailable="@{uiModel.satScoreData.dataAvailable}"
+            android:textAlignment="center"
+            app:layout_constraintEnd_toEndOf="@+id/textView5"
+            app:layout_constraintStart_toStartOf="@+id/textView5"
+            app:layout_constraintTop_toBottomOf="@+id/textView5" />
 
-    <ProgressBar
-        android:id="@+id/mathProgressBar"
-        style="?android:attr/progressBarStyleHorizontal"
-        android:layout_width="70dp"
-        android:layout_height="wrap_content"
-        android:layout_marginBottom="8dp"
-        app:layout_constraintBottom_toTopOf="@+id/webPageTextView"
-        app:layout_constraintEnd_toEndOf="@+id/mathScoreTextView"
-        app:layout_constraintStart_toStartOf="@+id/mathScoreTextView"
-        app:layout_constraintTop_toBottomOf="@+id/mathScoreTextView" />
+        <TextView
+            android:id="@+id/readingScoreTextView"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            tools:text="400/600"
+            setScoreTextForSubject="@{uiModel.satScoreData.reading}"
+            isDataAvailable="@{uiModel.satScoreData.dataAvailable}"
+            android:textAlignment="center"
+            app:layout_constraintBottom_toBottomOf="@+id/mathScoreTextView"
+            app:layout_constraintEnd_toEndOf="@+id/textView6"
+            app:layout_constraintStart_toStartOf="@+id/textView6"
+            app:layout_constraintTop_toTopOf="@+id/mathScoreTextView" />
 
-    <ProgressBar
-        android:id="@+id/readingProgressBar"
-        style="?android:attr/progressBarStyleHorizontal"
-        android:layout_width="70dp"
-        android:layout_height="wrap_content"
-        app:layout_constraintBottom_toBottomOf="@+id/mathProgressBar"
-        app:layout_constraintEnd_toEndOf="@+id/readingScoreTextView"
-        app:layout_constraintStart_toStartOf="@+id/readingScoreTextView"
-        app:layout_constraintTop_toTopOf="@+id/mathProgressBar" />
+        <TextView
+            android:id="@+id/writingScoreTextView"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            tools:text="400/600"
+            setScoreTextForSubject="@{uiModel.satScoreData.writing}"
+            isDataAvailable="@{uiModel.satScoreData.dataAvailable}"
+            android:textAlignment="center"
+            app:layout_constraintBottom_toBottomOf="@+id/readingScoreTextView"
+            app:layout_constraintEnd_toEndOf="@+id/textView4"
+            app:layout_constraintStart_toStartOf="@+id/textView4"
+            app:layout_constraintTop_toTopOf="@+id/readingScoreTextView" />
 
-    <ProgressBar
-        android:id="@+id/writingProgressBar"
-        style="?android:attr/progressBarStyleHorizontal"
-        android:layout_width="70dp"
-        android:layout_height="0dp"
-        app:layout_constraintBottom_toBottomOf="@+id/readingProgressBar"
-        app:layout_constraintEnd_toEndOf="@+id/writingScoreTextView"
-        app:layout_constraintHorizontal_bias="0.6"
-        app:layout_constraintStart_toStartOf="@+id/writingScoreTextView"
-        app:layout_constraintTop_toTopOf="@+id/readingProgressBar" />
+        <ProgressBar
+            android:id="@+id/mathProgressBar"
+            style="?android:attr/progressBarStyleHorizontal"
+            android:layout_width="70dp"
+            android:layout_height="wrap_content"
+            android:layout_marginBottom="8dp"
+            setScoreProgressForSubject="@{uiModel.satScoreData.math}"
+            isDataAvailable="@{uiModel.satScoreData.dataAvailable}"
+            app:layout_constraintBottom_toTopOf="@+id/webPageTextView"
+            app:layout_constraintEnd_toEndOf="@+id/mathScoreTextView"
+            app:layout_constraintStart_toStartOf="@+id/mathScoreTextView"
+            app:layout_constraintTop_toBottomOf="@+id/mathScoreTextView" />
 
-    <TextView
-        android:id="@+id/webPageTextView"
-        android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
-        android:layout_marginBottom="8dp"
-        android:layout_marginEnd="8dp"
-        android:layout_marginRight="8dp"
-        android:text="TextView"
-        android:textColorLink="#0000EE"
-        android:visibility="visible"
-        app:layout_constraintBottom_toBottomOf="@+id/view3"
-        app:layout_constraintEnd_toEndOf="@+id/view3" />
+        <ProgressBar
+            android:id="@+id/readingProgressBar"
+            style="?android:attr/progressBarStyleHorizontal"
+            android:layout_width="70dp"
+            android:layout_height="wrap_content"
+            setScoreProgressForSubject="@{uiModel.satScoreData.reading}"
+            isDataAvailable="@{uiModel.satScoreData.dataAvailable}"
+            app:layout_constraintBottom_toBottomOf="@+id/mathProgressBar"
+            app:layout_constraintEnd_toEndOf="@+id/readingScoreTextView"
+            app:layout_constraintStart_toStartOf="@+id/readingScoreTextView"
+            app:layout_constraintTop_toTopOf="@+id/mathProgressBar" />
+
+        <ProgressBar
+            android:id="@+id/writingProgressBar"
+            style="?android:attr/progressBarStyleHorizontal"
+            android:layout_width="70dp"
+            android:layout_height="0dp"
+            setScoreProgressForSubject="@{uiModel.satScoreData.writing}"
+            isDataAvailable="@{uiModel.satScoreData.dataAvailable}"
+            app:layout_constraintBottom_toBottomOf="@+id/readingProgressBar"
+            app:layout_constraintEnd_toEndOf="@+id/writingScoreTextView"
+            app:layout_constraintHorizontal_bias="0.6"
+            app:layout_constraintStart_toStartOf="@+id/writingScoreTextView"
+            app:layout_constraintTop_toTopOf="@+id/readingProgressBar" />
+
+        <TextView
+            android:id="@+id/webPageTextView"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_marginBottom="8dp"
+            android:layout_marginEnd="8dp"
+            android:layout_marginRight="8dp"
+            setWebsiteLinkText="@{uiModel.school.webPageLink}"
+            android:text="@string/visit_website"
+            android:textColorLink="#0000EE"
+            android:visibility="visible"
+            app:layout_constraintBottom_toBottomOf="@+id/view3"
+            app:layout_constraintEnd_toEndOf="@+id/view3" />
 
 
-</androidx.constraintlayout.widget.ConstraintLayout>
+    </androidx.constraintlayout.widget.ConstraintLayout>
+</layout>
