@@ -18,6 +18,7 @@ import androidx.recyclerview.widget.RecyclerView;
 
 import com.example.thomasraybould.nycschools.R;
 import com.example.thomasraybould.nycschools.databinding.BoroughListItemBinding;
+import com.example.thomasraybould.nycschools.databinding.SchoolListItemBinding;
 import com.example.thomasraybould.nycschools.entities.Borough;
 import com.example.thomasraybould.nycschools.entities.SatScoreData;
 import com.example.thomasraybould.nycschools.entities.School;
@@ -153,20 +154,20 @@ public class SchoolListAdapter extends RecyclerView.Adapter<SchoolListAdapter.Vi
     @Override
     public ViewHolder onCreateViewHolder(@NonNull ViewGroup parent, int viewType) {
 
-        final int viewId;
+        LayoutInflater layoutInflater = LayoutInflater.from(context);
+
         if(viewType == BOROUGH_TITLE.ordinal()){
-            LayoutInflater layoutInflater = LayoutInflater.from(context);
             BoroughListItemBinding itemBinding = BoroughListItemBinding.inflate(layoutInflater, parent, false);
             return new ViewHolder(itemBinding);
         }
         else if(viewType == SAT_SCORE_ITEM.ordinal()){
-            viewId = R.layout.sat_score_list_item;
         }
         else{
-            viewId = R.layout.school_list_item;
+            SchoolListItemBinding itemBinding = SchoolListItemBinding.inflate(layoutInflater, parent, false);
+            return new ViewHolder(itemBinding);
         }
 
-        View view = LayoutInflater.from(context).inflate(viewId, parent, false);
+        View view = LayoutInflater.from(context).inflate(R.layout.sat_score_list_item, parent, false);
         return new ViewHolder(view);
     }
 
@@ -208,6 +209,7 @@ public class SchoolListAdapter extends RecyclerView.Adapter<SchoolListAdapter.Vi
 
     static class ViewHolder extends RecyclerView.ViewHolder{
         BoroughListItemBinding boroughListItemBinding;
+        SchoolListItemBinding schoolListItemBinding;
         TextView textView;
         ImageView imageView;
         ProgressBar boroughLoadingProgressBar;
@@ -219,6 +221,11 @@ public class SchoolListAdapter extends RecyclerView.Adapter<SchoolListAdapter.Vi
         ViewHolder(BoroughListItemBinding boroughListItemBinding){
             super(boroughListItemBinding.getRoot());
             this.boroughListItemBinding = boroughListItemBinding;
+        }
+
+        ViewHolder(SchoolListItemBinding schoolListItemBinding){
+            super(schoolListItemBinding.getRoot());
+            this.schoolListItemBinding = schoolListItemBinding;
         }
 
         ViewHolder(View itemView) {
@@ -236,7 +243,7 @@ public class SchoolListAdapter extends RecyclerView.Adapter<SchoolListAdapter.Vi
         }
 
         void bindSchool(SchoolListItemUiModel schoolListItemUiModel, OnSchoolListItemSelectedListener listener){
-            textView.setText(schoolListItemUiModel.getSchool().getName());
+            schoolListItemBinding.setUiModel(schoolListItemUiModel);
             itemView.setOnClickListener((v)->{
                 listener.onSchoolListItemSelected(schoolListItemUiModel);
                 schoolListItemUiModel.setSelected(!schoolListItemUiModel.isSelected());
