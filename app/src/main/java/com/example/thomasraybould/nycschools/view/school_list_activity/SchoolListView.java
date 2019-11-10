@@ -7,15 +7,11 @@ import java.util.List;
 
 public interface SchoolListView {
 
-    void setSchoolList(List<SchoolListItemUiModel> schoolListItemUiModels);
-
     void addItemsForBorough(List<SchoolListItemUiModel> schoolListItemUiModels, Borough borough);
 
     void removeItemsForBorough(Borough borough);
 
     void addScoreItem(SchoolListItemUiModel scoreItem);
-
-    void removeScoreItem(String schooldbn);
 
     void toast(String message);
 

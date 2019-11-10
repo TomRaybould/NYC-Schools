@@ -1,11 +1,13 @@
 package com.example.thomasraybould.nycschools.view.school_list_activity;
 
 import android.os.Bundle;
+import android.widget.Toast;
+
 import androidx.appcompat.app.AppCompatActivity;
+import androidx.lifecycle.ViewModelProviders;
 import androidx.recyclerview.widget.LinearLayoutManager;
 import androidx.recyclerview.widget.LinearSmoothScroller;
 import androidx.recyclerview.widget.RecyclerView;
-import android.widget.Toast;
 
 import com.example.thomasraybould.nycschools.R;
 import com.example.thomasraybould.nycschools.adapters.school_list_adapter.OnSchoolListItemSelectedListener;
@@ -30,8 +32,12 @@ public class SchoolListActivity extends AppCompatActivity implements SchoolListV
 
         initViews();
 
-        schoolListPresenter = new SchoolListPresenterImpl();
+        schoolListAdapter = SchoolListAdapter.Companion.createSchoolListAdapter(SchoolListActivity.this, SchoolListActivity.this);
+        recyclerView.setAdapter(schoolListAdapter);
+
+        schoolListPresenter = ViewModelProviders.of(this).get(SchoolListPresenterImpl.class);
         schoolListPresenter.onCreate(this);
+        schoolListPresenter.getSchoolList().observe(this, schoolListUiModel -> schoolListAdapter.updateList(schoolListUiModel.getSchoolListItemUiModels()));
     }
 
     private void initViews() {
@@ -40,10 +46,11 @@ public class SchoolListActivity extends AppCompatActivity implements SchoolListV
         linearLayoutManager = new LinearLayoutManager(this);
 
         RecyclerView.SmoothScroller smoothScroller = new LinearSmoothScroller(this) {
-                    @Override protected int getVerticalSnapPreference() {
-                        return LinearSmoothScroller.SNAP_TO_START;
-                    }
-                };
+            @Override
+            protected int getVerticalSnapPreference() {
+                return LinearSmoothScroller.SNAP_TO_START;
+            }
+        };
         recyclerView.setLayoutManager(linearLayoutManager);
 
     }
@@ -62,15 +69,8 @@ public class SchoolListActivity extends AppCompatActivity implements SchoolListV
     }
 
     @Override
-    public void toast(String message){
+    public void toast(String message) {
         Toast.makeText(this, message, Toast.LENGTH_SHORT).show();
-    }
-
-
-    @Override
-    public void setSchoolList(List<SchoolListItemUiModel> schoolListItemUiModels) {
-        schoolListAdapter = SchoolListAdapter.createSchoolListAdapter(this, this, schoolListItemUiModels);
-        recyclerView.setAdapter(schoolListAdapter);
     }
 
     @Override
@@ -87,11 +87,6 @@ public class SchoolListActivity extends AppCompatActivity implements SchoolListV
     @Override
     public void addScoreItem(SchoolListItemUiModel scoreItem) {
         schoolListAdapter.addScoreItemForSchool(scoreItem);
-    }
-
-    @Override
-    public void removeScoreItem(String schoolDbn) {
-        schoolListAdapter.removeScoreItem(schoolDbn);
     }
 
     @Override

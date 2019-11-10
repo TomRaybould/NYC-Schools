@@ -1,12 +1,14 @@
 package com.example.thomasraybould.nycschools.view.base;
 
+import androidx.lifecycle.ViewModel;
+
 import com.example.thomasraybould.nycschools.di.ComponentProvider;
 import com.example.thomasraybould.nycschools.di.ComponentProviderImpl;
 
 import io.reactivex.disposables.CompositeDisposable;
 
 
-public class AbstractRxPresenter<T> implements Presenter<T>{
+public class AbstractRxPresenter<T> extends ViewModel implements Presenter<T> {
 
     protected T view;
     protected final CompositeDisposable onPauseDisposable = new CompositeDisposable();
