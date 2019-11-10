@@ -38,7 +38,7 @@ public class SatScoreDataRepoImpl extends AbstractWebRepo implements SatScoreDat
 
         Map<String, String> authTokenHeaders = authTokenProvider.getAuthTokenHeaders();
 
-        NetworkRequest networkRequest = NetworkRequest.createNetworkRequest(satApi, authTokenHeaders);
+        NetworkRequest networkRequest = NetworkRequest.Companion.createNetworkRequest(satApi, authTokenHeaders);
 
         return httpClient.getJsonArray(networkRequest)
                 .map(networkResponse -> parseSatDataResponse(networkResponse, dbn));
