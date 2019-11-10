@@ -1,6 +1,7 @@
 # NYC Schools
 
 ## This branch contains work done after my 48 hour challenge that was completed on the weekend of (7/20/2019). In this branch I am working on some of the issues I didn't have time to address.
+## The submitted version can be seen in tags.
 
 ## User overview
 <p>
