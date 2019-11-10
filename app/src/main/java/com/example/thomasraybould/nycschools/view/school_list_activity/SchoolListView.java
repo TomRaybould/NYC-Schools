@@ -1,19 +1,19 @@
 package com.example.thomasraybould.nycschools.view.school_list_activity;
 
-import com.example.thomasraybould.nycschools.adapters.school_list_adapter.SchoolListItem;
+import com.example.thomasraybould.nycschools.adapters.school_list_adapter.SchoolListItemUiModel;
 import com.example.thomasraybould.nycschools.entities.Borough;
 
 import java.util.List;
 
 public interface SchoolListView {
 
-    void setSchoolList(List<SchoolListItem> schoolListItems);
+    void setSchoolList(List<SchoolListItemUiModel> schoolListItemUiModels);
 
-    void addItemsForBorough(List<SchoolListItem> schoolListItems, Borough borough);
+    void addItemsForBorough(List<SchoolListItemUiModel> schoolListItemUiModels, Borough borough);
 
     void removeItemsForBorough(Borough borough);
 
-    void addScoreItem(SchoolListItem scoreItem);
+    void addScoreItem(SchoolListItemUiModel scoreItem);
 
     void removeScoreItem(String schooldbn);
 
@@ -21,5 +21,5 @@ public interface SchoolListView {
 
     void changeBoroughLoadingStatus(Borough borough, boolean isLoading);
 
-    List<SchoolListItem> getCurrentListItems();
+    List<SchoolListItemUiModel> getCurrentListItems();
 }

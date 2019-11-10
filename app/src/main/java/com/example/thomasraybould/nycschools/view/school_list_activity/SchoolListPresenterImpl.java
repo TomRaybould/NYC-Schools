@@ -1,6 +1,6 @@
 package com.example.thomasraybould.nycschools.view.school_list_activity;
 
-import com.example.thomasraybould.nycschools.adapters.school_list_adapter.SchoolListItem;
+import com.example.thomasraybould.nycschools.adapters.school_list_adapter.SchoolListItemUiModel;
 import com.example.thomasraybould.nycschools.adapters.school_list_adapter.SchoolListItemType;
 import com.example.thomasraybould.nycschools.domain.get_sat_score_interactor.GetSatScoreDataInteractor;
 import com.example.thomasraybould.nycschools.domain.get_sat_score_interactor.data.SatDataResponse;
@@ -10,7 +10,6 @@ import com.example.thomasraybould.nycschools.entities.Borough;
 import com.example.thomasraybould.nycschools.entities.SatScoreData;
 import com.example.thomasraybould.nycschools.entities.School;
 import com.example.thomasraybould.nycschools.rx_util.SchedulerProvider;
-import com.example.thomasraybould.nycschools.util.cache.Cache;
 import com.example.thomasraybould.nycschools.view.base.AbstractRxPresenter;
 
 import java.util.ArrayList;
@@ -54,41 +53,41 @@ public class SchoolListPresenterImpl extends AbstractRxPresenter<SchoolListView>
     }
 
     private void setInitList() {
-        List<SchoolListItem> schoolListItems = schoolListItemCache.get(LIST_ITEMS_CACHE_KEY);
+        List<SchoolListItemUiModel> schoolListItemUiModels = schoolListItemCache.get(LIST_ITEMS_CACHE_KEY);
 
-        if(schoolListItems == null || schoolListItems.isEmpty()) {
-            schoolListItems = new ArrayList<>();
+        if(schoolListItemUiModels == null || schoolListItemUiModels.isEmpty()) {
+            schoolListItemUiModels = new ArrayList<>();
             for (Borough borough : Borough.values()) {
-                SchoolListItem boroughItem = SchoolListItem.createBoroughItem(borough);
-                schoolListItems.add(boroughItem);
+                SchoolListItemUiModel boroughItem = SchoolListItemUiModel.createBoroughItem(borough);
+                schoolListItemUiModels.add(boroughItem);
             }
         }
 
-        view.setSchoolList(schoolListItems);
+        view.setSchoolList(schoolListItemUiModels);
     }
 
     @Override
     public void onPause() {
-        List<SchoolListItem> currentListItems = view.getCurrentListItems();
+        List<SchoolListItemUiModel> currentListItems = view.getCurrentListItems();
         schoolListItemCache.put(LIST_ITEMS_CACHE_KEY, currentListItems);
         pendingDownloads.clear();
         super.onPause();
     }
 
     @Override
-    public void onSchoolListItemSelected(SchoolListItem schoolListItem) {
-        if(schoolListItem.getType() == SchoolListItemType.BOROUGH_TITLE){
-            onBoroughSelected(schoolListItem);
+    public void onSchoolListItemSelected(SchoolListItemUiModel schoolListItemUiModel) {
+        if(schoolListItemUiModel.getType() == SchoolListItemType.BOROUGH_TITLE){
+            onBoroughSelected(schoolListItemUiModel);
         }
-        else if (schoolListItem.getType() == SchoolListItemType.SCHOOL_ITEM){
-            onSchoolSelected(schoolListItem);
+        else if (schoolListItemUiModel.getType() == SchoolListItemType.SCHOOL_ITEM){
+            onSchoolSelected(schoolListItemUiModel);
         }
     }
 
-    private void onBoroughSelected(SchoolListItem schoolListItem) {
-        Borough borough = schoolListItem.getBorough();
+    private void onBoroughSelected(SchoolListItemUiModel schoolListItemUiModel) {
+        Borough borough = schoolListItemUiModel.getBorough();
         //cancel download of json and remove school cells from list
-        if(schoolListItem.isSelected()){
+        if(schoolListItemUiModel.isSelected()){
             view.removeItemsForBorough(borough);
             Disposable disposable = pendingDownloads.get(borough.code);
             if(disposable!= null){
@@ -129,8 +128,8 @@ public class SchoolListPresenterImpl extends AbstractRxPresenter<SchoolListView>
         }
         List<School> schools = schoolListResponse.getSchools();
 
-        List<SchoolListItem> schoolListItems = schoolsToListItems(schools);
-        view.addItemsForBorough(schoolListItems, schoolListResponse.getBorough());
+        List<SchoolListItemUiModel> schoolListItemUiModels = schoolsToListItems(schools);
+        view.addItemsForBorough(schoolListItemUiModels, schoolListResponse.getBorough());
         view.changeBoroughLoadingStatus(schoolListResponse.getBorough(), false);
     }
 
@@ -143,18 +142,18 @@ public class SchoolListPresenterImpl extends AbstractRxPresenter<SchoolListView>
         view.toast("Failed to load schools");
     }
 
-    private List<SchoolListItem> schoolsToListItems(List<School> schools){
-        List<SchoolListItem> schoolListItems = new ArrayList<>();
+    private List<SchoolListItemUiModel> schoolsToListItems(List<School> schools){
+        List<SchoolListItemUiModel> schoolListItemUiModels = new ArrayList<>();
         for (School school: schools) {
-            SchoolListItem schoolItem = SchoolListItem.createSchoolItem(school, school.getBorough());
-            schoolListItems.add(schoolItem);
+            SchoolListItemUiModel schoolItem = SchoolListItemUiModel.createSchoolItem(school, school.getBorough());
+            schoolListItemUiModels.add(schoolItem);
         }
-        return schoolListItems;
+        return schoolListItemUiModels;
     }
 
-    private void onSchoolSelected(SchoolListItem schoolListItem){
-        School school = schoolListItem.getSchool();
-        if(schoolListItem.isSelected()){
+    private void onSchoolSelected(SchoolListItemUiModel schoolListItemUiModel){
+        School school = schoolListItemUiModel.getSchool();
+        if(schoolListItemUiModel.isSelected()){
             stopSatScoreRequest(school.getDbn());
             view.removeScoreItem(school.getDbn());
             return;
@@ -182,7 +181,7 @@ public class SchoolListPresenterImpl extends AbstractRxPresenter<SchoolListView>
             return;
         }
 
-        SchoolListItem scoreListItem = satDataToSchoolListItem(satScoreData, school);
+        SchoolListItemUiModel scoreListItem = satDataToSchoolListItem(satScoreData, school);
 
         view.addScoreItem(scoreListItem);
     }
@@ -191,9 +190,9 @@ public class SchoolListPresenterImpl extends AbstractRxPresenter<SchoolListView>
         view.toast("Failed to load SAT scores");
     }
 
-    private static SchoolListItem satDataToSchoolListItem(SatScoreData satScoreData, School school){
+    private static SchoolListItemUiModel satDataToSchoolListItem(SatScoreData satScoreData, School school){
 
-        return SchoolListItem.newBuilder()
+        return SchoolListItemUiModel.newBuilder()
                 .borough(school.getBorough())
                 .type(SchoolListItemType.SAT_SCORE_ITEM)
                 .school(school)

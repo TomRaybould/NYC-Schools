@@ -38,7 +38,7 @@ public class SchoolListWebRepoImpl extends AbstractWebRepo implements SchoolList
 
         Map<String, String> authTokenHeaders = authTokenProvider.getAuthTokenHeaders();
 
-        NetworkRequest networkRequest = NetworkRequest.Companion.createNetworkRequest(schoolListApi, authTokenHeaders);
+        NetworkRequest networkRequest = NetworkRequest.createNetworkRequest(schoolListApi, authTokenHeaders);
 
         return httpClient.getJsonArray(networkRequest)
                 .map(networkResponse -> parseSchoolListResponse(networkResponse, borough));

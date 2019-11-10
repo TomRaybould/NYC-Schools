@@ -5,7 +5,7 @@ import com.example.thomasraybould.nycschools.entities.Borough;
 import com.example.thomasraybould.nycschools.entities.SatScoreData;
 import com.example.thomasraybould.nycschools.entities.School;
 
-public class SchoolListItem {
+public class SchoolListItemUiModel {
 
     private final SchoolListItemType    type;
     private final SatScoreData          satScoreData;
@@ -15,7 +15,7 @@ public class SchoolListItem {
     private final int                   imageResId;
     private boolean                     isLoading;
 
-    private SchoolListItem(Builder builder) {
+    private SchoolListItemUiModel(Builder builder) {
         type = builder.type;
         satScoreData = builder.satScoreData;
         borough = builder.borough;
@@ -65,7 +65,7 @@ public class SchoolListItem {
         isLoading = loading;
     }
 
-    public static SchoolListItem createSchoolItem(School school, Borough borough) {
+    public static SchoolListItemUiModel createSchoolItem(School school, Borough borough) {
         return new Builder()
                 .type(SchoolListItemType.SCHOOL_ITEM)
                 .school(school)
@@ -73,7 +73,7 @@ public class SchoolListItem {
                 .build();
     }
 
-    public static SchoolListItem createBoroughItem(Borough borough) {
+    public static SchoolListItemUiModel createBoroughItem(Borough borough) {
 
         int imageResId;
 
@@ -100,7 +100,7 @@ public class SchoolListItem {
         }
 
 
-        return SchoolListItem.newBuilder()
+        return SchoolListItemUiModel.newBuilder()
                 .type(SchoolListItemType.BOROUGH_TITLE)
                 .borough(borough)
                 .imageResId(imageResId)
@@ -149,8 +149,8 @@ public class SchoolListItem {
             return this;
         }
 
-        public SchoolListItem build() {
-            return new SchoolListItem(this);
+        public SchoolListItemUiModel build() {
+            return new SchoolListItemUiModel(this);
         }
     }
 }

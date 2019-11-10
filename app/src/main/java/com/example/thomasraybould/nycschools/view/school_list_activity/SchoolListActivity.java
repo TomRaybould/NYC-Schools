@@ -10,7 +10,7 @@ import android.widget.Toast;
 import com.example.thomasraybould.nycschools.R;
 import com.example.thomasraybould.nycschools.adapters.school_list_adapter.OnSchoolListItemSelectedListener;
 import com.example.thomasraybould.nycschools.adapters.school_list_adapter.SchoolListAdapter;
-import com.example.thomasraybould.nycschools.adapters.school_list_adapter.SchoolListItem;
+import com.example.thomasraybould.nycschools.adapters.school_list_adapter.SchoolListItemUiModel;
 import com.example.thomasraybould.nycschools.entities.Borough;
 
 import java.util.List;
@@ -68,14 +68,14 @@ public class SchoolListActivity extends AppCompatActivity implements SchoolListV
 
 
     @Override
-    public void setSchoolList(List<SchoolListItem> schoolListItems) {
-        schoolListAdapter = SchoolListAdapter.createSchoolListAdapter(this, this, schoolListItems);
+    public void setSchoolList(List<SchoolListItemUiModel> schoolListItemUiModels) {
+        schoolListAdapter = SchoolListAdapter.createSchoolListAdapter(this, this, schoolListItemUiModels);
         recyclerView.setAdapter(schoolListAdapter);
     }
 
     @Override
-    public void addItemsForBorough(List<SchoolListItem> schoolListItems, Borough borough) {
-        int insertTarget = schoolListAdapter.addSchoolItemsForBorough(schoolListItems, borough);
+    public void addItemsForBorough(List<SchoolListItemUiModel> schoolListItemUiModels, Borough borough) {
+        int insertTarget = schoolListAdapter.addSchoolItemsForBorough(schoolListItemUiModels, borough);
         linearLayoutManager.scrollToPositionWithOffset(insertTarget - 1, 0);
     }
 
@@ -85,7 +85,7 @@ public class SchoolListActivity extends AppCompatActivity implements SchoolListV
     }
 
     @Override
-    public void addScoreItem(SchoolListItem scoreItem) {
+    public void addScoreItem(SchoolListItemUiModel scoreItem) {
         schoolListAdapter.addScoreItemForSchool(scoreItem);
     }
 
@@ -100,12 +100,12 @@ public class SchoolListActivity extends AppCompatActivity implements SchoolListV
     }
 
     @Override
-    public List<SchoolListItem> getCurrentListItems() {
+    public List<SchoolListItemUiModel> getCurrentListItems() {
         return schoolListAdapter.getCurrentList();
     }
 
     @Override
-    public void onSchoolListItemSelected(SchoolListItem schoolListItem) {
-        schoolListPresenter.onSchoolListItemSelected(schoolListItem);
+    public void onSchoolListItemSelected(SchoolListItemUiModel schoolListItemUiModel) {
+        schoolListPresenter.onSchoolListItemSelected(schoolListItemUiModel);
     }
 }
