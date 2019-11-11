@@ -5,6 +5,7 @@ import android.graphics.PorterDuff
 import android.view.LayoutInflater
 import android.view.ViewGroup
 import androidx.core.content.ContextCompat
+import androidx.recyclerview.widget.LinearLayoutManager
 import androidx.recyclerview.widget.RecyclerView
 import com.example.thomasraybould.nycschools.R
 import com.example.thomasraybould.nycschools.adapters.school_list_adapter.SchoolListItemType.BOROUGH_TITLE
@@ -14,7 +15,7 @@ import com.example.thomasraybould.nycschools.databinding.SatScoreListItemBinding
 import com.example.thomasraybould.nycschools.databinding.SchoolListItemBinding
 import java.util.*
 
-class SchoolListAdapter constructor(private val listener: OnSchoolListItemSelectedListener, private val context: Context) : RecyclerView.Adapter<SchoolListAdapter.ViewHolder>() {
+class SchoolListAdapter constructor(private val listener: OnSchoolListItemSelectedListener, private val context: Context, private val linearLayoutManager: LinearLayoutManager) : RecyclerView.Adapter<SchoolListAdapter.ViewHolder>() {
     private val schoolListItemUiModels: MutableList<SchoolListItemUiModel> = ArrayList()
 
     private enum class LoadingPayLoad {
@@ -31,9 +32,9 @@ class SchoolListAdapter constructor(private val listener: OnSchoolListItemSelect
         addItemsAsNeeded(newSchoolListItems)
 
         schoolListItemUiModels.forEachIndexed { index, schoolListItemUiModel ->
-            if(schoolListItemUiModel.type == BOROUGH_TITLE){
+            if (schoolListItemUiModel.type == BOROUGH_TITLE) {
                 newSchoolListItems.forEach {
-                    if(schoolListItemUiModel == it){
+                    if (schoolListItemUiModel == it) {
                         schoolListItemUiModel.isLoading = it.isLoading
                         notifyItemChanged(index, LoadingPayLoad.LOADING_PAY_LOAD)
                     }
@@ -51,9 +52,11 @@ class SchoolListAdapter constructor(private val listener: OnSchoolListItemSelect
                 schoolListItemUiModels.clear()
                 schoolListItemUiModels.addAll(newSchoolListItems)
                 notifyItemRangeInserted(index, sizeDiff)
+                linearLayoutManager.scrollToPositionWithOffset(index - 1, 0)
                 return
             }
         }
+
     }
 
     private fun removeItemsAsNeeded(schoolListItems: List<SchoolListItemUiModel>) {
@@ -149,13 +152,6 @@ class SchoolListAdapter constructor(private val listener: OnSchoolListItemSelect
             boroughListItemBinding?.progressBar?.indeterminateDrawable?.setColorFilter(ContextCompat.getColor(context, R.color.progress_bar_color), PorterDuff.Mode.SRC_IN)
         }
 
-    }
-
-    companion object {
-
-        fun createSchoolListAdapter(listener: OnSchoolListItemSelectedListener, context: Context): SchoolListAdapter {
-            return SchoolListAdapter(listener, context)
-        }
     }
 
 }

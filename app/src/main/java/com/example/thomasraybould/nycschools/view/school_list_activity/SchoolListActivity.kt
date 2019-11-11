@@ -25,9 +25,11 @@ class SchoolListActivity : AppCompatActivity(), OnSchoolListItemSelectedListener
         super.onCreate(savedInstanceState)
         setContentView(R.layout.school_list_activity)
 
-        initViews()
+        recyclerView = findViewById(R.id.recyclerView)
+        val linearLayoutManager = LinearLayoutManager(this)
+        recyclerView!!.layoutManager = linearLayoutManager
 
-        val schoolListAdapter = SchoolListAdapter.createSchoolListAdapter(this@SchoolListActivity, this@SchoolListActivity)
+        val schoolListAdapter = SchoolListAdapter(this, this, linearLayoutManager)
         recyclerView!!.adapter = schoolListAdapter
 
         schoolListViewModel = ViewModelProviders.of(this).get(SchoolListViewModelImpl::class.java)
@@ -39,20 +41,6 @@ class SchoolListActivity : AppCompatActivity(), OnSchoolListItemSelectedListener
                 }
             }
         })
-    }
-
-    private fun initViews() {
-        recyclerView = findViewById(R.id.recyclerView)
-
-        val linearLayoutManager = LinearLayoutManager(this)
-
-        val smoothScroller = object : LinearSmoothScroller(this) {
-            override fun getVerticalSnapPreference(): Int {
-                return LinearSmoothScroller.SNAP_TO_START
-            }
-        }
-        recyclerView!!.layoutManager = linearLayoutManager
-
     }
 
     private fun toast(message: String) {
