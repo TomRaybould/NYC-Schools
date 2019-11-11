@@ -7,12 +7,6 @@ import java.util.List;
 
 public interface SchoolListView {
 
-    void addItemsForBorough(List<SchoolListItemUiModel> schoolListItemUiModels, Borough borough);
-
-    void removeItemsForBorough(Borough borough);
-
-    void addScoreItem(SchoolListItemUiModel scoreItem);
-
     void toast(String message);
 
     void changeBoroughLoadingStatus(Borough borough, boolean isLoading);

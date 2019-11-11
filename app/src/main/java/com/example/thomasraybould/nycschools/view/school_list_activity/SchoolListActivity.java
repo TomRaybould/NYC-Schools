@@ -74,22 +74,6 @@ public class SchoolListActivity extends AppCompatActivity implements SchoolListV
     }
 
     @Override
-    public void addItemsForBorough(List<SchoolListItemUiModel> schoolListItemUiModels, Borough borough) {
-        int insertTarget = schoolListAdapter.addSchoolItemsForBorough(schoolListItemUiModels, borough);
-        linearLayoutManager.scrollToPositionWithOffset(insertTarget - 1, 0);
-    }
-
-    @Override
-    public void removeItemsForBorough(Borough borough) {
-        schoolListAdapter.removeItemsForBorough(borough);
-    }
-
-    @Override
-    public void addScoreItem(SchoolListItemUiModel scoreItem) {
-        schoolListAdapter.addScoreItemForSchool(scoreItem);
-    }
-
-    @Override
     public void changeBoroughLoadingStatus(Borough borough, boolean isLoading) {
         schoolListAdapter.changeLoadingStatusOfBorough(borough, isLoading);
     }

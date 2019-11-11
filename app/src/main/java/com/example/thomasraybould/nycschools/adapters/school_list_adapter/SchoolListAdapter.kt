@@ -57,78 +57,6 @@ class SchoolListAdapter constructor(private val listener: OnSchoolListItemSelect
         }
     }
 
-    fun addSchoolItemsForBorough(newItems: List<SchoolListItemUiModel>, borough: Borough): Int {
-
-        //find the title for the borough and add new items underneath
-        var insertTarget = -1
-        for (i in schoolListItemUiModels.indices) {
-            val schoolListItemUiModel = schoolListItemUiModels[i]
-            if (schoolListItemUiModel.type == BOROUGH_TITLE && schoolListItemUiModel.borough == borough) {
-                schoolListItemUiModel.isSelected = true
-                insertTarget = i + 1
-            }
-        }
-
-        if (insertTarget > -1) {
-            schoolListItemUiModels.addAll(insertTarget, newItems)
-            notifyItemRangeInserted(insertTarget, newItems.size)
-        }
-
-        return insertTarget
-    }
-
-
-    /**
-     * Searching for the target school that was selected and then
-     * adding a score item underneath and then returning the position
-     * of the school.
-     *
-     * @param scoreItem
-     * @return
-     */
-    fun addScoreItemForSchool(scoreItem: SchoolListItemUiModel): Int {
-        val targetDbn = scoreItem.school.dbn
-
-        var insertTarget = -1
-        for (i in schoolListItemUiModels.indices) {
-            val schoolListItemUiModel = schoolListItemUiModels[i]
-            if (schoolListItemUiModel.type != SCHOOL_ITEM) {
-                continue
-            }
-            if (targetDbn == schoolListItemUiModel.school.dbn) {
-                insertTarget = i + 1
-            }
-        }
-
-        if (insertTarget > -1) {
-            schoolListItemUiModels.add(insertTarget, scoreItem)
-            notifyItemInserted(insertTarget)
-        }
-
-        return insertTarget
-    }
-
-//    fun removeScoreItem(targetDbn: String) {
-//
-//        for (i in schoolListItemUiModels.indices) {
-//            val schoolListItemUiModel = schoolListItemUiModels[i]
-//            val school = schoolListItemUiModel.school
-//
-//            val schoolItemDbn: String?
-//
-//            schoolItemDbn = school?.dbn
-//
-//            if (targetDbn == schoolItemDbn) {
-//                if (schoolListItemUiModel.type == SAT_SCORE_ITEM) {
-//                    schoolListItemUiModels.removeAt(i)
-//                    notifyItemRemoved(i)
-//                    break
-//                }
-//
-//            }
-//        }
-//
-//    }
 
     fun changeLoadingStatusOfBorough(borough: Borough, isLoading: Boolean) {
         for (i in schoolListItemUiModels.indices) {
@@ -141,18 +69,6 @@ class SchoolListAdapter constructor(private val listener: OnSchoolListItemSelect
         }
     }
 
-    fun removeItemsForBorough(borough: Borough) {
-        //go through list in reverse to remove items
-        for (i in schoolListItemUiModels.indices.reversed()) {
-            val schoolListItemUiModel = schoolListItemUiModels[i]
-
-            if (schoolListItemUiModel.type != BOROUGH_TITLE && schoolListItemUiModel.borough == borough) {
-                schoolListItemUiModels.removeAt(i)
-                notifyItemRemoved(i)
-            }
-
-        }
-    }
 
     override fun onCreateViewHolder(parent: ViewGroup, viewType: Int): ViewHolder {
 

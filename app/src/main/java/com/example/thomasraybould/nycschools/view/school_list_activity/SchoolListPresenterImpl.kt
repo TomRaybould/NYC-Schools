@@ -153,7 +153,10 @@ class SchoolListPresenterImpl : AbstractRxPresenter<SchoolListView>(), SchoolLis
     private fun onSchoolSelected(schoolListItemUiModel: SchoolListItemUiModel) {
         val school = schoolListItemUiModel.school
         if (schoolListItemUiModel.isSelected) {
-            schoolListItemUiModels.remove(schoolListItemUiModel)
+            val indexOfScore = schoolListItemUiModels.indexOf(schoolListItemUiModel) + 1
+            if (indexOfScore <= schoolListItemUiModels.lastIndex) {
+                schoolListItemUiModels.removeAt(indexOfScore)
+            }
             schoolListUiModelLiveData.postValue(SchoolListUiModel(schoolListItemUiModels))
             return
         }
@@ -182,7 +185,13 @@ class SchoolListPresenterImpl : AbstractRxPresenter<SchoolListView>(), SchoolLis
 
         val scoreListItem = satDataToSchoolListItem(satScoreData, school)
 
-        view.addScoreItem(scoreListItem)
+        schoolListItemUiModels.forEachIndexed { index, schoolListItemUiModel ->
+            if (satDataResponse.satScoreData.dbn == schoolListItemUiModel.school?.dbn) {
+                schoolListItemUiModels.add(index + 1, scoreListItem)
+                schoolListUiModelLiveData.postValue(SchoolListUiModel(schoolListItemUiModels))
+                return
+            }
+        }
     }
 
     private fun failedToGetSatData(school: School) {
