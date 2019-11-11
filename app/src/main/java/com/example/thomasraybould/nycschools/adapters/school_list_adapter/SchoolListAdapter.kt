@@ -7,18 +7,15 @@ import android.view.ViewGroup
 import androidx.core.content.ContextCompat
 import androidx.recyclerview.widget.RecyclerView
 import com.example.thomasraybould.nycschools.R
-import com.example.thomasraybould.nycschools.adapters.school_list_adapter.SchoolListItemType.*
+import com.example.thomasraybould.nycschools.adapters.school_list_adapter.SchoolListItemType.BOROUGH_TITLE
+import com.example.thomasraybould.nycschools.adapters.school_list_adapter.SchoolListItemType.SAT_SCORE_ITEM
 import com.example.thomasraybould.nycschools.databinding.BoroughListItemBinding
 import com.example.thomasraybould.nycschools.databinding.SatScoreListItemBinding
 import com.example.thomasraybould.nycschools.databinding.SchoolListItemBinding
-import com.example.thomasraybould.nycschools.entities.Borough
 import java.util.*
 
 class SchoolListAdapter constructor(private val listener: OnSchoolListItemSelectedListener, private val context: Context) : RecyclerView.Adapter<SchoolListAdapter.ViewHolder>() {
     private val schoolListItemUiModels: MutableList<SchoolListItemUiModel> = ArrayList()
-
-    val currentList: List<SchoolListItemUiModel>
-        get() = schoolListItemUiModels
 
     private enum class LoadingPayLoad {
         LOADING_PAY_LOAD
@@ -32,6 +29,17 @@ class SchoolListAdapter constructor(private val listener: OnSchoolListItemSelect
         }
         removeItemsAsNeeded(newSchoolListItems)
         addItemsAsNeeded(newSchoolListItems)
+
+        schoolListItemUiModels.forEachIndexed { index, schoolListItemUiModel ->
+            if(schoolListItemUiModel.type == BOROUGH_TITLE){
+                newSchoolListItems.forEach {
+                    if(schoolListItemUiModel == it){
+                        schoolListItemUiModel.isLoading = it.isLoading
+                        notifyItemChanged(index, LoadingPayLoad.LOADING_PAY_LOAD)
+                    }
+                }
+            }
+        }
     }
 
     private fun addItemsAsNeeded(newSchoolListItems: List<SchoolListItemUiModel>) {
@@ -56,19 +64,6 @@ class SchoolListAdapter constructor(private val listener: OnSchoolListItemSelect
             }
         }
     }
-
-
-    fun changeLoadingStatusOfBorough(borough: Borough, isLoading: Boolean) {
-        for (i in schoolListItemUiModels.indices) {
-            val schoolListItemUiModel = schoolListItemUiModels[i]
-            if (schoolListItemUiModel.type == BOROUGH_TITLE && schoolListItemUiModel.borough == borough) {
-                schoolListItemUiModel.isLoading = isLoading
-                notifyItemChanged(i, LoadingPayLoad.LOADING_PAY_LOAD)
-                break
-            }
-        }
-    }
-
 
     override fun onCreateViewHolder(parent: ViewGroup, viewType: Int): ViewHolder {
 

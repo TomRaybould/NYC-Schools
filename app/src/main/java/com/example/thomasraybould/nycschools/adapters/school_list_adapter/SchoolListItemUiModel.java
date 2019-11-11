@@ -1,5 +1,7 @@
 package com.example.thomasraybould.nycschools.adapters.school_list_adapter;
 
+import androidx.annotation.Nullable;
+
 import com.example.thomasraybould.nycschools.R;
 import com.example.thomasraybould.nycschools.entities.Borough;
 import com.example.thomasraybould.nycschools.entities.SatScoreData;
@@ -151,6 +153,27 @@ public class SchoolListItemUiModel {
 
         public SchoolListItemUiModel build() {
             return new SchoolListItemUiModel(this);
+        }
+    }
+
+    @Override
+    public boolean equals(@Nullable Object obj) {
+        if (!(obj instanceof SchoolListItemUiModel)){
+           return false;
+        }
+        SchoolListItemUiModel schoolListItemUiModel = (SchoolListItemUiModel) obj;
+
+        if(schoolListItemUiModel.type != this.type){
+            return false;
+        }
+
+        if(schoolListItemUiModel.type == SchoolListItemType.BOROUGH_TITLE){
+            return schoolListItemUiModel.borough.equals(this.borough);
+        }else if(schoolListItemUiModel.type == SchoolListItemType.SCHOOL_ITEM){
+            return schoolListItemUiModel.getSchool().getDbn().equals(this.getSchool().getDbn());
+        }
+        else{
+            return schoolListItemUiModel.getSatScoreData().getDbn().equals(this.getSatScoreData().getDbn());
         }
     }
 }
