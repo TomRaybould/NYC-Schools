@@ -74,15 +74,19 @@ class SchoolListAdapter constructor(private val listener: OnSchoolListItemSelect
 
         val layoutInflater = LayoutInflater.from(context)
 
-        if (viewType == BOROUGH_TITLE.ordinal) {
-            val itemBinding = BoroughListItemBinding.inflate(layoutInflater, parent, false)
-            return ViewHolder(itemBinding)
-        } else if (viewType == SAT_SCORE_ITEM.ordinal) {
-            val itemBinding = SatScoreListItemBinding.inflate(layoutInflater, parent, false)
-            return ViewHolder(itemBinding)
-        } else {
-            val itemBinding = SchoolListItemBinding.inflate(layoutInflater, parent, false)
-            return ViewHolder(itemBinding)
+        return when (viewType) {
+            BOROUGH_TITLE.ordinal -> {
+                val itemBinding = BoroughListItemBinding.inflate(layoutInflater, parent, false)
+                ViewHolder(itemBinding)
+            }
+            SAT_SCORE_ITEM.ordinal -> {
+                val itemBinding = SatScoreListItemBinding.inflate(layoutInflater, parent, false)
+                ViewHolder(itemBinding)
+            }
+            else -> {
+                val itemBinding = SchoolListItemBinding.inflate(layoutInflater, parent, false)
+                ViewHolder(itemBinding)
+            }
         }
     }
 
@@ -99,12 +103,10 @@ class SchoolListAdapter constructor(private val listener: OnSchoolListItemSelect
 
     override fun onBindViewHolder(holder: ViewHolder, position: Int) {
         val schoolListItemUiModel = schoolListItemUiModels[position]
-        if (schoolListItemUiModel.type == BOROUGH_TITLE) {
-            holder.bindBorough(schoolListItemUiModel, context, listener)
-        } else if (schoolListItemUiModel.type == SAT_SCORE_ITEM) {
-            holder.satScoreListItemBinding?.uiModel = schoolListItemUiModel
-        } else {
-            holder.bindSchool(schoolListItemUiModel, listener)
+        when {
+            schoolListItemUiModel.type == BOROUGH_TITLE -> holder.bindBorough(schoolListItemUiModel, context, listener)
+            schoolListItemUiModel.type == SAT_SCORE_ITEM -> holder.satScoreListItemBinding?.uiModel = schoolListItemUiModel
+            else -> holder.bindSchool(schoolListItemUiModel, listener)
         }
     }
 
