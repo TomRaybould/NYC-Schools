@@ -17,7 +17,7 @@
 
 ## Technical Details
 
-* This app is structured with a Clean MVP architecture, as can be seen in the rough sketch I have provided below; With all dependencies pointing inward towards the domain package.
+* This app is structured with a MVVM architecture.
 
 * Dagger 2 was used for dependency injection.
 
@@ -29,27 +29,7 @@
 
 * There are also some unit tests to check that I am properly receiving and parsing the data from the api.
 
-
-### What's left
-
-<p>
-    With more time there is obviously more things that I
-    would have liked to add in but couldn't.
-</p>
-
-- [ ] Handling multiple screen sizes. (This app was developed using a pixel 1) No tablet resources were made.
-
-- [x] Handling orientation change. As it stands when the user changes to landscape the state of the list is lost and thus reloads as new. With more time, this would be an issue I could definitely fix.
-
-- [ ] Displaying more interesting data and creating more Activities. Along with more styling.
-
-- [ ] Storage and security of auth token for API.
-
-- [ ] More tests.
-
 <p>
     I have tagged this project in four working stages of development, inorder
     to show the progression of the app.
 <p/>
-
-![Architecture drawing](https://res.cloudinary.com/dgrwnfwr2/image/upload/v1563769706/nycschoolsproject_cu492w.jpg)
