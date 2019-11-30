@@ -7,25 +7,27 @@ import com.example.thomasraybould.nycschools.domain.get_sat_score_interactor.Sat
 import com.example.thomasraybould.nycschools.domain.get_sat_score_interactor.SatScoreDataRepo;
 import com.example.thomasraybould.nycschools.domain.get_sat_score_interactor.impl.GetSatScoreDataInteractorImpl;
 
+import javax.inject.Singleton;
+
 import dagger.Module;
 import dagger.Provides;
 
 @Module
-public class SatScoreModule {
+class SatScoreModule {
 
-    @AppScope
+    @Singleton
     @Provides
     static GetSatScoreDataInteractor getSatScoreDataInteractor(GetSatScoreDataInteractorImpl getSatScoreDataInteractor){
         return getSatScoreDataInteractor;
     }
 
-    @AppScope
+    @Singleton
     @Provides
     static SatScoreDataRepo satScoredDataRepo(SatScoreDataRepoImpl satScoredDataRepo){
         return satScoredDataRepo;
     }
 
-    @AppScope
+    @Singleton
     @Provides
     static SatScoreDataDbRepo satScoredDataDbRepo(SatScoreDataDbRepoImpl satScoredDataRepo){
         return satScoredDataRepo;

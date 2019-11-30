@@ -1,21 +1,35 @@
 package com.example.thomasraybould.nycschools;
 
+import android.app.Activity;
 import android.app.Application;
 
-import com.example.thomasraybould.nycschools.di.app_component.AppComponent;
-import com.example.thomasraybould.nycschools.di.ComponentProviderImpl;
 import com.example.thomasraybould.nycschools.di.app_component.DaggerAppComponent;
 import com.example.thomasraybould.nycschools.di.app_component.DbModule;
 
-public class NycSchoolsApplication extends Application {
+import javax.inject.Inject;
+
+import dagger.android.AndroidInjector;
+import dagger.android.DispatchingAndroidInjector;
+import dagger.android.HasActivityInjector;
+
+public class NycSchoolsApplication extends Application implements HasActivityInjector {
+
+    @Inject
+    DispatchingAndroidInjector<Activity> dispatchingAndroidInjector;
+
     @Override
     public void onCreate() {
         super.onCreate();
 
-        AppComponent appComponent = DaggerAppComponent.builder()
+        DaggerAppComponent.builder()
                 .dbModule(new DbModule(getApplicationContext()))
-                .build();
+                .build()
+                .inject(this);
 
-        ComponentProviderImpl.initComponentProvider(appComponent);
+    }
+
+    @Override
+    public AndroidInjector<Activity> activityInjector() {
+        return dispatchingAndroidInjector;
     }
 }

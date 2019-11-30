@@ -8,6 +8,8 @@ import com.example.thomasraybould.nycschools.network.http_client.impl.HttpClient
 import java.util.HashMap;
 import java.util.concurrent.TimeUnit;
 
+import javax.inject.Singleton;
+
 import dagger.Module;
 import dagger.Provides;
 import okhttp3.OkHttpClient;
@@ -15,7 +17,7 @@ import okhttp3.OkHttpClient;
 @Module
 public class NetworkModule {
 
-    @AppScope
+    @Singleton
     @Provides
     static OkHttpClient okHttpClient(){
        return new OkHttpClient.Builder()
@@ -24,19 +26,19 @@ public class NetworkModule {
                 .build();
     }
 
-    @AppScope
+    @Singleton
     @Provides
     static HttpClient httpClient(HttpClientImpl httpClient){
         return httpClient;
     }
 
-    @AppScope
+    @Singleton
     @Provides
     static AuthTokenProvider authTokenProvider(){
         return () -> new HashMap<>();
     }
 
-    @AppScope
+    @Singleton
     @Provides
     static ApiUrlProvider apiUrlProvider(){
         return new ApiUrlProvider() {

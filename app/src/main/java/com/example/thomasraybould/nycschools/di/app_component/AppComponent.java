@@ -1,17 +1,23 @@
 package com.example.thomasraybould.nycschools.di.app_component;
 
-import com.example.thomasraybould.nycschools.view.school_list_activity.SchoolListViewModelImpl;
+import com.example.thomasraybould.nycschools.NycSchoolsApplication;
+import com.example.thomasraybould.nycschools.di.school_list_component.SchoolListActivityModule;
+
+import javax.inject.Singleton;
 
 import dagger.Component;
+import dagger.android.AndroidInjectionModule;
 
-@Component(modules = {NetworkModule.class,
+@Component(modules = {
+        AndroidInjectionModule.class,
+        ViewModelModule.class,
+        SchoolListActivityModule.class,
+        NetworkModule.class,
         SchoolListModule.class,
         SatScoreModule.class,
         RxModule.class,
         DbModule.class})
-@AppScope
+@Singleton
 public interface AppComponent {
-
-    void inject(SchoolListViewModelImpl schoolListPresenter);
-
+    void inject(NycSchoolsApplication nycSchoolsApplication);
 }

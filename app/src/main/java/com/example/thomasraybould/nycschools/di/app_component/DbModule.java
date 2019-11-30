@@ -2,6 +2,8 @@ package com.example.thomasraybould.nycschools.di.app_component;
 
 import android.content.Context;
 
+import javax.inject.Singleton;
+
 import dagger.Module;
 import dagger.Provides;
 
@@ -14,7 +16,7 @@ public class DbModule {
         this.context = context;
     }
 
-    @AppScope
+    @Singleton
     @Provides
      Context getContext(){
         return context;

@@ -7,25 +7,27 @@ import com.example.thomasraybould.nycschools.domain.get_school_list_interactor.S
 import com.example.thomasraybould.nycschools.domain.get_school_list_interactor.SchoolListRepo;
 import com.example.thomasraybould.nycschools.domain.get_school_list_interactor.impl.GetSchoolListInteractorImpl;
 
+import javax.inject.Singleton;
+
 import dagger.Module;
 import dagger.Provides;
 
 @Module
 class SchoolListModule {
 
-    @AppScope
+    @Singleton
     @Provides
     static SchoolListRepo getSchoolListRepo(SchoolListWebRepoImpl schoolListWebRepo){
         return schoolListWebRepo;
     }
 
-    @AppScope
+    @Singleton
     @Provides
     static SchoolListDbRepo getSchoolListDbRepo(SchoolListDbRepoImpl schoolListDbRepo){
         return schoolListDbRepo;
     }
 
-    @AppScope
+    @Singleton
     @Provides
     static GetSchoolListInteractor getSchoolListInteractor(GetSchoolListInteractorImpl getSchoolListInteractor){
         return getSchoolListInteractor;

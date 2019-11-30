@@ -14,6 +14,7 @@ import com.example.thomasraybould.nycschools.entities.SatScoreData
 import com.example.thomasraybould.nycschools.entities.School
 import com.example.thomasraybould.nycschools.rx_util.SchedulerProvider
 import com.example.thomasraybould.nycschools.view.base.BaseViewModel
+import dagger.android.AndroidInjection
 
 import java.util.ArrayList
 import java.util.HashMap
@@ -22,27 +23,13 @@ import javax.inject.Inject
 
 import io.reactivex.disposables.Disposable
 
-class SchoolListViewModelImpl : BaseViewModel(), SchoolListViewModel {
-
-    @Inject
-    lateinit var getSchoolListInteractor: GetSchoolListInteractor
-
-    @Inject
-    lateinit var getSatScoreDataInteractor: GetSatScoreDataInteractor
-
-    @Inject
-    lateinit var schedulerProvider: SchedulerProvider
+class SchoolListViewModelImpl  @Inject constructor(private val getSchoolListInteractor: GetSchoolListInteractor, val getSatScoreDataInteractor: GetSatScoreDataInteractor, val schedulerProvider: SchedulerProvider): BaseViewModel(), SchoolListViewModel {
 
     private val schoolListItemUiModels: MutableList<SchoolListItemUiModel> = ArrayList()
 
     private val schoolListUiModelLiveData: MutableLiveData<SchoolListUiModel> = MutableLiveData()
 
     private val pendingDownloads = HashMap<String, Disposable>()
-
-    init {
-        componentProvider.appComponent
-                .inject(this)
-    }
 
     private fun postUpdatedList() {
         schoolListUiModelLiveData.postValue(SchoolListUiModel(schoolListItemUiModels))

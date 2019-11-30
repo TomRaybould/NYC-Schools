@@ -5,6 +5,7 @@ import android.widget.Toast
 
 import androidx.appcompat.app.AppCompatActivity
 import androidx.lifecycle.Observer
+import androidx.lifecycle.ViewModelProvider
 import androidx.lifecycle.ViewModelProviders
 import androidx.recyclerview.widget.LinearLayoutManager
 import androidx.recyclerview.widget.LinearSmoothScroller
@@ -14,29 +15,36 @@ import com.example.thomasraybould.nycschools.R
 import com.example.thomasraybould.nycschools.adapters.school_list_adapter.OnSchoolListItemSelectedListener
 import com.example.thomasraybould.nycschools.adapters.school_list_adapter.SchoolListAdapter
 import com.example.thomasraybould.nycschools.adapters.school_list_adapter.SchoolListItemUiModel
+import dagger.android.AndroidInjection
+import dagger.android.support.AndroidSupportInjection
+import javax.inject.Inject
 
 class SchoolListActivity : AppCompatActivity(), OnSchoolListItemSelectedListener {
 
-    private var recyclerView: RecyclerView? = null
+    @Inject
+    lateinit var factory: ViewModelProvider.Factory
 
-    private lateinit var schoolListViewModel: SchoolListViewModel
+    private var schoolListViewModel : SchoolListViewModel? = null
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
         setContentView(R.layout.school_list_activity)
 
-        recyclerView = findViewById(R.id.recyclerView)
+        AndroidInjection.inject(this)
+
+        val recyclerView : RecyclerView = findViewById(R.id.recyclerView)
         val linearLayoutManager = LinearLayoutManager(this)
-        recyclerView!!.layoutManager = linearLayoutManager
+        recyclerView.layoutManager = linearLayoutManager
 
         val schoolListAdapter = SchoolListAdapter(this, this, linearLayoutManager)
-        recyclerView!!.adapter = schoolListAdapter
+        recyclerView.adapter = schoolListAdapter
 
-        schoolListViewModel = ViewModelProviders.of(this).get(SchoolListViewModelImpl::class.java)
-        schoolListViewModel.getSchoolList().observe(this, Observer { schoolListViewModel ->
-            schoolListViewModel?.let {
-                schoolListAdapter.updateList(schoolListViewModel.schoolListItemUiModels)
-                schoolListViewModel.errorMessage?.let {
+        schoolListViewModel = ViewModelProviders.of(this, factory).get(SchoolListViewModelImpl::class.java)
+
+        schoolListViewModel?.getSchoolList()?.observe(this, Observer { schoolListUiModel ->
+            schoolListUiModel?.let {
+                schoolListAdapter.updateList(schoolListUiModel.schoolListItemUiModels)
+                schoolListUiModel.errorMessage?.let {
                     toast(it)
                 }
             }
@@ -48,6 +56,6 @@ class SchoolListActivity : AppCompatActivity(), OnSchoolListItemSelectedListener
     }
 
     override fun onSchoolListItemSelected(schoolListItemUiModel: SchoolListItemUiModel) {
-        schoolListViewModel.onSchoolListItemSelected(schoolListItemUiModel)
+        schoolListViewModel?.onSchoolListItemSelected(schoolListItemUiModel)
     }
 }

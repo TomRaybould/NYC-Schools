@@ -2,6 +2,8 @@ package com.example.thomasraybould.nycschools.di.app_component;
 
 import com.example.thomasraybould.nycschools.rx_util.SchedulerProvider;
 
+import javax.inject.Singleton;
+
 import dagger.Module;
 import dagger.Provides;
 import io.reactivex.Scheduler;
@@ -11,7 +13,7 @@ import io.reactivex.schedulers.Schedulers;
 @Module
 public class RxModule {
 
-    @AppScope
+    @Singleton
     @Provides
     static SchedulerProvider schedulerProvider(){
         return new SchedulerProvider() {
