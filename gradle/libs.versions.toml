@@ -1,0 +1,44 @@
+[versions]
+appcompat = "1.2.0"
+constraintlayout = "1.1.3"
+recyclerview = "1.0.0"
+coreKtx = "1.1.0"
+lifecycleViewModel = "2.3.1"
+junit = "4.12"
+testRunner = "1.2.0"
+espressoCore = "3.2.0"
+dagger = "2.22"
+rxJava = "2.2.10"
+rxAndroid = "2.0.2"
+okhttp = "4.9.0"
+glide = "4.9.0"
+kotlinStdlib = "1.5.21"  # Replace with your Kotlin version
+
+[libraries]
+androidxAppCompat = { module = "androidx.appcompat:appcompat", version.ref = "appcompat" }
+androidxConstraintLayout = { module = "androidx.constraintlayout:constraintlayout", version.ref = "constraintlayout" }
+androidxRecyclerView = { module = "androidx.recyclerview:recyclerview", version.ref = "recyclerview" }
+androidxCoreKtx = { module = "androidx.core:core-ktx", version.ref = "coreKtx" }
+androidxLifecycleViewModel = { module = "androidx.lifecycle:lifecycle-viewmodel", version.ref = "lifecycleViewModel" }
+junit = { module = "junit:junit", version.ref = "junit" }
+androidxTestRunner = { module = "androidx.test:runner", version.ref = "testRunner" }
+espressoCore = { module = "androidx.test.espresso:espresso-core", version.ref = "espressoCore" }
+
+# Dagger Dependencies
+dagger = { module = "com.google.dagger:dagger", version.ref = "dagger" }
+daggerAndroidSupport = { module = "com.google.dagger:dagger-android-support", version.ref = "dagger" }
+daggerCompiler = { module = "com.google.dagger:dagger-compiler", version.ref = "dagger" }
+daggerAndroidProcessor = { module = "com.google.dagger:dagger-android-processor", version.ref = "dagger" }
+
+# RxJava Dependencies
+rxJava = { module = "io.reactivex.rxjava2:rxjava", version.ref = "rxJava" }
+rxAndroid = { module = "io.reactivex.rxjava2:rxandroid", version.ref = "rxAndroid" }
+
+# Networking
+okhttp = { module = "com.squareup.okhttp3:okhttp", version.ref = "okhttp" }
+
+# Image Loading
+glide = { module = "com.github.bumptech.glide:glide", version.ref = "glide" }
+
+# Kotlin Standard Library
+kotlinStdlib = { module = "org.jetbrains.kotlin:kotlin-stdlib-jdk7", version.ref = "kotlinStdlib" }

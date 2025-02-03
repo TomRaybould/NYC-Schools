@@ -32,30 +32,31 @@ android {
 }
 
 dependencies {
-    implementation fileTree(dir: 'libs', include: ['*.jar'])
-    implementation 'androidx.appcompat:appcompat:1.1.0'
-    implementation 'androidx.constraintlayout:constraintlayout:1.1.3'
-    testImplementation 'junit:junit:4.12'
-    androidTestImplementation 'androidx.test:runner:1.2.0'
-    androidTestImplementation 'androidx.test.espresso:espresso-core:3.2.0'
+    implementation libs.androidxAppCompat
+    implementation libs.androidxConstraintLayout
+    implementation libs.androidxRecyclerView
+    implementation libs.androidxCoreKtx
+    implementation libs.androidxLifecycleViewModel
+    testImplementation libs.junit
+    androidTestImplementation libs.androidxTestRunner
+    androidTestImplementation libs.espressoCore
 
-    implementation 'com.google.dagger:dagger-android-support:2.22'
-    implementation 'com.google.dagger:dagger:2.22'
-    kapt 'com.google.dagger:dagger-compiler:2.22'
-    kapt "com.google.dagger:dagger-android-processor:2.22"
+    // Dagger Dependencies
+    implementation libs.dagger
+    implementation libs.daggerAndroidSupport
+    kapt libs.daggerCompiler
+    kapt libs.daggerAndroidProcessor
 
-    implementation 'io.reactivex.rxjava2:rxjava:2.2.10'
-    implementation 'io.reactivex.rxjava2:rxandroid:2.0.2'
+    // RxJava
+    implementation libs.rxJava
+    implementation libs.rxAndroid
 
-    implementation 'com.squareup.okhttp3:okhttp:4.9.0'
+    // Networking
+    implementation libs.okhttp
 
-    implementation 'androidx.recyclerview:recyclerview:1.0.0'
+    // Image Loading
+    implementation libs.glide
 
-    implementation 'com.github.bumptech.glide:glide:4.9.0'
-
-    implementation 'androidx.core:core-ktx:1.1.0'
-    implementation "org.jetbrains.kotlin:kotlin-stdlib-jdk7:$kotlin_version"
-
-    implementation "androidx.lifecycle:lifecycle-viewmodel:2.1.0"
-    implementation "android.arch.lifecycle:extensions:1.1.1"
+    // Kotlin Standard Library
+    implementation libs.kotlinStdlib
 }

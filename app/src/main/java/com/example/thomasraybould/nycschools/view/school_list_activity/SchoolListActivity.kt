@@ -6,7 +6,6 @@ import android.widget.Toast
 import androidx.appcompat.app.AppCompatActivity
 import androidx.lifecycle.Observer
 import androidx.lifecycle.ViewModelProvider
-import androidx.lifecycle.ViewModelProviders
 import androidx.recyclerview.widget.LinearLayoutManager
 import androidx.recyclerview.widget.LinearSmoothScroller
 import androidx.recyclerview.widget.RecyclerView
@@ -39,7 +38,7 @@ class SchoolListActivity : AppCompatActivity(), OnSchoolListItemSelectedListener
         val schoolListAdapter = SchoolListAdapter(this, this, linearLayoutManager)
         recyclerView.adapter = schoolListAdapter
 
-        schoolListViewModel = ViewModelProviders.of(this, factory).get(SchoolListViewModelImpl::class.java)
+        schoolListViewModel = ViewModelProvider(this, factory).get(SchoolListViewModelImpl::class.java)
 
         schoolListViewModel?.getSchoolList()?.observe(this, Observer { schoolListUiModel ->
             schoolListUiModel?.let {
