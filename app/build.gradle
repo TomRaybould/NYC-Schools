@@ -1,3 +1,7 @@
+plugins {
+    alias(libs.plugins.compose.compiler)
+}
+
 apply plugin: 'com.android.application'
 apply plugin: 'kotlin-android'
 apply plugin: 'kotlin-kapt'
@@ -28,6 +32,9 @@ android {
     }
     dataBinding {
         enabled = true
+    }
+    buildFeatures {
+        compose true
     }
 }
 
