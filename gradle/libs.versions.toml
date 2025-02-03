@@ -13,6 +13,16 @@ rxJava = "2.2.10"
 rxAndroid = "2.0.2"
 okhttp = "4.9.0"
 glide = "4.9.0"
+kotlinStdlib = "1.5.21"  # Replace with your Kotlin version
+composeBom = "2025.01.01"
+material3 = "1.0.0" # Update to the appropriate version
+material = "1.0.0" # Update to the appropriate version
+foundation = "1.0.0" # Update to the appropriate version
+ui = "1.0.0" # Update to the appropriate version
+uiToolingPreview = "1.0.0" # Update to the appropriate version
+uiTooling = "1.0.0" # Update to the appropriate version
+uiTestJUnit4 = "1.0.0" # Update to the appropriate version
+uiTestManifest = "1.0.0" # Update to the appropriate version
 kotlinStdlib = "1.5.21"
 mockk = "1.13.2"
 androidx-core-testing = "2.1.0"
@@ -26,6 +36,16 @@ androidxLifecycleViewModel = { module = "androidx.lifecycle:lifecycle-viewmodel"
 junit = { module = "junit:junit", version.ref = "junit" }
 androidxTestRunner = { module = "androidx.test:runner", version.ref = "testRunner" }
 espressoCore = { module = "androidx.test.espresso:espresso-core", version.ref = "espressoCore" }
+composeBom = { group = "androidx.compose", name = "compose-bom", version.ref = "composeBom" }
+material3 = { group = "androidx.compose.material3", name = "material3", version.ref = "material3" }
+material = { group = "androidx.compose.material", name = "material", version.ref = "material" }
+foundation = { group = "androidx.compose.foundation", name = "foundation", version.ref = "foundation" }
+ui = { group = "androidx.compose.ui", name = "ui", version.ref = "ui" }
+uiToolingPreview = { group = "androidx.compose.ui", name = "ui-tooling-preview", version.ref = "uiToolingPreview" }
+uiTooling = { group = "androidx.compose.ui", name = "ui-tooling", version.ref = "uiTooling" }
+uiTestJUnit4 = { group = "androidx.compose.ui", name = "ui-test-junit4", version.ref = "uiTestJUnit4" }
+uiTestManifest = { group = "androidx.compose.ui", name = "ui-test-manifest", version.ref = "uiTestManifest" }
+
 
 # Dagger Dependencies
 dagger = { module = "com.google.dagger:dagger", version.ref = "dagger" }

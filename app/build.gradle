@@ -7,7 +7,7 @@ android {
     compileSdkVersion 34
     defaultConfig {
         applicationId "com.example.thomasraybould.nycschools"
-        minSdkVersion 15
+        minSdkVersion 21
         targetSdkVersion 33
         versionCode 1
         versionName "1.0"
@@ -59,6 +59,22 @@ dependencies {
 
     // Kotlin Standard Library
     implementation libs.kotlinStdlib
+
+    //compose
+    implementation libs.composeBom
+    androidTestImplementation libs.composeBom
+
+    // Material Design 3
+    implementation libs.material3
+
+    // Android Studio Preview support
+    implementation libs.uiToolingPreview
+    debugImplementation libs.uiTooling
+
+    // UI Tests
+    androidTestImplementation libs.uiTestJUnit4
+    debugImplementation libs.uiTestManifest
+
 
     // Testing
     testImplementation libs.mockk
