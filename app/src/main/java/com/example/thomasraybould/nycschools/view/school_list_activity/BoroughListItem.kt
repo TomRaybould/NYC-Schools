@@ -39,7 +39,7 @@ fun getTestBoroughs(isLoading: Boolean): List<NycListItem.BoroughItem> {
     )
 }
 
-@Preview()
+@Preview
 @Composable
 fun Preview() {
     Column {
