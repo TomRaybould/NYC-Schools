@@ -1,7 +1,8 @@
 # NYC Schools
-
-## This branch contains work done after my 48 hour challenge that was completed on the weekend of (7/20/2019). In this branch I am working on some of the issues I didn't have time to address.
-## The submitted version can be seen in tags.
+<p>
+    Original done for an interview coding challenge, I now use 
+    this project to practice using technologies in Android.
+</p>
 
 ## User overview
 <p>
@@ -30,6 +31,6 @@
 * There are also some unit tests to check that I am properly receiving and parsing the data from the api.
 
 <p>
-    I have tagged this project in four working stages of development, inorder
+    I have tagged this project in working stages of development, inorder
     to show the progression of the app.
 <p/>
