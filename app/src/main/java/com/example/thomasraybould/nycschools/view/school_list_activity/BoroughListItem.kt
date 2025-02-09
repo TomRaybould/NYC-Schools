@@ -3,6 +3,7 @@ package com.example.thomasraybould.nycschools.view.school_list_activity
 import androidx.compose.foundation.BorderStroke
 import androidx.compose.foundation.Image
 import androidx.compose.foundation.border
+import androidx.compose.foundation.layout.Box
 import androidx.compose.foundation.layout.Column
 import androidx.compose.foundation.layout.Row
 import androidx.compose.foundation.layout.fillMaxWidth
@@ -10,6 +11,7 @@ import androidx.compose.foundation.layout.height
 import androidx.compose.foundation.layout.padding
 import androidx.compose.foundation.layout.size
 import androidx.compose.foundation.shape.RoundedCornerShape
+import androidx.compose.material3.CircularProgressIndicator
 import androidx.compose.material3.Divider
 import androidx.compose.material3.MaterialTheme
 import androidx.compose.material3.Surface
@@ -42,6 +44,7 @@ fun getTestBoroughs(isLoading: Boolean): List<NycListItem.BoroughItem> {
 fun Preview() {
     Column {
         getTestBoroughs(false).map { BoroughItem(it) }
+        getTestBoroughs(true).map { BoroughItem(it) }
     }
 }
 
@@ -55,7 +58,7 @@ fun BoroughItem(boroughItem: NycListItem.BoroughItem) {
 
 @Composable
 fun BoroughContent(boroughItem: NycListItem.BoroughItem) {
-    Surface {
+    Box {
         Row(
             Modifier
                 .fillMaxWidth()
@@ -81,6 +84,14 @@ fun BoroughContent(boroughItem: NycListItem.BoroughItem) {
                     .padding(start = 6.dp),
                 text = boroughItem.borough.boroughTitle,
                 style = MaterialTheme.typography.headlineMedium
+            )
+
+        }
+        if (boroughItem.isLoading) {
+            CircularProgressIndicator(
+                modifier = Modifier
+                    .align(alignment = Alignment.CenterEnd)
+                    .padding(end = 4.dp),
             )
         }
     }
