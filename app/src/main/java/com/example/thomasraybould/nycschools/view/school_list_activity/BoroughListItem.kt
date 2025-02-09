@@ -1,5 +1,6 @@
 package com.example.thomasraybould.nycschools.view.school_list_activity
 
+import ListItemWithUnderline
 import androidx.compose.foundation.BorderStroke
 import androidx.compose.foundation.Image
 import androidx.compose.foundation.border
@@ -13,6 +14,7 @@ import androidx.compose.foundation.layout.size
 import androidx.compose.foundation.shape.RoundedCornerShape
 import androidx.compose.material3.CircularProgressIndicator
 import androidx.compose.material3.Divider
+import androidx.compose.material3.HorizontalDivider
 import androidx.compose.material3.MaterialTheme
 import androidx.compose.material3.Surface
 import androidx.compose.material3.Text
@@ -93,16 +95,6 @@ fun BoroughContent(boroughItem: NycListItem.BoroughItem) {
                     .align(alignment = Alignment.CenterEnd)
                     .padding(end = 4.dp),
             )
-        }
-    }
-}
-
-@Composable
-fun ListItemWithUnderline(content: @Composable () -> Unit) {
-    Surface {
-        Column {
-            content()
-            Divider(Modifier.padding(start = 4.dp), thickness = 1.dp)
         }
     }
 }
