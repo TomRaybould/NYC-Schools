@@ -8,7 +8,7 @@ apply plugin: 'kotlin-kapt'
 
 android {
     namespace 'com.example.thomasraybould.nycschools'
-    compileSdkVersion 34
+    compileSdkVersion 35
     defaultConfig {
         applicationId "com.example.thomasraybould.nycschools"
         minSdkVersion 21
