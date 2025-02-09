@@ -13,10 +13,7 @@ import androidx.compose.foundation.layout.padding
 import androidx.compose.foundation.layout.size
 import androidx.compose.foundation.shape.RoundedCornerShape
 import androidx.compose.material3.CircularProgressIndicator
-import androidx.compose.material3.Divider
-import androidx.compose.material3.HorizontalDivider
 import androidx.compose.material3.MaterialTheme
-import androidx.compose.material3.Surface
 import androidx.compose.material3.Text
 import androidx.compose.runtime.Composable
 import androidx.compose.ui.Alignment
@@ -31,13 +28,13 @@ import com.example.thomasraybould.nycschools.R
 import com.example.thomasraybould.nycschools.entities.Borough
 import com.example.thomasraybould.nycschools.view.uiModels.NycListItem
 
-fun getTestBoroughs(isLoading: Boolean): List<NycListItem.BoroughItem> {
+fun getTestBoroughs(isLoading: Boolean): List<NycListItem.BoroughItemUiModel> {
     return listOf(
-        NycListItem.BoroughItem(Borough.MANHATTAN, R.drawable.manhattan, isLoading),
-        NycListItem.BoroughItem(Borough.BROOKLYN, R.drawable.brooklyn, isLoading),
-        NycListItem.BoroughItem(Borough.QUEENS, R.drawable.queens, isLoading),
-        NycListItem.BoroughItem(Borough.STATEN_ISLAND, R.drawable.statenisland, isLoading),
-        NycListItem.BoroughItem(Borough.BRONX, R.drawable.bronx, isLoading),
+        NycListItem.BoroughItemUiModel(Borough.MANHATTAN, R.drawable.manhattan, isLoading),
+        NycListItem.BoroughItemUiModel(Borough.BROOKLYN, R.drawable.brooklyn, isLoading),
+        NycListItem.BoroughItemUiModel(Borough.QUEENS, R.drawable.queens, isLoading),
+        NycListItem.BoroughItemUiModel(Borough.STATEN_ISLAND, R.drawable.statenisland, isLoading),
+        NycListItem.BoroughItemUiModel(Borough.BRONX, R.drawable.bronx, isLoading),
     )
 }
 
@@ -51,15 +48,15 @@ fun Preview() {
 }
 
 @Composable
-fun BoroughItem(boroughItem: NycListItem.BoroughItem) {
+fun BoroughItem(boroughItemUiModel: NycListItem.BoroughItemUiModel) {
     ListItemWithUnderline {
-        BoroughContent(boroughItem)
+        BoroughContent(boroughItemUiModel)
     }
 }
 
 
 @Composable
-fun BoroughContent(boroughItem: NycListItem.BoroughItem) {
+fun BoroughContent(boroughItemUiModel: NycListItem.BoroughItemUiModel) {
     Box {
         Row(
             Modifier
@@ -68,7 +65,7 @@ fun BoroughContent(boroughItem: NycListItem.BoroughItem) {
                 .padding(4.dp)
         ) {
 
-            val boroughImagePainter = painterResource(id = boroughItem.imageRes)
+            val boroughImagePainter = painterResource(id = boroughItemUiModel.imageRes)
 
             Image(
                 modifier = Modifier
@@ -84,12 +81,12 @@ fun BoroughContent(boroughItem: NycListItem.BoroughItem) {
                 modifier = Modifier
                     .align(Alignment.CenterVertically)
                     .padding(start = 6.dp),
-                text = boroughItem.borough.boroughTitle,
+                text = boroughItemUiModel.borough.boroughTitle,
                 style = MaterialTheme.typography.headlineMedium
             )
 
         }
-        if (boroughItem.isLoading) {
+        if (boroughItemUiModel.isLoading) {
             CircularProgressIndicator(
                 modifier = Modifier
                     .align(alignment = Alignment.CenterEnd)
