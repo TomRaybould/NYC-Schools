@@ -1,3 +1,5 @@
+package com.example.thomasraybould.nycschools.view.school_list_compose_activity
+
 import androidx.compose.foundation.layout.Column
 import androidx.compose.foundation.layout.padding
 import androidx.compose.material3.HorizontalDivider

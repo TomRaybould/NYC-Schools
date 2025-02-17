@@ -1,4 +1,4 @@
-package com.example.thomasraybould.nycschools.view.school_list_activity.compose
+package com.example.thomasraybould.nycschools.view.school_list_compose_activity
 
 import android.os.Bundle
 import android.widget.Toast

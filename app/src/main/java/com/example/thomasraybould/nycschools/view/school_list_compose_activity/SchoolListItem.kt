@@ -1,6 +1,5 @@
-package com.example.thomasraybould.nycschools.view.school_list_activity.compose
+package com.example.thomasraybould.nycschools.view.school_list_compose_activity
 
-import ListItemWithUnderline
 import androidx.compose.foundation.layout.Arrangement
 import androidx.compose.foundation.layout.Box
 import androidx.compose.foundation.layout.Column
