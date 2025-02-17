@@ -1,5 +1,8 @@
 package com.example.thomasraybould.nycschools.view.school_list_activity
 
-import com.example.thomasraybould.nycschools.adapters.school_list_adapter.SchoolListItemUiModel
+import com.example.thomasraybould.nycschools.view.uiModels.NycListItem
 
-data class SchoolListUiModel(val schoolListItemUiModels: List<SchoolListItemUiModel>, val errorMessage: String? = null)
+data class SchoolListUiModel(
+    val schoolListItemUiModels: List<NycListItem>,
+    val errorMessage: String? = null
+)

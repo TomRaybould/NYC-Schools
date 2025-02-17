@@ -12,15 +12,16 @@ import androidx.databinding.BindingAdapter
 import com.bumptech.glide.Glide
 import com.bumptech.glide.request.RequestOptions
 import com.example.thomasraybould.nycschools.R
+import com.example.thomasraybould.nycschools.view.uiModels.NycListItem
 
 
 @BindingAdapter("setBoroughImageRes")
-fun setBoroughImageRes(imageView: ImageView, schoolListItemUiModel: SchoolListItemUiModel?) {
-    schoolListItemUiModel?.let {
+fun setBoroughImageRes(imageView: ImageView, boroughItemUiModel: NycListItem.BoroughItemUiModel?) {
+    boroughItemUiModel?.let {
         Glide.with(imageView.context)
                 .applyDefaultRequestOptions(RequestOptions.centerCropTransform())
                 .applyDefaultRequestOptions(RequestOptions.circleCropTransform())
-                .load(schoolListItemUiModel.imageResId)
+                .load(boroughItemUiModel)
                 .into(imageView)
     }
 }

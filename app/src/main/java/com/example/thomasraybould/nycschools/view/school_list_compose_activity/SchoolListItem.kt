@@ -19,7 +19,9 @@ import androidx.compose.ui.semantics.ProgressBarRangeInfo
 import androidx.compose.ui.text.style.TextOverflow
 import androidx.compose.ui.tooling.preview.Preview
 import androidx.compose.ui.unit.dp
+import com.example.thomasraybould.nycschools.entities.Borough
 import com.example.thomasraybould.nycschools.entities.SatScoreData
+import com.example.thomasraybould.nycschools.entities.School
 import com.example.thomasraybould.nycschools.view.uiModels.NycListItem
 
 @Preview
@@ -28,7 +30,8 @@ fun SchoolPreview() {
     Column {
         SchoolItem(
             NycListItem.SchoolItemUiModel(
-                schoolName = "Test school not expanded",
+                borough = Borough.QUEENS,
+                school = School.newBuilder().name("Test school not expanded").build(),
                 satScoreData = SatScoreData.newBuilder()
                     .math(500)
                     .reading(501)
@@ -40,7 +43,9 @@ fun SchoolPreview() {
         )
         SchoolItem(
             NycListItem.SchoolItemUiModel(
-                schoolName = "Test school long text not expanded, loading state",
+                borough = Borough.QUEENS,
+                school = School.newBuilder()
+                    .name("Test school long text not expanded, loading state").build(),
                 satScoreData = SatScoreData.newBuilder()
                     .math(500)
                     .reading(501)
@@ -52,7 +57,8 @@ fun SchoolPreview() {
         )
         SchoolItem(
             NycListItem.SchoolItemUiModel(
-                schoolName = "Test school expanded",
+                borough = Borough.QUEENS,
+                school = School.newBuilder().name("Test school expanded").build(),
                 satScoreData = SatScoreData.newBuilder()
                     .math(500)
                     .reading(501)
@@ -76,7 +82,7 @@ fun SchoolItemContent(schoolItemUiModel: NycListItem.SchoolItemUiModel) {
         ListItemWithUnderline {
             Box(modifier = Modifier.height(50.dp)) {
                 Text(
-                    text = schoolItemUiModel.schoolName,
+                    text = schoolItemUiModel.school.name,
                     modifier = Modifier
                         .fillMaxWidth()
                         .padding(start = 16.dp)
@@ -93,9 +99,6 @@ fun SchoolItemContent(schoolItemUiModel: NycListItem.SchoolItemUiModel) {
                     )
                 }
             }
-        }
-        if (schoolItemUiModel.isSelected) {
-            ScoreCard(schoolItemUiModel.satScoreData)
         }
     }
 }
@@ -132,7 +135,7 @@ fun ScoreView(sectionName: String, score: Int, modifier: Modifier = Modifier) {
             )
             ProgressBarRangeInfo
             LinearProgressIndicator(
-                progress = { (score/800.0).toFloat() },
+                progress = { (score / 800.0).toFloat() },
                 modifier = Modifier.fillMaxWidth()
             )
         }

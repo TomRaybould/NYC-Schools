@@ -6,9 +6,7 @@ import androidx.activity.compose.setContent
 import androidx.appcompat.app.AppCompatActivity
 import androidx.lifecycle.ViewModelProvider
 import com.example.thomasraybould.nycschools.R
-import com.example.thomasraybould.nycschools.adapters.school_list_adapter.OnSchoolListItemSelectedListener
-import com.example.thomasraybould.nycschools.adapters.school_list_adapter.SchoolListItemType
-import com.example.thomasraybould.nycschools.adapters.school_list_adapter.SchoolListItemUiModel
+import com.example.thomasraybould.nycschools.adapters.school_list_adapter.OnNycListItemSelectedListener
 import com.example.thomasraybould.nycschools.entities.Borough
 import com.example.thomasraybould.nycschools.view.school_list_activity.SchoolListViewModel
 import com.example.thomasraybould.nycschools.view.school_list_activity.SchoolListViewModelImpl
@@ -16,7 +14,7 @@ import com.example.thomasraybould.nycschools.view.uiModels.NycListItem
 import dagger.android.AndroidInjection
 import javax.inject.Inject
 
-class SchoolListComposeActivity : AppCompatActivity(), OnSchoolListItemSelectedListener {
+class SchoolListComposeActivity : AppCompatActivity(), OnNycListItemSelectedListener {
 
     @Inject
     lateinit var factory: ViewModelProvider.Factory
@@ -36,20 +34,8 @@ class SchoolListComposeActivity : AppCompatActivity(), OnSchoolListItemSelectedL
 
         schoolListViewModel?.getSchoolList()?.observe(this) { schoolListUiModel ->
             schoolListUiModel?.let {
-                val nycListItems =
-                    schoolListUiModel.schoolListItemUiModels.mapNotNull { schoolListUiModel ->
-                        if (schoolListUiModel.type == SchoolListItemType.BOROUGH_TITLE) {
-                            NycListItem.BoroughItemUiModel(
-                                schoolListUiModel.borough,
-                                getImageForBorough(schoolListUiModel.borough),
-                                schoolListUiModel.isLoading
-                            )
-                        } else {
-                            null
-                        }
-                    }
                 setContent {
-                    SchoolListView(nycListItems)
+                    SchoolListView(schoolListUiModel.schoolListItemUiModels)
                 }
             }
         }
@@ -60,8 +46,8 @@ class SchoolListComposeActivity : AppCompatActivity(), OnSchoolListItemSelectedL
         Toast.makeText(this, message, Toast.LENGTH_SHORT).show()
     }
 
-    override fun onSchoolListItemSelected(schoolListItemUiModel: SchoolListItemUiModel) {
-        schoolListViewModel?.onSchoolListItemSelected(schoolListItemUiModel)
+    override fun onNycListItemSelected(nycListItem: NycListItem) {
+        schoolListViewModel?.onSchoolListItemSelected(nycListItem)
     }
 
     private fun getImageForBorough(borough: Borough): Int {
