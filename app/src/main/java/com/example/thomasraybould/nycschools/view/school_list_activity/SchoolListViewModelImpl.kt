@@ -58,13 +58,11 @@ class SchoolListViewModelImpl @Inject constructor(
         //cancel download of json and remove school cells from list
         if (boroughItemUiModel.isSelected) {
             val newList = getCurrentList().toMutableList()
-
             for (i in newList.size - 1 downTo 0) {
                 val nycListItem = newList[i]
                 if (nycListItem.borough == borough) {
                     if (nycListItem is NycListItem.BoroughItemUiModel) {
-                        nycListItem.isLoading = false
-                        nycListItem.isSelected = false
+                        newList[i] = nycListItem.copy(isLoading = false, isSelected = false)
                     } else {
                         newList.removeAt(i)
                     }
@@ -80,8 +78,7 @@ class SchoolListViewModelImpl @Inject constructor(
 
         val newList = getCurrentList().map {
             if (it is NycListItem.BoroughItemUiModel && it.borough == borough) {
-                it.isLoading = true
-                it.isSelected = true
+                return@map it.copy(isSelected = true, isLoading = true)
             }
             it
         }
@@ -125,6 +122,7 @@ class SchoolListViewModelImpl @Inject constructor(
         val newSchoolListItemUiModels = schoolsToListItems(schools)
 
         val newList = getCurrentList().apply {
+            set(targetIdx, NycListItem.BoroughItemUiModel(borough, isSelected = true))
             addAll(targetIdx + 1, newSchoolListItemUiModels)
         }
         postUpdatedList(newList)
@@ -194,7 +192,7 @@ class SchoolListViewModelImpl @Inject constructor(
 
         getCurrentList().forEachIndexed { index, schoolListItemUiModel ->
             if (satDataResponse.satScoreData.dbn == school.dbn) {
-                 val newList = getCurrentList()
+                val newList = getCurrentList()
                     .apply {
                         add(index + 1, scoreListItem)
                     }
