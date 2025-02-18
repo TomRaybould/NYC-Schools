@@ -6,6 +6,7 @@ constraintlayout = "2.2.0"
 recyclerview = "1.4.0"
 coreKtx = "1.15.0"
 lifecycleViewModel = "2.8.7"
+composeRuntimeLivedata = "1.7.7"
 junit = "4.13.2"
 testRunner = "1.6.2"
 espressoCore = "3.6.1"
@@ -34,6 +35,7 @@ androidxConstraintLayout = { module = "androidx.constraintlayout:constraintlayou
 androidxRecyclerView = { module = "androidx.recyclerview:recyclerview", version.ref = "recyclerview" }
 androidxCoreKtx = { module = "androidx.core:core-ktx", version.ref = "coreKtx" }
 androidxLifecycleViewModel = { module = "androidx.lifecycle:lifecycle-viewmodel", version.ref = "lifecycleViewModel" }
+androidxComposeRuntimeLivedata = { module = "androidx.compose.runtime:runtime-livedata", version.ref = "composeRuntimeLivedata" }
 junit = { module = "junit:junit", version.ref = "junit" }
 androidxTestRunner = { module = "androidx.test:runner", version.ref = "testRunner" }
 espressoCore = { module = "androidx.test.espresso:espresso-core", version.ref = "espressoCore" }

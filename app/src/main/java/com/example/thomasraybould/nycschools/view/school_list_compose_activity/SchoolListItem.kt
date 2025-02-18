@@ -72,13 +72,16 @@ fun SchoolPreview() {
 }
 
 @Composable
-fun SchoolItem(schoolItemUiModel: NycListItem.SchoolItemUiModel) {
+fun SchoolItem(
+    schoolItemUiModel: NycListItem.SchoolItemUiModel,
+    onNycListItemSelected: ((NycListItem) -> Unit)? = null
+) {
     SchoolItemContent(schoolItemUiModel)
 }
 
 @Composable
 fun SchoolItemContent(schoolItemUiModel: NycListItem.SchoolItemUiModel) {
-    Column {
+    Surface {
         ListItemWithUnderline {
             Box(modifier = Modifier.height(50.dp)) {
                 Text(

@@ -45,6 +45,7 @@ dependencies {
     implementation libs.androidxRecyclerView
     implementation libs.androidxCoreKtx
     implementation libs.androidxLifecycleViewModel
+    implementation libs.androidxComposeRuntimeLivedata
     testImplementation libs.junit
     androidTestImplementation libs.androidxTestRunner
     androidTestImplementation libs.espressoCore

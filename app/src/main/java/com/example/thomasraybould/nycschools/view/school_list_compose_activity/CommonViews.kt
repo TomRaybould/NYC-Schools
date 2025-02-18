@@ -9,8 +9,8 @@ import androidx.compose.ui.Modifier
 import androidx.compose.ui.unit.dp
 
 @Composable
-fun ListItemWithUnderline(content: @Composable () -> Unit) {
-    Surface {
+fun ListItemWithUnderline(modifier: Modifier = Modifier, content: @Composable () -> Unit) {
+    Surface(modifier = modifier) {
         Column {
             content()
             HorizontalDivider(Modifier.padding(start = 4.dp), thickness = 1.dp)

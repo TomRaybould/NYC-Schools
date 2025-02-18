@@ -1,9 +1,12 @@
 package com.example.thomasraybould.nycschools.view.school_list_compose_activity
 
 import android.os.Bundle
+import android.util.Log
 import android.widget.Toast
 import androidx.activity.compose.setContent
 import androidx.appcompat.app.AppCompatActivity
+import androidx.compose.runtime.livedata.observeAsState
+import androidx.compose.runtime.remember
 import androidx.lifecycle.ViewModelProvider
 import com.example.thomasraybould.nycschools.R
 import com.example.thomasraybould.nycschools.adapters.school_list_adapter.OnNycListItemSelectedListener
@@ -19,25 +22,25 @@ class SchoolListComposeActivity : AppCompatActivity(), OnNycListItemSelectedList
     @Inject
     lateinit var factory: ViewModelProvider.Factory
 
-    private var schoolListViewModel: SchoolListViewModel? = null
+    lateinit var schoolListViewModel: SchoolListViewModel
+
 
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
-        setContent {
-            SchoolListView(listOf())
-        }
+
 
         AndroidInjection.inject(this)
 
-        schoolListViewModel = ViewModelProvider(this, factory).get(SchoolListViewModelImpl::class.java)
+        schoolListViewModel =
+            ViewModelProvider(this, factory).get(SchoolListViewModelImpl::class.java) ?: return
 
-        schoolListViewModel?.getSchoolList()?.observe(this) { schoolListUiModel ->
-            schoolListUiModel?.let {
-                setContent {
-                    SchoolListView(schoolListUiModel.schoolListItemUiModels)
-                }
-            }
+        schoolListViewModel.getSchoolList().observeForever {
+            Log.i("", "")
+        }
+
+        setContent {
+            SchoolListScreen(schoolListViewModel)
         }
 
     }
