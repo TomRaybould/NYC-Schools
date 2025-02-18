@@ -1,6 +1,7 @@
 [versions]
 kotlin = "2.1.10"
 appcompat = "1.7.0"
+appcompatactivity = "1.10.0"
 constraintlayout = "2.2.0"
 recyclerview = "1.4.0"
 coreKtx = "1.15.0"
@@ -28,6 +29,7 @@ androidx-core-testing = "2.1.0"
 
 [libraries]
 androidxAppCompat = { module = "androidx.appcompat:appcompat", version.ref = "appcompat" }
+androidxAppCompatActivityCompose = { module = "androidx.activity:activity-compose", version.ref = "appcompatactivity" }
 androidxConstraintLayout = { module = "androidx.constraintlayout:constraintlayout", version.ref = "constraintlayout" }
 androidxRecyclerView = { module = "androidx.recyclerview:recyclerview", version.ref = "recyclerview" }
 androidxCoreKtx = { module = "androidx.core:core-ktx", version.ref = "coreKtx" }

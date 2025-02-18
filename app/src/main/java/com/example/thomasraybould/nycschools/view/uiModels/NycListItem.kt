@@ -11,13 +11,13 @@ sealed class NycListItem {
         @DrawableRes
         val imageRes: Int,
         val isLoading: Boolean
-    )
+    ) : NycListItem()
 
     data class SchoolItemUiModel(
         val schoolName: String,
         val satScoreData: SatScoreData,
         val isLoading: Boolean,
         val isSelected: Boolean
-    )
+    ) : NycListItem()
 
 }

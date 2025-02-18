@@ -40,6 +40,7 @@ android {
 
 dependencies {
     implementation libs.androidxAppCompat
+    implementation libs.androidxAppCompatActivityCompose
     implementation libs.androidxConstraintLayout
     implementation libs.androidxRecyclerView
     implementation libs.androidxCoreKtx
