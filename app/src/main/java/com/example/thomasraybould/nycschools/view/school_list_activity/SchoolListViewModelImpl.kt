@@ -7,7 +7,6 @@ import com.example.thomasraybould.nycschools.domain.get_sat_score_interactor.dat
 import com.example.thomasraybould.nycschools.domain.get_school_list_interactor.GetSchoolListInteractor
 import com.example.thomasraybould.nycschools.domain.get_school_list_interactor.data.SchoolListResponse
 import com.example.thomasraybould.nycschools.entities.Borough
-import com.example.thomasraybould.nycschools.entities.SatScoreData
 import com.example.thomasraybould.nycschools.entities.School
 import com.example.thomasraybould.nycschools.rx_util.SchedulerProvider
 import com.example.thomasraybould.nycschools.view.base.BaseViewModel
