@@ -1,7 +1,6 @@
-package com.example.thomasraybould.nycschools.view.school_list_activity
+package com.example.thomasraybould.nycschools.view.school_list_activity.compose
 
 import ListItemWithUnderline
-import android.widget.ProgressBar
 import androidx.compose.foundation.layout.Arrangement
 import androidx.compose.foundation.layout.Box
 import androidx.compose.foundation.layout.Column

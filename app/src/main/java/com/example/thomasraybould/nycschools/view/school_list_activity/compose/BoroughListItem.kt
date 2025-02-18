@@ -1,4 +1,4 @@
-package com.example.thomasraybould.nycschools.view.school_list_activity
+package com.example.thomasraybould.nycschools.view.school_list_activity.compose
 
 import ListItemWithUnderline
 import androidx.compose.foundation.BorderStroke
