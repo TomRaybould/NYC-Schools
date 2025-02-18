@@ -1,12 +1,9 @@
 package com.example.thomasraybould.nycschools.view.school_list_compose_activity
 
 import android.os.Bundle
-import android.util.Log
 import android.widget.Toast
 import androidx.activity.compose.setContent
 import androidx.appcompat.app.AppCompatActivity
-import androidx.compose.runtime.livedata.observeAsState
-import androidx.compose.runtime.remember
 import androidx.lifecycle.ViewModelProvider
 import com.example.thomasraybould.nycschools.R
 import com.example.thomasraybould.nycschools.adapters.school_list_adapter.OnNycListItemSelectedListener
@@ -35,10 +32,6 @@ class SchoolListComposeActivity : AppCompatActivity(), OnNycListItemSelectedList
         schoolListViewModel =
             ViewModelProvider(this, factory).get(SchoolListViewModelImpl::class.java) ?: return
 
-        schoolListViewModel.getSchoolList().observeForever {
-            Log.i("", "")
-        }
-
         setContent {
             SchoolListScreen(schoolListViewModel)
         }
@@ -49,8 +42,8 @@ class SchoolListComposeActivity : AppCompatActivity(), OnNycListItemSelectedList
         Toast.makeText(this, message, Toast.LENGTH_SHORT).show()
     }
 
-    override fun onNycListItemSelected(nycListItem: NycListItem) {
-        schoolListViewModel?.onSchoolListItemSelected(nycListItem)
+    override fun onNycListItemSelected(schoolItemUiModel: NycListItem) {
+        schoolListViewModel.onSchoolListItemSelected(schoolItemUiModel)
     }
 
     private fun getImageForBorough(borough: Borough): Int {

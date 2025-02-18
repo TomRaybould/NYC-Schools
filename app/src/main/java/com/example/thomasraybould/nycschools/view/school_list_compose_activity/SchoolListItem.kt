@@ -1,5 +1,6 @@
 package com.example.thomasraybould.nycschools.view.school_list_compose_activity
 
+import androidx.compose.foundation.clickable
 import androidx.compose.foundation.layout.Arrangement
 import androidx.compose.foundation.layout.Box
 import androidx.compose.foundation.layout.Column
@@ -32,11 +33,6 @@ fun SchoolPreview() {
             NycListItem.SchoolItemUiModel(
                 borough = Borough.QUEENS,
                 school = School.newBuilder().name("Test school not expanded").build(),
-                satScoreData = SatScoreData.newBuilder()
-                    .math(500)
-                    .reading(501)
-                    .writing(502)
-                    .build(),
                 isLoading = false,
                 isSelected = false
             )
@@ -46,11 +42,6 @@ fun SchoolPreview() {
                 borough = Borough.QUEENS,
                 school = School.newBuilder()
                     .name("Test school long text not expanded, loading state").build(),
-                satScoreData = SatScoreData.newBuilder()
-                    .math(500)
-                    .reading(501)
-                    .writing(502)
-                    .build(),
                 isLoading = true,
                 isSelected = false
             )
@@ -59,15 +50,25 @@ fun SchoolPreview() {
             NycListItem.SchoolItemUiModel(
                 borough = Borough.QUEENS,
                 school = School.newBuilder().name("Test school expanded").build(),
-                satScoreData = SatScoreData.newBuilder()
-                    .math(500)
-                    .reading(501)
-                    .writing(502)
-                    .build(),
                 isLoading = false,
                 isSelected = true
             )
         )
+
+
+        val satScoreData =
+            NycListItem.SatScoreDataUiModel(
+                Borough.BROOKLYN,
+                SatScoreData.newBuilder()
+                    .math(500)
+                    .reading(501)
+                    .writing(502)
+                    .build(),
+                ""
+            )
+
+        ScoreCard(satScoreData)
+
     }
 }
 
@@ -76,12 +77,17 @@ fun SchoolItem(
     schoolItemUiModel: NycListItem.SchoolItemUiModel,
     onNycListItemSelected: ((NycListItem) -> Unit)? = null
 ) {
-    SchoolItemContent(schoolItemUiModel)
+    SchoolItemContent(modifier = Modifier.clickable {
+        onNycListItemSelected?.invoke(schoolItemUiModel)
+    }, schoolItemUiModel = schoolItemUiModel)
 }
 
 @Composable
-fun SchoolItemContent(schoolItemUiModel: NycListItem.SchoolItemUiModel) {
-    Surface {
+fun SchoolItemContent(
+    modifier: Modifier = Modifier,
+    schoolItemUiModel: NycListItem.SchoolItemUiModel
+) {
+    Surface(modifier = modifier) {
         ListItemWithUnderline {
             Box(modifier = Modifier.height(50.dp)) {
                 Text(
@@ -106,8 +112,10 @@ fun SchoolItemContent(schoolItemUiModel: NycListItem.SchoolItemUiModel) {
     }
 }
 
+
 @Composable
-fun ScoreCard(satScoreData: SatScoreData) {
+fun ScoreCard(satScoreDataUiModel: NycListItem.SatScoreDataUiModel) {
+    val satScoreData = satScoreDataUiModel.satScoreData
     Surface(
         modifier = Modifier
             .fillMaxWidth()

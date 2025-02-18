@@ -152,12 +152,15 @@ class SchoolListViewModelImpl @Inject constructor(
     }
 
     private fun onSchoolSelected(schoolItemUiModel: NycListItem.SchoolItemUiModel) {
-
         if (schoolItemUiModel.isSelected) {
             val nycListItems = getCurrentList()
-            val indexOfScore = nycListItems.indexOf(schoolItemUiModel) + 1
+            val indexOfSchool = nycListItems.indexOf(schoolItemUiModel)
+            val indexOfScore = indexOfSchool + 1
             if (indexOfScore <= nycListItems.lastIndex) {
-                val newList = nycListItems.toMutableList().apply { removeAt(indexOfScore) }
+                val newList = getCurrentList().apply {
+                    removeAt(indexOfScore)
+                    set(indexOfSchool, schoolItemUiModel.copy(isSelected = false, isLoading = false))
+                }
                 postUpdatedList(newList)
             }
             return
@@ -187,35 +190,37 @@ class SchoolListViewModelImpl @Inject constructor(
             return
         }
 
-        val scoreListItem = satDataToSchoolItemUiModel(satScoreData, school)
+        val scoreListItem = NycListItem.SatScoreDataUiModel(
+            borough = school.borough,
+            satScoreData = satScoreData,
+            webPageLink = school.webPageLink
+        )
 
-
+        var targetIndex = 0
         getCurrentList().forEachIndexed { index, schoolListItemUiModel ->
-            if (satDataResponse.satScoreData.dbn == school.dbn) {
-                val newList = getCurrentList()
-                    .apply {
-                        add(index + 1, scoreListItem)
-                    }
-                postUpdatedList(newList)
-                return
+            if (satDataResponse.satScoreData.dbn == (schoolListItemUiModel as? NycListItem.SchoolItemUiModel)?.school?.dbn) {
+                targetIndex = index
+                return@forEachIndexed
             }
         }
+
+        val newList = getCurrentList().apply {
+            set(
+                targetIndex, NycListItem.SchoolItemUiModel(
+                    borough = school.borough,
+                    school = school,
+                    isSelected = true,
+                    isLoading = false
+                )
+            )
+            add(targetIndex + 1, scoreListItem)
+        }
+
+        postUpdatedList(newList)
     }
 
     private fun failedToGetSatData() {
         postWithError("Failed to load SAT scores")
-    }
-
-    private fun satDataToSchoolItemUiModel(
-        satScoreData: SatScoreData,
-        school: School
-    ): NycListItem.SchoolItemUiModel {
-        return NycListItem.SchoolItemUiModel(
-            school = school,
-            borough = school.borough,
-            satScoreData = satScoreData,
-        )
-
     }
 
     private fun getCurrentList(): MutableList<NycListItem> {

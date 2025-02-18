@@ -29,6 +29,8 @@ fun SchoolListView(
                 BoroughItem(nycListItem, onNycListItemSelected)
             } else if (nycListItem is NycListItem.SchoolItemUiModel) {
                 SchoolItem(nycListItem, onNycListItemSelected)
+            } else if (nycListItem is NycListItem.SatScoreDataUiModel){
+                ScoreCard(nycListItem)
             }
         }
     }

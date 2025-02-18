@@ -19,13 +19,12 @@ sealed class NycListItem(open val borough: Borough) {
     data class SchoolItemUiModel(
         override val borough: Borough,
         val school: School,
-        val satScoreData: SatScoreData? = null,
         val webPageLink: String? = null,
         var isLoading: Boolean = false,
         var isSelected: Boolean = false
     ) : NycListItem(borough) {
         override fun equals(other: Any?): Boolean {
-            return (other as School).dbn == this.school.dbn
+            return (other as? SchoolItemUiModel)?.school?.dbn == this.school.dbn
         }
     }
 
