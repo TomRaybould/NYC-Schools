@@ -49,6 +49,15 @@ fun SchoolPreview() {
         SchoolItem(
             NycListItem.SchoolItemUiModel(
                 borough = Borough.QUEENS,
+                school = School.newBuilder()
+                    .name("Test school long text not expanded, not loading state").build(),
+                isLoading = false,
+                isSelected = false
+            )
+        )
+        SchoolItem(
+            NycListItem.SchoolItemUiModel(
+                borough = Borough.QUEENS,
                 school = School.newBuilder().name("Test school expanded").build(),
                 isLoading = false,
                 isSelected = true
@@ -95,9 +104,9 @@ fun SchoolItemContent(
                     modifier = Modifier
                         .fillMaxWidth()
                         .padding(start = 16.dp)
-                        .padding(end = 75.dp)
+                        .padding(end = if (schoolItemUiModel.isLoading) 50.dp else 4.dp)
                         .align(Alignment.CenterStart),
-                    style = MaterialTheme.typography.bodyLarge,
+                    style = MaterialTheme.typography.headlineSmall,
                     maxLines = 1,
                     overflow = TextOverflow.Ellipsis
                 )

@@ -24,6 +24,9 @@ import androidx.compose.ui.unit.dp
 import com.example.thomasraybould.nycschools.entities.Borough
 import com.example.thomasraybould.nycschools.entities.SatScoreData
 import com.example.thomasraybould.nycschools.entities.School
+import com.example.thomasraybould.nycschools.view.errorColor
+import com.example.thomasraybould.nycschools.view.neutralColor
+import com.example.thomasraybould.nycschools.view.successColor
 import com.example.thomasraybould.nycschools.view.uiModels.NycListItem
 
 @Preview
@@ -31,7 +34,7 @@ import com.example.thomasraybould.nycschools.view.uiModels.NycListItem
 fun ScoreCardPreview() {
     Column {
 
-        val satScoreData =
+        val satScoreData1 =
             NycListItem.SatScoreDataUiModel(
                 Borough.BROOKLYN,
                 SatScoreData.newBuilder()
@@ -42,7 +45,19 @@ fun ScoreCardPreview() {
                 ""
             )
 
-        ScoreCard(satScoreData)
+        val satScoreData2 =
+            NycListItem.SatScoreDataUiModel(
+                Borough.BROOKLYN,
+                SatScoreData.newBuilder()
+                    .math(100)
+                    .reading(400)
+                    .writing(800)
+                    .build(),
+                ""
+            )
+
+        ScoreCard(satScoreData1)
+        ScoreCard(satScoreData2)
 
     }
 }
@@ -72,7 +87,8 @@ fun ScoreView(sectionName: String, score: Int, modifier: Modifier = Modifier) {
         Column {
             Text(
                 sectionName,
-                Modifier.align(Alignment.CenterHorizontally)
+                Modifier
+                    .align(Alignment.CenterHorizontally)
                     .padding(top = 4.dp)
             )
             Text(
@@ -85,9 +101,20 @@ fun ScoreView(sectionName: String, score: Int, modifier: Modifier = Modifier) {
                     .padding(10.dp)
                     .weight(1.0f),
                 percentage = (score / 800.0).toFloat(),
-                primaryColor = MaterialTheme.colorScheme.primary,
+                primaryColor = getProgressColor(score),
                 secondaryColor = Color.LightGray
             )
         }
+    }
+
+}
+
+private fun getProgressColor(score: Int): Color {
+    return if (score <= 350) {
+        errorColor
+    } else if (score <= 450) {
+        neutralColor
+    } else {
+        successColor
     }
 }

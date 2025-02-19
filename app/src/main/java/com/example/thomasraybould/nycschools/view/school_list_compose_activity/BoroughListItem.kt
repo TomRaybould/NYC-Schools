@@ -89,7 +89,7 @@ fun BoroughContent(boroughItemUiModel: NycListItem.BoroughItemUiModel) {
                     .align(Alignment.CenterVertically)
                     .padding(start = 6.dp),
                 text = boroughItemUiModel.borough.boroughTitle,
-                style = MaterialTheme.typography.headlineMedium
+                style = MaterialTheme.typography.headlineLarge
             )
 
         }
