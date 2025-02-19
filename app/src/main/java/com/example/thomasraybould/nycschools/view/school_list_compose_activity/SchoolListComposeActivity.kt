@@ -22,7 +22,6 @@ class SchoolListComposeActivity : AppCompatActivity(), OnNycListItemSelectedList
     lateinit var schoolListViewModel: SchoolListViewModel
 
 
-
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
 
@@ -31,6 +30,12 @@ class SchoolListComposeActivity : AppCompatActivity(), OnNycListItemSelectedList
 
         schoolListViewModel =
             ViewModelProvider(this, factory).get(SchoolListViewModelImpl::class.java) ?: return
+
+        schoolListViewModel.getSchoolList().observe(this) { schoolListUiModel ->
+            schoolListUiModel.errorMessage?.let {
+                toast(it)
+            }
+        }
 
         setContent {
             SchoolListScreen(schoolListViewModel)
@@ -44,17 +49,6 @@ class SchoolListComposeActivity : AppCompatActivity(), OnNycListItemSelectedList
 
     override fun onNycListItemSelected(schoolItemUiModel: NycListItem) {
         schoolListViewModel.onSchoolListItemSelected(schoolItemUiModel)
-    }
-
-    private fun getImageForBorough(borough: Borough): Int {
-        return when (borough.code) {
-            "M" -> R.drawable.manhattan
-            "K" -> R.drawable.brooklyn
-            "Q" -> R.drawable.queens
-            "X" -> R.drawable.bronx
-            "R" -> R.drawable.statenisland
-            else -> R.drawable.manhattan
-        }
     }
 
 }
