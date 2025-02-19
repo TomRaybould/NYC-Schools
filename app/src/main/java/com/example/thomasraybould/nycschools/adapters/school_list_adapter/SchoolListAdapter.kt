@@ -37,7 +37,7 @@ class SchoolListAdapter(
             if (schoolListItemUiModel is NycListItem.BoroughItemUiModel) {
                 newSchoolListItems.forEach { newSchoolListItem ->
                     if (schoolListItemUiModel == newSchoolListItem) {
-                        (newSchoolListItem as NycListItem.SchoolItemUiModel).let {
+                        (newSchoolListItem as? NycListItem.SchoolItemUiModel)?.let {
                             schoolListItemUiModel.isLoading = it.isLoading
                             notifyItemChanged(index, LoadingPayLoad.LOADING_PAY_LOAD)
                         }
@@ -132,7 +132,7 @@ class SchoolListAdapter(
         val nycListItem = nycListItems[position]
         return if (nycListItem is NycListItem.BoroughItemUiModel) {
             1
-        } else if (nycListItem is NycListItem.SchoolItemUiModel) {
+        } else if (nycListItem is NycListItem.SatScoreDataUiModel) {
             2
         } else {
             3
