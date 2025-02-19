@@ -21,7 +21,7 @@ fun setBoroughImageRes(imageView: ImageView, boroughItemUiModel: NycListItem.Bor
         Glide.with(imageView.context)
                 .applyDefaultRequestOptions(RequestOptions.centerCropTransform())
                 .applyDefaultRequestOptions(RequestOptions.circleCropTransform())
-                .load(boroughItemUiModel)
+                .load(boroughItemUiModel.imageRes)
                 .into(imageView)
     }
 }
