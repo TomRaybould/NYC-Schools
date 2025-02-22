@@ -1,4 +1,4 @@
-package com.example.thomasraybould.nycschools.view.school_list_compose_activity.viewModel
+package com.example.thomasraybould.nycschools.features.school_list_compose_activity.viewModel
 
 import androidx.lifecycle.LiveData
 import androidx.lifecycle.MutableLiveData
@@ -9,9 +9,9 @@ import com.example.thomasraybould.nycschools.domain.get_school_list_interactor.d
 import com.example.thomasraybould.nycschools.entities.Borough
 import com.example.thomasraybould.nycschools.entities.School
 import com.example.thomasraybould.nycschools.rx_util.SchedulerProvider
-import com.example.thomasraybould.nycschools.view.base.BaseViewModel
-import com.example.thomasraybould.nycschools.view.school_list_compose_activity.ComposeSchoolListUiModel
-import com.example.thomasraybould.nycschools.view.uiModels.NycListItem
+import com.example.thomasraybould.nycschools.features.base.BaseViewModel
+import com.example.thomasraybould.nycschools.features.school_list_compose_activity.ComposeSchoolListUiModel
+import com.example.thomasraybould.nycschools.features.uiModels.NycListItem
 import io.reactivex.disposables.Disposable
 import javax.inject.Inject
 

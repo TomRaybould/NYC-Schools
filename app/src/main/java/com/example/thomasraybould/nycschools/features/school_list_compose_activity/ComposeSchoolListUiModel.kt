@@ -1,6 +1,6 @@
-package com.example.thomasraybould.nycschools.view.school_list_compose_activity
+package com.example.thomasraybould.nycschools.features.school_list_compose_activity
 
-import com.example.thomasraybould.nycschools.view.uiModels.NycListItem
+import com.example.thomasraybould.nycschools.features.uiModels.NycListItem
 
 data class ComposeSchoolListUiModel(
     val schoolListItemUiModels: List<NycListItem>,

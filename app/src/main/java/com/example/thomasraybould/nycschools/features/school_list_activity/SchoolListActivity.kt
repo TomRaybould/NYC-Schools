@@ -1,4 +1,4 @@
-package com.example.thomasraybould.nycschools.view.school_list_activity
+package com.example.thomasraybould.nycschools.features.school_list_activity
 
 import android.os.Bundle
 import android.widget.Toast
@@ -7,11 +7,9 @@ import androidx.lifecycle.ViewModelProvider
 import androidx.recyclerview.widget.LinearLayoutManager
 import androidx.recyclerview.widget.RecyclerView
 import com.example.thomasraybould.nycschools.R
-import com.example.thomasraybould.nycschools.adapters.school_list_adapter.OnNycListItemSelectedListener
 import com.example.thomasraybould.nycschools.adapters.school_list_adapter.OnSchoolListItemSelectedListener
 import com.example.thomasraybould.nycschools.adapters.school_list_adapter.SchoolListAdapter
 import com.example.thomasraybould.nycschools.adapters.school_list_adapter.SchoolListItemUiModel
-import com.example.thomasraybould.nycschools.view.uiModels.NycListItem
 import dagger.android.AndroidInjection
 import javax.inject.Inject
 

@@ -1,18 +1,14 @@
-package com.example.thomasraybould.nycschools.view.school_list_compose_activity
+package com.example.thomasraybould.nycschools.features.school_list_compose_activity
 
 import android.os.Bundle
 import android.widget.Toast
 import androidx.activity.compose.setContent
 import androidx.appcompat.app.AppCompatActivity
 import androidx.lifecycle.ViewModelProvider
-import com.example.thomasraybould.nycschools.R
 import com.example.thomasraybould.nycschools.adapters.school_list_adapter.OnNycListItemSelectedListener
-import com.example.thomasraybould.nycschools.entities.Borough
-import com.example.thomasraybould.nycschools.view.school_list_activity.SchoolListViewModel
-import com.example.thomasraybould.nycschools.view.school_list_activity.SchoolListViewModelImpl
-import com.example.thomasraybould.nycschools.view.school_list_compose_activity.viewModel.ComposeSchoolListViewModel
-import com.example.thomasraybould.nycschools.view.school_list_compose_activity.viewModel.ComposeSchoolListViewModelImpl
-import com.example.thomasraybould.nycschools.view.uiModels.NycListItem
+import com.example.thomasraybould.nycschools.features.school_list_compose_activity.viewModel.ComposeSchoolListViewModel
+import com.example.thomasraybould.nycschools.features.school_list_compose_activity.viewModel.ComposeSchoolListViewModelImpl
+import com.example.thomasraybould.nycschools.features.uiModels.NycListItem
 import dagger.android.AndroidInjection
 import javax.inject.Inject
 

@@ -1,4 +1,4 @@
-package com.example.thomasraybould.nycschools.view.uiModels
+package com.example.thomasraybould.nycschools.features.uiModels
 
 import com.example.thomasraybould.nycschools.entities.Borough
 import org.junit.Assert

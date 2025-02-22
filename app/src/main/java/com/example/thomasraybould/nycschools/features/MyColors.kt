@@ -1,4 +1,4 @@
-package com.example.thomasraybould.nycschools.view
+package com.example.thomasraybould.nycschools.features
 
 import androidx.compose.ui.graphics.Color
 

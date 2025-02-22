@@ -1,4 +1,4 @@
-package com.example.thomasraybould.nycschools.view.school_list_compose_activity
+package com.example.thomasraybould.nycschools.features.school_list_compose_activity
 
 import androidx.compose.foundation.layout.fillMaxHeight
 import androidx.compose.foundation.layout.fillMaxWidth
@@ -13,8 +13,8 @@ import com.example.thomasraybould.nycschools.R
 import com.example.thomasraybould.nycschools.entities.Borough
 import com.example.thomasraybould.nycschools.entities.SatScoreData
 import com.example.thomasraybould.nycschools.entities.School
-import com.example.thomasraybould.nycschools.view.school_list_compose_activity.viewModel.ComposeSchoolListViewModel
-import com.example.thomasraybould.nycschools.view.uiModels.NycListItem
+import com.example.thomasraybould.nycschools.features.school_list_compose_activity.viewModel.ComposeSchoolListViewModel
+import com.example.thomasraybould.nycschools.features.uiModels.NycListItem
 
 @Preview
 @Composable

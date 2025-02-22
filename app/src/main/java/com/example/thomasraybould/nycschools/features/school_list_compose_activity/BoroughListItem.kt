@@ -1,4 +1,4 @@
-package com.example.thomasraybould.nycschools.view.school_list_compose_activity
+package com.example.thomasraybould.nycschools.features.school_list_compose_activity
 
 import androidx.compose.foundation.BorderStroke
 import androidx.compose.foundation.Image
@@ -26,7 +26,7 @@ import androidx.compose.ui.tooling.preview.Preview
 import androidx.compose.ui.unit.dp
 import com.example.thomasraybould.nycschools.R
 import com.example.thomasraybould.nycschools.entities.Borough
-import com.example.thomasraybould.nycschools.view.uiModels.NycListItem
+import com.example.thomasraybould.nycschools.features.uiModels.NycListItem
 
 fun getTestBoroughs(isLoading: Boolean): List<NycListItem.BoroughItemUiModel> {
     return listOf(

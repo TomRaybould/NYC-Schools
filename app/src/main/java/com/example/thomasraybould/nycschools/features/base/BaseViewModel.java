@@ -1,4 +1,4 @@
-package com.example.thomasraybould.nycschools.view.base;
+package com.example.thomasraybould.nycschools.features.base;
 
 import androidx.lifecycle.ViewModel;
 
