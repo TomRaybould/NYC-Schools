@@ -1,5 +1,6 @@
 package com.example.thomasraybould.nycschools.view.school_list_compose_activity
 
+import androidx.compose.foundation.background
 import androidx.compose.foundation.clickable
 import androidx.compose.foundation.layout.Arrangement
 import androidx.compose.foundation.layout.Box
@@ -74,39 +75,42 @@ fun ScoreCard(satScoreDataUiModel: NycListItem.SatScoreDataUiModel) {
             horizontalArrangement = Arrangement.SpaceEvenly,
             modifier = Modifier.fillMaxWidth()
         ) {
-            ScoreView("Math", satScoreData.math, Modifier.weight(1.0f))
-            ScoreView("Reading", satScoreData.reading, Modifier.weight(1.0f))
-            ScoreView("Writing", satScoreData.writing, Modifier.weight(1.0f))
+            val scoreViewModifier = Modifier.weight(1.0f)
+                .background(Color.LightGray)
+            ScoreView("Math", satScoreData.math, scoreViewModifier)
+            ScoreView("Reading", satScoreData.reading, scoreViewModifier)
+            ScoreView("Writing", satScoreData.writing, scoreViewModifier)
         }
     }
 }
 
 @Composable
-fun ScoreView(sectionName: String, score: Int, modifier: Modifier = Modifier) {
-    Surface(modifier = modifier) {
-        Column {
-            Text(
-                sectionName,
-                Modifier
-                    .align(Alignment.CenterHorizontally)
-                    .padding(top = 4.dp)
-            )
-            Text(
-                "$score/800",
-                Modifier.align(Alignment.CenterHorizontally),
-                style = MaterialTheme.typography.bodyMedium
-            )
-            ProgressBarContainer(
-                modifier = Modifier
-                    .padding(10.dp)
-                    .weight(1.0f),
-                percentage = (score / 800.0).toFloat(),
-                primaryColor = getProgressColor(score),
-                secondaryColor = Color.LightGray
-            )
-        }
+fun ScoreView(
+    sectionName: String,
+    score: Int,
+    modifier: Modifier = Modifier
+) {
+    Column(modifier = modifier) {
+        Text(
+            sectionName,
+            Modifier
+                .align(Alignment.CenterHorizontally)
+                .padding(top = 4.dp)
+        )
+        Text(
+            "$score/800",
+            Modifier.align(Alignment.CenterHorizontally),
+            style = MaterialTheme.typography.bodyMedium
+        )
+        ProgressBarContainer(
+            modifier = Modifier
+                .padding(10.dp)
+                .weight(1.0f),
+            percentage = (score / 800.0).toFloat(),
+            primaryColor = getProgressColor(score),
+            secondaryColor = Color.LightGray
+        )
     }
-
 }
 
 private fun getProgressColor(score: Int): Color {
