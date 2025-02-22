@@ -19,7 +19,7 @@ import androidx.compose.ui.unit.dp
 @Preview
 @Composable
 fun ProgressBarPreview() {
-    Surface(Modifier.background(Color.Cyan)){
+    Surface(color = Color.Yellow){
         ProgressBarContainer(percentage = .50f)
     }
 }
@@ -31,7 +31,8 @@ fun ProgressBarContainer(
     primaryColor: Color = Color.DarkGray,
     secondaryColor: Color = Color.Gray
 ) {
-    Surface(modifier.background(Color.Transparent)) {
+    Surface(modifier = modifier,
+        color = Color.Transparent) {
         ProgressBar(
             percentage = percentage,
             primaryColor = primaryColor,
@@ -46,7 +47,7 @@ private fun ProgressBar(
     primaryColor: Color = Color.DarkGray,
     secondaryColor: Color = Color.Gray
 ) {
-    Box(modifier = Modifier.fillMaxWidth()) {
+    Box(modifier = Modifier.fillMaxWidth().background(Color.Transparent)) {
         RoundedLine(percentage = 1.0f, color = secondaryColor)
         RoundedLine(percentage = percentage, color = primaryColor)
     }
@@ -55,7 +56,7 @@ private fun ProgressBar(
 @Composable
 private fun RoundedLine(
     percentage: Float = .50f,
-    color: Color
+    color: Color = Color.Red
 ) {
     Box(
         modifier = Modifier
