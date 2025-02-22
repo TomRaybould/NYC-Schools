@@ -4,7 +4,7 @@
     <data>
         <variable
             name="uiModel"
-            type="com.example.thomasraybould.nycschools.view.uiModels.NycListItem.SatScoreDataUiModel"
+            type="com.example.thomasraybould.nycschools.adapters.school_list_adapter.SchoolListItemUiModel"
             />
     </data>
 
@@ -38,6 +38,7 @@
             android:layout_marginLeft="16dp"
             android:layout_marginStart="16dp"
             android:layout_marginTop="8dp"
+            android:textAlignment="center"
             android:textSize="15sp"
             android:textStyle="italic"
             android:text="@string/math"
@@ -84,6 +85,7 @@
             tools:text="400/600"
             setScoreTextForSubject="@{uiModel.satScoreData.math}"
             isDataAvailable="@{uiModel.satScoreData.dataAvailable}"
+            android:textAlignment="center"
             app:layout_constraintEnd_toEndOf="@+id/textView5"
             app:layout_constraintStart_toStartOf="@+id/textView5"
             app:layout_constraintTop_toBottomOf="@+id/textView5" />
@@ -95,6 +97,7 @@
             tools:text="400/600"
             setScoreTextForSubject="@{uiModel.satScoreData.reading}"
             isDataAvailable="@{uiModel.satScoreData.dataAvailable}"
+            android:textAlignment="center"
             app:layout_constraintBottom_toBottomOf="@+id/mathScoreTextView"
             app:layout_constraintEnd_toEndOf="@+id/textView6"
             app:layout_constraintStart_toStartOf="@+id/textView6"
@@ -107,6 +110,7 @@
             tools:text="400/600"
             setScoreTextForSubject="@{uiModel.satScoreData.writing}"
             isDataAvailable="@{uiModel.satScoreData.dataAvailable}"
+            android:textAlignment="center"
             app:layout_constraintBottom_toBottomOf="@+id/readingScoreTextView"
             app:layout_constraintEnd_toEndOf="@+id/textView4"
             app:layout_constraintStart_toStartOf="@+id/textView4"
@@ -157,7 +161,7 @@
             android:layout_marginBottom="8dp"
             android:layout_marginEnd="8dp"
             android:layout_marginRight="8dp"
-            setWebsiteLinkText="@{uiModel.webPageLink}"
+            setWebsiteLinkText="@{uiModel.school.webPageLink}"
             android:text="@string/visit_website"
             android:textColorLink="#0000EE"
             android:visibility="visible"

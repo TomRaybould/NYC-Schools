@@ -4,7 +4,7 @@
     <data>
         <variable
             name="uiModel"
-            type="com.example.thomasraybould.nycschools.view.uiModels.NycListItem.SchoolItemUiModel"
+            type="com.example.thomasraybould.nycschools.adapters.school_list_adapter.SchoolListItemUiModel"
             />
     </data>
 

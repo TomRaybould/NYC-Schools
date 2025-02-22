@@ -8,53 +8,49 @@ import androidx.core.content.ContextCompat
 import androidx.recyclerview.widget.LinearLayoutManager
 import androidx.recyclerview.widget.RecyclerView
 import com.example.thomasraybould.nycschools.R
+import com.example.thomasraybould.nycschools.adapters.school_list_adapter.SchoolListItemType.BOROUGH_TITLE
+import com.example.thomasraybould.nycschools.adapters.school_list_adapter.SchoolListItemType.SAT_SCORE_ITEM
 import com.example.thomasraybould.nycschools.databinding.BoroughListItemBinding
 import com.example.thomasraybould.nycschools.databinding.SatScoreListItemBinding
 import com.example.thomasraybould.nycschools.databinding.SchoolListItemBinding
-import com.example.thomasraybould.nycschools.view.uiModels.NycListItem
+import java.util.*
 
-class SchoolListAdapter(
-    private val listener: OnNycListItemSelectedListener,
-    private val context: Context,
-    private val linearLayoutManager: LinearLayoutManager
-) : RecyclerView.Adapter<SchoolListAdapter.ViewHolder>() {
-    private val nycListItems: MutableList<NycListItem> = mutableListOf()
+class SchoolListAdapter constructor(private val listener: OnSchoolListItemSelectedListener, private val context: Context, private val linearLayoutManager: LinearLayoutManager) : RecyclerView.Adapter<SchoolListAdapter.ViewHolder>() {
+    private val schoolListItemUiModels: MutableList<SchoolListItemUiModel> = ArrayList()
 
     private enum class LoadingPayLoad {
         LOADING_PAY_LOAD
     }
 
-    fun updateList(newSchoolListItems: List<NycListItem>) {
-        if (this.nycListItems.isEmpty()) {
-            this.nycListItems.addAll(newSchoolListItems)
+    fun updateList(newSchoolListItems: List<SchoolListItemUiModel>) {
+        if (this.schoolListItemUiModels.isEmpty()) {
+            this.schoolListItemUiModels.addAll(newSchoolListItems)
             this.notifyDataSetChanged()
             return
         }
         removeItemsAsNeeded(newSchoolListItems)
         addItemsAsNeeded(newSchoolListItems)
 
-        nycListItems.forEachIndexed { index, schoolListItemUiModel ->
-            if (schoolListItemUiModel is NycListItem.BoroughItemUiModel) {
-                newSchoolListItems.forEach { newSchoolListItem ->
-                    if (schoolListItemUiModel == newSchoolListItem) {
-                        (newSchoolListItem as? NycListItem.SchoolItemUiModel)?.let {
-                            schoolListItemUiModel.isLoading = it.isLoading
-                            notifyItemChanged(index, LoadingPayLoad.LOADING_PAY_LOAD)
-                        }
+        schoolListItemUiModels.forEachIndexed { index, schoolListItemUiModel ->
+            if (schoolListItemUiModel.type == BOROUGH_TITLE) {
+                newSchoolListItems.forEach {
+                    if (schoolListItemUiModel == it) {
+                        schoolListItemUiModel.isLoading = it.isLoading
+                        notifyItemChanged(index, LoadingPayLoad.LOADING_PAY_LOAD)
                     }
                 }
             }
         }
     }
 
-    private fun addItemsAsNeeded(newSchoolListItems: List<NycListItem>) {
-        val sizeDiff = newSchoolListItems.size - nycListItems.size
+    private fun addItemsAsNeeded(newSchoolListItems: List<SchoolListItemUiModel>) {
+        val sizeDiff = newSchoolListItems.size - schoolListItemUiModels.size
         if (sizeDiff <= 0) return
 
         newSchoolListItems.forEachIndexed { index, schoolListItemUiModel ->
-            if (index > nycListItems.lastIndex || nycListItems[index] != schoolListItemUiModel) {
-                nycListItems.clear()
-                nycListItems.addAll(newSchoolListItems)
+            if (index > schoolListItemUiModels.lastIndex || schoolListItemUiModels[index] != schoolListItemUiModel) {
+                schoolListItemUiModels.clear()
+                schoolListItemUiModels.addAll(newSchoolListItems)
                 notifyItemRangeInserted(index, sizeDiff)
                 linearLayoutManager.scrollToPositionWithOffset(index - 1, 0)
                 return
@@ -63,10 +59,10 @@ class SchoolListAdapter(
 
     }
 
-    private fun removeItemsAsNeeded(schoolListItems: List<NycListItem>) {
-        for (i in this.nycListItems.size - 1 downTo 0) {
-            if (!schoolListItems.contains(nycListItems[i])) {
-                nycListItems.removeAt(i)
+    private fun removeItemsAsNeeded(schoolListItems: List<SchoolListItemUiModel>) {
+        for (i in this.schoolListItemUiModels.size - 1 downTo 0) {
+            if (!schoolListItems.contains(schoolListItemUiModels[i])) {
+                schoolListItemUiModels.removeAt(i)
                 notifyItemRemoved(i)
             }
         }
@@ -77,16 +73,14 @@ class SchoolListAdapter(
         val layoutInflater = LayoutInflater.from(context)
 
         return when (viewType) {
-            1 -> {
+            BOROUGH_TITLE.ordinal -> {
                 val itemBinding = BoroughListItemBinding.inflate(layoutInflater, parent, false)
                 ViewHolder(itemBinding)
             }
-
-            2 -> {
+            SAT_SCORE_ITEM.ordinal -> {
                 val itemBinding = SatScoreListItemBinding.inflate(layoutInflater, parent, false)
                 ViewHolder(itemBinding)
             }
-
             else -> {
                 val itemBinding = SchoolListItemBinding.inflate(layoutInflater, parent, false)
                 ViewHolder(itemBinding)
@@ -96,8 +90,8 @@ class SchoolListAdapter(
 
     override fun onBindViewHolder(holder: ViewHolder, position: Int, payloads: List<Any>) {
         if (!payloads.isEmpty() && payloads[0] === LoadingPayLoad.LOADING_PAY_LOAD) {
-            val schoolListItemUiModel = nycListItems[position]
-            if (schoolListItemUiModel is NycListItem.BoroughItemUiModel) {
+            val schoolListItemUiModel = schoolListItemUiModels[position]
+            if (schoolListItemUiModel.type == BOROUGH_TITLE) {
                 holder.boroughListItemBinding?.uiModel = schoolListItemUiModel
             }
             return
@@ -106,37 +100,20 @@ class SchoolListAdapter(
     }
 
     override fun onBindViewHolder(holder: ViewHolder, position: Int) {
-        val schoolListItemUiModel = nycListItems[position]
+        val schoolListItemUiModel = schoolListItemUiModels[position]
         when {
-            schoolListItemUiModel is NycListItem.BoroughItemUiModel -> holder.bindBorough(
-                schoolListItemUiModel,
-                context,
-                listener
-            )
-
-            schoolListItemUiModel is NycListItem.SatScoreDataUiModel -> holder.satScoreListItemBinding?.uiModel =
-                schoolListItemUiModel
-
-            schoolListItemUiModel is NycListItem.SchoolItemUiModel -> holder.bindSchool(
-                schoolListItemUiModel,
-                listener
-            )
+            schoolListItemUiModel.type == BOROUGH_TITLE -> holder.bindBorough(schoolListItemUiModel, context, listener)
+            schoolListItemUiModel.type == SAT_SCORE_ITEM -> holder.satScoreListItemBinding?.uiModel = schoolListItemUiModel
+            else -> holder.bindSchool(schoolListItemUiModel, listener)
         }
     }
 
     override fun getItemCount(): Int {
-        return nycListItems.size
+        return schoolListItemUiModels.size
     }
 
     override fun getItemViewType(position: Int): Int {
-        val nycListItem = nycListItems[position]
-        return if (nycListItem is NycListItem.BoroughItemUiModel) {
-            1
-        } else if (nycListItem is NycListItem.SatScoreDataUiModel) {
-            2
-        } else {
-            3
-        }
+        return schoolListItemUiModels[position].type.ordinal
     }
 
     class ViewHolder : RecyclerView.ViewHolder {
@@ -152,41 +129,27 @@ class SchoolListAdapter(
             this.schoolListItemBinding = schoolListItemBinding
         }
 
-        constructor(satScoreListItemBinding: SatScoreListItemBinding) : super(
-            satScoreListItemBinding.root
-        ) {
+        constructor(satScoreListItemBinding: SatScoreListItemBinding) : super(satScoreListItemBinding.root) {
             this.satScoreListItemBinding = satScoreListItemBinding
         }
 
-        fun bindSchool(
-            schoolListItemUiModel: NycListItem.SchoolItemUiModel,
-            listener: OnNycListItemSelectedListener
-        ) {
+        fun bindSchool(schoolListItemUiModel: SchoolListItemUiModel, listener: OnSchoolListItemSelectedListener) {
             schoolListItemBinding?.uiModel = schoolListItemUiModel
             itemView.setOnClickListener { v ->
-                listener.onNycListItemSelected(schoolListItemUiModel)
+                listener.onSchoolListItemSelected(schoolListItemUiModel)
                 schoolListItemUiModel.isSelected = !schoolListItemUiModel.isSelected
             }
         }
 
-        fun bindBorough(
-            schoolListItemUiModel: NycListItem.BoroughItemUiModel,
-            context: Context,
-            listener: OnNycListItemSelectedListener
-        ) {
+        fun bindBorough(schoolListItemUiModel: SchoolListItemUiModel, context: Context, listener: OnSchoolListItemSelectedListener) {
             boroughListItemBinding?.uiModel = schoolListItemUiModel
 
             boroughListItemBinding?.root?.setOnClickListener { v ->
-                listener.onNycListItemSelected(schoolListItemUiModel)
+                listener.onSchoolListItemSelected(schoolListItemUiModel)
                 schoolListItemUiModel.isSelected = !schoolListItemUiModel.isSelected
             }
 
-            boroughListItemBinding?.progressBar?.indeterminateDrawable?.setColorFilter(
-                ContextCompat.getColor(
-                    context,
-                    R.color.progress_bar_color
-                ), PorterDuff.Mode.SRC_IN
-            )
+            boroughListItemBinding?.progressBar?.indeterminateDrawable?.setColorFilter(ContextCompat.getColor(context, R.color.progress_bar_color), PorterDuff.Mode.SRC_IN)
         }
 
     }

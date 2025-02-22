@@ -10,7 +10,7 @@ import com.example.thomasraybould.nycschools.entities.Borough
 import com.example.thomasraybould.nycschools.entities.School
 import com.example.thomasraybould.nycschools.rx_util.SchedulerProvider
 import com.example.thomasraybould.nycschools.view.base.BaseViewModel
-import com.example.thomasraybould.nycschools.view.school_list_activity.SchoolListUiModel
+import com.example.thomasraybould.nycschools.view.school_list_compose_activity.ComposeSchoolListUiModel
 import com.example.thomasraybould.nycschools.view.uiModels.NycListItem
 import io.reactivex.disposables.Disposable
 import javax.inject.Inject
@@ -21,19 +21,19 @@ class ComposeSchoolListViewModelImpl @Inject constructor(
     val schedulerProvider: SchedulerProvider
 ) : BaseViewModel(), ComposeSchoolListViewModel {
 
-    private val schoolListUiModelLiveData: MutableLiveData<SchoolListUiModel> = MutableLiveData()
+    private val composeSchoolListUiModelLiveData: MutableLiveData<ComposeSchoolListUiModel> = MutableLiveData()
 
     private val pendingDownloads = HashMap<String, Disposable>()
 
     private fun postUpdatedList(nycListItems: List<NycListItem>) {
-        schoolListUiModelLiveData.postValue(SchoolListUiModel(nycListItems))
+        composeSchoolListUiModelLiveData.postValue(ComposeSchoolListUiModel(nycListItems))
     }
 
     private fun postWithError(error: String) {
-        schoolListUiModelLiveData.postValue(SchoolListUiModel(listOf(), error))
+        composeSchoolListUiModelLiveData.postValue(ComposeSchoolListUiModel(listOf(), error))
     }
 
-    override fun getSchoolList(): LiveData<SchoolListUiModel> {
+    override fun getSchoolList(): LiveData<ComposeSchoolListUiModel> {
         val nycListItems = getCurrentList()
         if (nycListItems.isEmpty()) {
             val boroughItemUiModels = Borough.entries.map { borough ->
@@ -42,7 +42,7 @@ class ComposeSchoolListViewModelImpl @Inject constructor(
             postUpdatedList(boroughItemUiModels)
         }
 
-        return schoolListUiModelLiveData
+        return composeSchoolListUiModelLiveData
     }
 
     override fun onSchoolListItemSelected(nycListItem: NycListItem) {
@@ -224,7 +224,7 @@ class ComposeSchoolListViewModelImpl @Inject constructor(
     }
 
     private fun getCurrentList(): MutableList<NycListItem> {
-        return schoolListUiModelLiveData.value?.schoolListItemUiModels?.toMutableList()
+        return composeSchoolListUiModelLiveData.value?.schoolListItemUiModels?.toMutableList()
             ?: mutableListOf()
     }
 

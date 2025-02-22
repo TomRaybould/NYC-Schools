@@ -9,13 +9,10 @@ import androidx.compose.runtime.Composable
 import androidx.compose.runtime.livedata.observeAsState
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.tooling.preview.Preview
-import androidx.core.content.pm.ShortcutInfoCompat.Surface
 import com.example.thomasraybould.nycschools.R
 import com.example.thomasraybould.nycschools.entities.Borough
 import com.example.thomasraybould.nycschools.entities.SatScoreData
 import com.example.thomasraybould.nycschools.entities.School
-import com.example.thomasraybould.nycschools.view.school_list_activity.SchoolListUiModel
-import com.example.thomasraybould.nycschools.view.school_list_activity.SchoolListViewModel
 import com.example.thomasraybould.nycschools.view.school_list_compose_activity.viewModel.ComposeSchoolListViewModel
 import com.example.thomasraybould.nycschools.view.uiModels.NycListItem
 
@@ -51,7 +48,7 @@ fun SchoolListScreenPreview() {
             ""
         )
 
-    val schoolListUiModel = SchoolListUiModel(
+    val composeSchoolListUiModel = ComposeSchoolListUiModel(
         listOf(
             boroughItemUiModel,
             schoolItemUiModel1,
@@ -61,7 +58,7 @@ fun SchoolListScreenPreview() {
         )
     )
 
-    SchoolListView(schoolListUiModel)
+    SchoolListView(composeSchoolListUiModel)
 }
 
 
@@ -69,14 +66,14 @@ fun SchoolListScreenPreview() {
 fun SchoolListScreen(
     schoolListViewModel: ComposeSchoolListViewModel
 ) {
-    val state = schoolListViewModel.getSchoolList().observeAsState(SchoolListUiModel(emptyList()))
+    val state = schoolListViewModel.getSchoolList().observeAsState(ComposeSchoolListUiModel(emptyList()))
     SchoolListView(state.value) { schoolListViewModel.onSchoolListItemSelected(it) }
 }
 
 
 @Composable
 fun SchoolListView(
-    schoolListUiModel: SchoolListUiModel,
+    composeSchoolListUiModel: ComposeSchoolListUiModel,
     onNycListItemSelected: ((NycListItem) -> Unit)? = null
 ) {
     Surface(
@@ -85,7 +82,7 @@ fun SchoolListView(
             .fillMaxHeight()
     ) {
         LazyColumn {
-            items(schoolListUiModel.schoolListItemUiModels) { nycListItem ->
+            items(composeSchoolListUiModel.schoolListItemUiModels) { nycListItem ->
                 if (nycListItem is NycListItem.BoroughItemUiModel) {
                     BoroughItem(nycListItem, onNycListItemSelected)
                 } else if (nycListItem is NycListItem.SchoolItemUiModel) {

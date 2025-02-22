@@ -2,6 +2,8 @@ package com.example.thomasraybould.nycschools.view.school_list_activity
 
 import androidx.lifecycle.LiveData
 import androidx.lifecycle.MutableLiveData
+import com.example.thomasraybould.nycschools.adapters.school_list_adapter.SchoolListItemType
+import com.example.thomasraybould.nycschools.adapters.school_list_adapter.SchoolListItemUiModel
 import com.example.thomasraybould.nycschools.domain.get_sat_score_interactor.GetSatScoreDataInteractor
 import com.example.thomasraybould.nycschools.domain.get_sat_score_interactor.data.SatDataResponse
 import com.example.thomasraybould.nycschools.domain.get_school_list_interactor.GetSchoolListInteractor
@@ -11,7 +13,7 @@ import com.example.thomasraybould.nycschools.entities.SatScoreData
 import com.example.thomasraybould.nycschools.entities.School
 import com.example.thomasraybould.nycschools.rx_util.SchedulerProvider
 import com.example.thomasraybould.nycschools.view.base.BaseViewModel
-import dagger.android.AndroidInjection
+import com.example.thomasraybould.nycschools.view.school_list_compose_activity.ComposeSchoolListUiModel
 
 import java.util.ArrayList
 import java.util.HashMap
@@ -20,11 +22,16 @@ import javax.inject.Inject
 
 import io.reactivex.disposables.Disposable
 
-class SchoolListViewModelImpl  @Inject constructor(private val getSchoolListInteractor: GetSchoolListInteractor, val getSatScoreDataInteractor: GetSatScoreDataInteractor, val schedulerProvider: SchedulerProvider): BaseViewModel(), SchoolListViewModel {
+class SchoolListViewModelImpl @Inject constructor(
+    private val getSchoolListInteractor: GetSchoolListInteractor,
+    val getSatScoreDataInteractor: GetSatScoreDataInteractor,
+    val schedulerProvider: SchedulerProvider
+) : BaseViewModel(), SchoolListViewModel {
 
     private val schoolListItemUiModels: MutableList<SchoolListItemUiModel> = ArrayList()
 
-    private val schoolListUiModelLiveData: MutableLiveData<SchoolListUiModel> = MutableLiveData()
+    private val schoolListUiModelLiveData: MutableLiveData<SchoolListUiModel> =
+        MutableLiveData()
 
     private val pendingDownloads = HashMap<String, Disposable>()
 
@@ -84,17 +91,20 @@ class SchoolListViewModelImpl  @Inject constructor(private val getSchoolListInte
         postUpdatedList()
 
         val disposable = getSchoolListInteractor.getSchoolsByBorough(borough)
-                .subscribeOn(schedulerProvider.io())
-                .observeOn(schedulerProvider.main())
-                .subscribe({ this.processGetSchoolListResponse(it, borough) },
-                        { failedToLoadList(borough) })
+            .subscribeOn(schedulerProvider.io())
+            .observeOn(schedulerProvider.main())
+            .subscribe({ this.processGetSchoolListResponse(it, borough) },
+                { failedToLoadList(borough) })
 
         pendingDownloads[borough.code] = disposable
 
         onDestroyDisposable.add(disposable)
     }
 
-    private fun processGetSchoolListResponse(schoolListResponse: SchoolListResponse, borough: Borough) {
+    private fun processGetSchoolListResponse(
+        schoolListResponse: SchoolListResponse,
+        borough: Borough
+    ) {
         if (!schoolListResponse.isSuccessful) {
             failedToLoadList(borough)
             return
@@ -145,10 +155,10 @@ class SchoolListViewModelImpl  @Inject constructor(private val getSchoolListInte
         }
 
         val disposable = getSatScoreDataInteractor.getSatScoreDataByDbn(school.dbn)
-                .subscribeOn(schedulerProvider.io())
-                .observeOn(schedulerProvider.main())
-                .subscribe({ satDataResponse -> processSatScoreResponse(satDataResponse, school) },
-                        { throwable -> failedToGetSatData() })
+            .subscribeOn(schedulerProvider.io())
+            .observeOn(schedulerProvider.main())
+            .subscribe({ satDataResponse -> processSatScoreResponse(satDataResponse, school) },
+                { throwable -> failedToGetSatData() })
 
         pendingDownloads[school.dbn] = disposable
 
@@ -177,13 +187,16 @@ class SchoolListViewModelImpl  @Inject constructor(private val getSchoolListInte
         postWithError("Failed to load SAT scores")
     }
 
-    private fun satDataToSchoolListItem(satScoreData: SatScoreData, school: School): SchoolListItemUiModel {
+    private fun satDataToSchoolListItem(
+        satScoreData: SatScoreData,
+        school: School
+    ): SchoolListItemUiModel {
         return SchoolListItemUiModel.newBuilder()
-                .borough(school.borough)
-                .type(SchoolListItemType.SAT_SCORE_ITEM)
-                .school(school)
-                .satScoreData(satScoreData)
-                .build()
+            .borough(school.borough)
+            .type(SchoolListItemType.SAT_SCORE_ITEM)
+            .school(school)
+            .satScoreData(satScoreData)
+            .build()
 
     }
 

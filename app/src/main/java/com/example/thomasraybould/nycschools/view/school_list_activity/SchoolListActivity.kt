@@ -8,12 +8,14 @@ import androidx.recyclerview.widget.LinearLayoutManager
 import androidx.recyclerview.widget.RecyclerView
 import com.example.thomasraybould.nycschools.R
 import com.example.thomasraybould.nycschools.adapters.school_list_adapter.OnNycListItemSelectedListener
+import com.example.thomasraybould.nycschools.adapters.school_list_adapter.OnSchoolListItemSelectedListener
 import com.example.thomasraybould.nycschools.adapters.school_list_adapter.SchoolListAdapter
+import com.example.thomasraybould.nycschools.adapters.school_list_adapter.SchoolListItemUiModel
 import com.example.thomasraybould.nycschools.view.uiModels.NycListItem
 import dagger.android.AndroidInjection
 import javax.inject.Inject
 
-class SchoolListActivity : AppCompatActivity(), OnNycListItemSelectedListener {
+class SchoolListActivity : AppCompatActivity(), OnSchoolListItemSelectedListener {
 
     @Inject
     lateinit var factory: ViewModelProvider.Factory
@@ -49,7 +51,9 @@ class SchoolListActivity : AppCompatActivity(), OnNycListItemSelectedListener {
         Toast.makeText(this, message, Toast.LENGTH_SHORT).show()
     }
 
-    override fun onNycListItemSelected(schoolItemUiModel: NycListItem) {
-        schoolListViewModel?.onSchoolListItemSelected(schoolItemUiModel)
+    override fun onSchoolListItemSelected(schoolListItemUiModel: SchoolListItemUiModel?) {
+        schoolListItemUiModel?.let {
+            schoolListViewModel?.onSchoolListItemSelected(it)
+        }
     }
 }

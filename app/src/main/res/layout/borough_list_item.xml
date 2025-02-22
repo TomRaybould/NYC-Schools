@@ -7,7 +7,7 @@
         <import type="android.view.View"/>
         <variable
             name="uiModel"
-            type="com.example.thomasraybould.nycschools.view.uiModels.NycListItem.BoroughItemUiModel"
+            type="com.example.thomasraybould.nycschools.adapters.school_list_adapter.SchoolListItemUiModel"
         />
     </data>
 
