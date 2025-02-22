@@ -16,6 +16,7 @@ import com.example.thomasraybould.nycschools.entities.SatScoreData
 import com.example.thomasraybould.nycschools.entities.School
 import com.example.thomasraybould.nycschools.view.school_list_activity.SchoolListUiModel
 import com.example.thomasraybould.nycschools.view.school_list_activity.SchoolListViewModel
+import com.example.thomasraybould.nycschools.view.school_list_compose_activity.viewModel.ComposeSchoolListViewModel
 import com.example.thomasraybould.nycschools.view.uiModels.NycListItem
 
 @Preview
@@ -57,7 +58,7 @@ fun SchoolListScreenPreview() {
             satScoreData,
             schoolItemUiModel2
 
-            )
+        )
     )
 
     SchoolListView(schoolListUiModel)
@@ -66,7 +67,7 @@ fun SchoolListScreenPreview() {
 
 @Composable
 fun SchoolListScreen(
-    schoolListViewModel: SchoolListViewModel
+    schoolListViewModel: ComposeSchoolListViewModel
 ) {
     val state = schoolListViewModel.getSchoolList().observeAsState(SchoolListUiModel(emptyList()))
     SchoolListView(state.value) { schoolListViewModel.onSchoolListItemSelected(it) }

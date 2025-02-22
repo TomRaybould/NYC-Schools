@@ -10,6 +10,8 @@ import com.example.thomasraybould.nycschools.adapters.school_list_adapter.OnNycL
 import com.example.thomasraybould.nycschools.entities.Borough
 import com.example.thomasraybould.nycschools.view.school_list_activity.SchoolListViewModel
 import com.example.thomasraybould.nycschools.view.school_list_activity.SchoolListViewModelImpl
+import com.example.thomasraybould.nycschools.view.school_list_compose_activity.viewModel.ComposeSchoolListViewModel
+import com.example.thomasraybould.nycschools.view.school_list_compose_activity.viewModel.ComposeSchoolListViewModelImpl
 import com.example.thomasraybould.nycschools.view.uiModels.NycListItem
 import dagger.android.AndroidInjection
 import javax.inject.Inject
@@ -19,7 +21,7 @@ class SchoolListComposeActivity : AppCompatActivity(), OnNycListItemSelectedList
     @Inject
     lateinit var factory: ViewModelProvider.Factory
 
-    lateinit var schoolListViewModel: SchoolListViewModel
+    lateinit var schoolListViewModel: ComposeSchoolListViewModel
 
 
     override fun onCreate(savedInstanceState: Bundle?) {
@@ -29,7 +31,8 @@ class SchoolListComposeActivity : AppCompatActivity(), OnNycListItemSelectedList
         AndroidInjection.inject(this)
 
         schoolListViewModel =
-            ViewModelProvider(this, factory).get(SchoolListViewModelImpl::class.java) ?: return
+            ViewModelProvider(this, factory).get(ComposeSchoolListViewModelImpl::class.java)
+                ?: return
 
         schoolListViewModel.getSchoolList().observe(this) { schoolListUiModel ->
             schoolListUiModel.errorMessage?.let {
