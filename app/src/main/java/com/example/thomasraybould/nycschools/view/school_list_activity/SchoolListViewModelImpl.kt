@@ -7,99 +7,94 @@ import com.example.thomasraybould.nycschools.domain.get_sat_score_interactor.dat
 import com.example.thomasraybould.nycschools.domain.get_school_list_interactor.GetSchoolListInteractor
 import com.example.thomasraybould.nycschools.domain.get_school_list_interactor.data.SchoolListResponse
 import com.example.thomasraybould.nycschools.entities.Borough
+import com.example.thomasraybould.nycschools.entities.SatScoreData
 import com.example.thomasraybould.nycschools.entities.School
 import com.example.thomasraybould.nycschools.rx_util.SchedulerProvider
 import com.example.thomasraybould.nycschools.view.base.BaseViewModel
-import com.example.thomasraybould.nycschools.view.uiModels.NycListItem
-import io.reactivex.disposables.Disposable
+import dagger.android.AndroidInjection
+
+import java.util.ArrayList
+import java.util.HashMap
+
 import javax.inject.Inject
 
-class SchoolListViewModelImpl @Inject constructor(
-    private val getSchoolListInteractor: GetSchoolListInteractor,
-    val getSatScoreDataInteractor: GetSatScoreDataInteractor,
-    val schedulerProvider: SchedulerProvider
-) : BaseViewModel(), SchoolListViewModel {
+import io.reactivex.disposables.Disposable
+
+class SchoolListViewModelImpl  @Inject constructor(private val getSchoolListInteractor: GetSchoolListInteractor, val getSatScoreDataInteractor: GetSatScoreDataInteractor, val schedulerProvider: SchedulerProvider): BaseViewModel(), SchoolListViewModel {
+
+    private val schoolListItemUiModels: MutableList<SchoolListItemUiModel> = ArrayList()
 
     private val schoolListUiModelLiveData: MutableLiveData<SchoolListUiModel> = MutableLiveData()
 
     private val pendingDownloads = HashMap<String, Disposable>()
 
-    private fun postUpdatedList(nycListItems: List<NycListItem>) {
-        schoolListUiModelLiveData.postValue(SchoolListUiModel(nycListItems))
+    private fun postUpdatedList() {
+        schoolListUiModelLiveData.postValue(SchoolListUiModel(schoolListItemUiModels))
     }
 
     private fun postWithError(error: String) {
-        schoolListUiModelLiveData.postValue(SchoolListUiModel(listOf(), error))
+        schoolListUiModelLiveData.postValue(SchoolListUiModel(schoolListItemUiModels, error))
     }
 
     override fun getSchoolList(): LiveData<SchoolListUiModel> {
-        val nycListItems = getCurrentList()
-        if (nycListItems.isEmpty()) {
-            val boroughItemUiModels = Borough.entries.map { borough ->
-                NycListItem.BoroughItemUiModel(borough)
+        if (schoolListItemUiModels.isEmpty()) {
+            for (borough in Borough.values()) {
+                val boroughItem = SchoolListItemUiModel.createBoroughItem(borough)
+                schoolListItemUiModels.add(boroughItem)
             }
-            postUpdatedList(boroughItemUiModels)
         }
+        postUpdatedList()
 
         return schoolListUiModelLiveData
     }
 
-    override fun onSchoolListItemSelected(nycListItem: NycListItem) {
-        if (nycListItem is NycListItem.BoroughItemUiModel) {
-            onBoroughSelected(nycListItem)
-        } else if (nycListItem is NycListItem.SchoolItemUiModel) {
-            onSchoolSelected(nycListItem)
+    override fun onSchoolListItemSelected(schoolListItemUiModel: SchoolListItemUiModel) {
+        if (schoolListItemUiModel.type == SchoolListItemType.BOROUGH_TITLE) {
+            onBoroughSelected(schoolListItemUiModel)
+        } else if (schoolListItemUiModel.type == SchoolListItemType.SCHOOL_ITEM) {
+            onSchoolSelected(schoolListItemUiModel)
         }
     }
 
-    private fun onBoroughSelected(boroughItemUiModel: NycListItem.BoroughItemUiModel) {
-        val borough = boroughItemUiModel.borough
+    private fun onBoroughSelected(schoolListItemUiModel: SchoolListItemUiModel) {
+        val borough = schoolListItemUiModel.borough
         //cancel download of json and remove school cells from list
-        if (boroughItemUiModel.isSelected) {
-            val newList = getCurrentList().toMutableList()
-            for (i in newList.size - 1 downTo 0) {
-                val nycListItem = newList[i]
-                if (nycListItem.borough == borough) {
-                    if (nycListItem is NycListItem.BoroughItemUiModel) {
-                        newList[i] = nycListItem.copy(isLoading = false, isSelected = false)
+        if (schoolListItemUiModel.isSelected) {
+            for (i in schoolListItemUiModels.size - 1 downTo 0) {
+                if (schoolListItemUiModels[i].borough == borough) {
+                    if (schoolListItemUiModels[i].type == SchoolListItemType.BOROUGH_TITLE) {
+                        schoolListItemUiModels[i].isLoading = false
                     } else {
-                        newList.removeAt(i)
+                        schoolListItemUiModels.removeAt(i)
                     }
                 }
             }
-
-            postUpdatedList(newList)
+            postUpdatedList()
             val disposable = pendingDownloads[borough.code]
             disposable?.dispose()
             return
         }
 
-
-        val newList = getCurrentList().map {
-            if (it is NycListItem.BoroughItemUiModel && it.borough == borough) {
-                return@map it.copy(isSelected = true, isLoading = true)
+        schoolListItemUiModels.forEach {
+            if (it.type == SchoolListItemType.BOROUGH_TITLE && it.borough == borough) {
+                it.isLoading = true
             }
-            it
         }
 
-
-        postUpdatedList(newList)
+        postUpdatedList()
 
         val disposable = getSchoolListInteractor.getSchoolsByBorough(borough)
-            .subscribeOn(schedulerProvider.io())
-            .observeOn(schedulerProvider.main())
-            .subscribe({ this.processGetSchoolListResponse(it, borough) },
-                { failedToLoadList(borough) })
+                .subscribeOn(schedulerProvider.io())
+                .observeOn(schedulerProvider.main())
+                .subscribe({ this.processGetSchoolListResponse(it, borough) },
+                        { failedToLoadList(borough) })
 
         pendingDownloads[borough.code] = disposable
 
         onDestroyDisposable.add(disposable)
     }
 
-    private fun processGetSchoolListResponse(
-        schoolListResponse: SchoolListResponse,
-        borough: Borough
-    ) {
+    private fun processGetSchoolListResponse(schoolListResponse: SchoolListResponse, borough: Borough) {
         if (!schoolListResponse.isSuccessful) {
             failedToLoadList(borough)
             return
@@ -108,76 +103,54 @@ class SchoolListViewModelImpl @Inject constructor(
         val schools = schoolListResponse.schools
 
         var targetIdx = 0
-
-        getCurrentList().forEachIndexed { index, schoolListItemUiModel ->
-            if (schoolListItemUiModel is NycListItem.BoroughItemUiModel &&
-                schoolListItemUiModel.borough == schoolListResponse.borough
-            ) {
+        schoolListItemUiModels.forEachIndexed { index, schoolListItemUiModel ->
+            if (schoolListItemUiModel.borough == schoolListResponse.borough) {
                 schoolListItemUiModel.isLoading = false
                 targetIdx = index
             }
         }
 
         val newSchoolListItemUiModels = schoolsToListItems(schools)
-
-        val newList = getCurrentList().apply {
-            set(targetIdx, NycListItem.BoroughItemUiModel(borough, isSelected = true))
-            addAll(targetIdx + 1, newSchoolListItemUiModels)
-        }
-        postUpdatedList(newList)
+        schoolListItemUiModels.addAll(targetIdx + 1, newSchoolListItemUiModels)
+        postUpdatedList()
     }
 
     private fun failedToLoadList(borough: Borough) {
-        val newList = getCurrentList().map {
-            if (it is NycListItem.BoroughItemUiModel && it.borough == borough) {
+        schoolListItemUiModels.forEach {
+            if (it.type == SchoolListItemType.BOROUGH_TITLE && it.borough == borough) {
                 it.isLoading = false
-                it
             }
         }
-
         postWithError("Failed to load schools")
     }
 
-    private fun schoolsToListItems(schools: List<School>): List<NycListItem> {
-        val schoolListItemUiModels = mutableListOf<NycListItem>()
+    private fun schoolsToListItems(schools: List<School>): List<SchoolListItemUiModel> {
+        val schoolListItemUiModels = ArrayList<SchoolListItemUiModel>()
         for (school in schools) {
-            val schoolItem = NycListItem.SchoolItemUiModel(
-                borough = school.borough,
-                school = school
-            )
+            val schoolItem = SchoolListItemUiModel.createSchoolItem(school, school.borough)
             schoolListItemUiModels.add(schoolItem)
         }
         return schoolListItemUiModels
     }
 
-    private fun onSchoolSelected(schoolItemUiModel: NycListItem.SchoolItemUiModel) {
-        if (schoolItemUiModel.isSelected) {
-            val nycListItems = getCurrentList()
-            val indexOfSchool = nycListItems.indexOf(schoolItemUiModel)
-            val indexOfScore = indexOfSchool + 1
-            if (indexOfScore <= nycListItems.lastIndex) {
-                val newList = getCurrentList().apply {
-                    removeAt(indexOfScore)
-                    set(indexOfSchool, schoolItemUiModel.copy(isSelected = false, isLoading = false))
-                }
-                postUpdatedList(newList)
+    private fun onSchoolSelected(schoolListItemUiModel: SchoolListItemUiModel) {
+        val school = schoolListItemUiModel.school
+        if (schoolListItemUiModel.isSelected) {
+            val indexOfScore = schoolListItemUiModels.indexOf(schoolListItemUiModel) + 1
+            if (indexOfScore <= schoolListItemUiModels.lastIndex) {
+                schoolListItemUiModels.removeAt(indexOfScore)
             }
+            postUpdatedList()
             return
         }
 
-        val disposable =
-            getSatScoreDataInteractor.getSatScoreDataByDbn(schoolItemUiModel.school.dbn)
+        val disposable = getSatScoreDataInteractor.getSatScoreDataByDbn(school.dbn)
                 .subscribeOn(schedulerProvider.io())
                 .observeOn(schedulerProvider.main())
-                .subscribe({ satDataResponse ->
-                    processSatScoreResponse(
-                        satDataResponse,
-                        schoolItemUiModel.school
-                    )
-                },
-                    { throwable -> failedToGetSatData() })
+                .subscribe({ satDataResponse -> processSatScoreResponse(satDataResponse, school) },
+                        { throwable -> failedToGetSatData() })
 
-        pendingDownloads[schoolItemUiModel.school.dbn] = disposable
+        pendingDownloads[school.dbn] = disposable
 
         onDestroyDisposable.add(disposable)
     }
@@ -189,42 +162,29 @@ class SchoolListViewModelImpl @Inject constructor(
             return
         }
 
-        val scoreListItem = NycListItem.SatScoreDataUiModel(
-            borough = school.borough,
-            satScoreData = satScoreData,
-            webPageLink = school.webPageLink
-        )
+        val scoreListItem = satDataToSchoolListItem(satScoreData, school)
 
-        var targetIndex = 0
-        getCurrentList().forEachIndexed { index, schoolListItemUiModel ->
-            if (satDataResponse.satScoreData.dbn == (schoolListItemUiModel as? NycListItem.SchoolItemUiModel)?.school?.dbn) {
-                targetIndex = index
-                return@forEachIndexed
+        schoolListItemUiModels.forEachIndexed { index, schoolListItemUiModel ->
+            if (satDataResponse.satScoreData.dbn == schoolListItemUiModel.school?.dbn) {
+                schoolListItemUiModels.add(index + 1, scoreListItem)
+                postUpdatedList()
+                return
             }
         }
-
-        val newList = getCurrentList().apply {
-            set(
-                targetIndex, NycListItem.SchoolItemUiModel(
-                    borough = school.borough,
-                    school = school,
-                    isSelected = true,
-                    isLoading = false
-                )
-            )
-            add(targetIndex + 1, scoreListItem)
-        }
-
-        postUpdatedList(newList)
     }
 
     private fun failedToGetSatData() {
         postWithError("Failed to load SAT scores")
     }
 
-    private fun getCurrentList(): MutableList<NycListItem> {
-        return schoolListUiModelLiveData.value?.schoolListItemUiModels?.toMutableList()
-            ?: mutableListOf()
+    private fun satDataToSchoolListItem(satScoreData: SatScoreData, school: School): SchoolListItemUiModel {
+        return SchoolListItemUiModel.newBuilder()
+                .borough(school.borough)
+                .type(SchoolListItemType.SAT_SCORE_ITEM)
+                .school(school)
+                .satScoreData(satScoreData)
+                .build()
+
     }
 
 }
