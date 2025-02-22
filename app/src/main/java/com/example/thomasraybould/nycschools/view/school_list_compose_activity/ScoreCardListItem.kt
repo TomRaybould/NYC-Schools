@@ -9,6 +9,9 @@ import androidx.compose.foundation.layout.Row
 import androidx.compose.foundation.layout.fillMaxWidth
 import androidx.compose.foundation.layout.height
 import androidx.compose.foundation.layout.padding
+import androidx.compose.material3.Card
+import androidx.compose.material3.CardDefaults
+import androidx.compose.material3.CardElevation
 import androidx.compose.material3.CircularProgressIndicator
 import androidx.compose.material3.LinearProgressIndicator
 import androidx.compose.material3.MaterialTheme
@@ -66,11 +69,12 @@ fun ScoreCardPreview() {
 @Composable
 fun ScoreCard(satScoreDataUiModel: NycListItem.SatScoreDataUiModel) {
     val satScoreData = satScoreDataUiModel.satScoreData
-    Surface(
+    Card(
         modifier = Modifier
             .fillMaxWidth()
-            .height(70.dp),
-        color = Color.LightGray
+            .height(70.dp)
+            .padding(horizontal = 4.dp)
+        ,
     ) {
         Row(
             horizontalArrangement = Arrangement.SpaceEvenly,

@@ -86,9 +86,12 @@ fun SchoolItem(
     schoolItemUiModel: NycListItem.SchoolItemUiModel,
     onNycListItemSelected: ((NycListItem) -> Unit)? = null
 ) {
-    SchoolItemContent(modifier = Modifier.clickable {
-        onNycListItemSelected?.invoke(schoolItemUiModel)
-    }, schoolItemUiModel = schoolItemUiModel)
+    SchoolItemContent(modifier = Modifier
+        .padding(horizontal = 4.dp)
+        .clickable {
+            onNycListItemSelected?.invoke(schoolItemUiModel)
+        }, schoolItemUiModel = schoolItemUiModel
+    )
 }
 
 @Composable
