@@ -69,14 +69,14 @@ fun ScoreCard(satScoreDataUiModel: NycListItem.SatScoreDataUiModel) {
     Surface(
         modifier = Modifier
             .fillMaxWidth()
-            .height(70.dp)
+            .height(70.dp),
+        color = Color.LightGray
     ) {
         Row(
             horizontalArrangement = Arrangement.SpaceEvenly,
             modifier = Modifier.fillMaxWidth()
         ) {
             val scoreViewModifier = Modifier.weight(1.0f)
-                .background(Color.LightGray)
             ScoreView("Math", satScoreData.math, scoreViewModifier)
             ScoreView("Reading", satScoreData.reading, scoreViewModifier)
             ScoreView("Writing", satScoreData.writing, scoreViewModifier)
@@ -108,7 +108,7 @@ fun ScoreView(
                 .weight(1.0f),
             percentage = (score / 800.0).toFloat(),
             primaryColor = getProgressColor(score),
-            secondaryColor = Color.LightGray
+            secondaryColor = Color.Gray
         )
     }
 }

@@ -69,9 +69,9 @@ fun SchoolPreview() {
             NycListItem.SatScoreDataUiModel(
                 Borough.BROOKLYN,
                 SatScoreData.newBuilder()
-                    .math(500)
-                    .reading(501)
-                    .writing(502)
+                    .math(300)
+                    .reading(400)
+                    .writing(500)
                     .build(),
                 ""
             )
