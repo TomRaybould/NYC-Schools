@@ -62,5 +62,5 @@ dependencies {
 
     // Testing
     testImplementation libs.mockk
-
+    testImplementation libs.androidx.core.testing
 }

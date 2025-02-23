@@ -14,6 +14,7 @@ okhttp = "4.9.0"
 glide = "4.9.0"
 kotlinStdlib = "1.5.21"
 mockk = "1.13.2"
+androidx-core-testing = "2.1.0"
 
 [libraries]
 androidxAppCompat = { module = "androidx.appcompat:appcompat", version.ref = "appcompat" }
@@ -46,3 +47,4 @@ kotlinStdlib = { module = "org.jetbrains.kotlin:kotlin-stdlib-jdk7", version.ref
 
 # Testing
 mockk = { module = "io.mockk:mockk", version.ref = "mockk" }
+androidx-core-testing = { module = "androidx.arch.core:core-testing", version.ref = "androidx-core-testing" }
