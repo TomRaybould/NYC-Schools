@@ -35,7 +35,7 @@ sealed class NycListItem(open val borough: Borough) {
     ) : NycListItem(borough)
 
     companion object {
-        private fun getImageForBorough(borough: Borough): Int {
+        fun getImageForBorough(borough: Borough): Int {
             return when (borough.code) {
                 "M" -> R.drawable.manhattan
                 "K" -> R.drawable.brooklyn
