@@ -20,12 +20,9 @@ sealed class NycListItem(open val borough: Borough) {
         override val borough: Borough,
         val school: School,
         var isLoading: Boolean = false,
-        var isSelected: Boolean = false
-    ) : NycListItem(borough) {
-        override fun equals(other: Any?): Boolean {
-            return (other as? SchoolItemUiModel)?.school?.dbn == this.school.dbn
-        }
-    }
+        var isSelected: Boolean = false,
+        val satScoreData: SatScoreData? = null
+    ) : NycListItem(borough)
 
     data class SatScoreDataUiModel(
         override val borough: Borough,

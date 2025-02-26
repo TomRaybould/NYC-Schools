@@ -27,27 +27,17 @@ import com.example.thomasraybould.nycschools.features.uiModels.NycListItem
 fun ScoreCardPreview() {
     Column {
 
-        val satScoreData1 =
-            NycListItem.SatScoreDataUiModel(
-                Borough.BROOKLYN,
-                SatScoreData.newBuilder()
-                    .math(0)
-                    .reading(400)
-                    .writing(800)
-                    .build(),
-                ""
-            )
+        val satScoreData1 = SatScoreData.newBuilder()
+            .math(0)
+            .reading(400)
+            .writing(800)
+            .build()
+        val satScoreData2 = SatScoreData.newBuilder()
+            .math(100)
+            .reading(400)
+            .writing(800)
+            .build()
 
-        val satScoreData2 =
-            NycListItem.SatScoreDataUiModel(
-                Borough.BROOKLYN,
-                SatScoreData.newBuilder()
-                    .math(100)
-                    .reading(400)
-                    .writing(800)
-                    .build(),
-                ""
-            )
 
         ScoreCard(satScoreData1)
         ScoreCard(satScoreData2)
@@ -56,14 +46,12 @@ fun ScoreCardPreview() {
 }
 
 @Composable
-fun ScoreCard(satScoreDataUiModel: NycListItem.SatScoreDataUiModel) {
-    val satScoreData = satScoreDataUiModel.satScoreData
+fun ScoreCard(satScoreData: SatScoreData) {
     Card(
         modifier = Modifier
             .fillMaxWidth()
             .height(70.dp)
-            .padding(horizontal = 4.dp)
-        ,
+            .padding(horizontal = 4.dp),
     ) {
         Row(
             horizontalArrangement = Arrangement.SpaceEvenly,

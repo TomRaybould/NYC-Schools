@@ -11,6 +11,7 @@ import androidx.compose.material3.MaterialTheme
 import androidx.compose.material3.Surface
 import androidx.compose.material3.Text
 import androidx.compose.runtime.Composable
+import androidx.compose.runtime.remember
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.text.style.TextOverflow
@@ -24,56 +25,56 @@ import com.example.thomasraybould.nycschools.features.uiModels.NycListItem
 @Preview
 @Composable
 fun SchoolPreview() {
+
+    val satScoreData = SatScoreData.newBuilder()
+        .math(300)
+        .reading(400)
+        .writing(500)
+        .build()
+
+    val schoolItemUiModels = mutableListOf(
+        NycListItem.SchoolItemUiModel(
+            borough = Borough.QUEENS,
+            school = School.newBuilder().name("Test school not expanded").build(),
+            isLoading = false,
+            isSelected = false,
+            satScoreData = satScoreData
+        ),
+        NycListItem.SchoolItemUiModel(
+            borough = Borough.QUEENS,
+            school = School.newBuilder()
+                .name("Test school long text not expanded, loading state").build(),
+            isLoading = true,
+            isSelected = false,
+            satScoreData = satScoreData
+        ),
+        NycListItem.SchoolItemUiModel(
+            borough = Borough.QUEENS,
+            school = School.newBuilder()
+                .name("Test school long text not expanded, not loading state").build(),
+            isLoading = false,
+            isSelected = false,
+            satScoreData = satScoreData
+        ),
+        NycListItem.SchoolItemUiModel(
+            borough = Borough.QUEENS,
+            school = School.newBuilder().name("Test school expanded").build(),
+            isLoading = false,
+            isSelected = true,
+            satScoreData = satScoreData
+        )
+    )
+
+
+
     Column {
-        SchoolItem(
-            NycListItem.SchoolItemUiModel(
-                borough = Borough.QUEENS,
-                school = School.newBuilder().name("Test school not expanded").build(),
-                isLoading = false,
-                isSelected = false
-            )
-        )
-        SchoolItem(
-            NycListItem.SchoolItemUiModel(
-                borough = Borough.QUEENS,
-                school = School.newBuilder()
-                    .name("Test school long text not expanded, loading state").build(),
-                isLoading = true,
-                isSelected = false
-            )
-        )
-        SchoolItem(
-            NycListItem.SchoolItemUiModel(
-                borough = Borough.QUEENS,
-                school = School.newBuilder()
-                    .name("Test school long text not expanded, not loading state").build(),
-                isLoading = false,
-                isSelected = false
-            )
-        )
-        SchoolItem(
-            NycListItem.SchoolItemUiModel(
-                borough = Borough.QUEENS,
-                school = School.newBuilder().name("Test school expanded").build(),
-                isLoading = false,
-                isSelected = true
-            )
-        )
-
-
-        val satScoreData =
-            NycListItem.SatScoreDataUiModel(
-                Borough.BROOKLYN,
-                SatScoreData.newBuilder()
-                    .math(300)
-                    .reading(400)
-                    .writing(500)
-                    .build(),
-                ""
-            )
-
-        ScoreCard(satScoreData)
-
+        schoolItemUiModels.forEach {
+            SchoolItem(it, onNycListItemSelected = { schoolModel ->
+                if (schoolModel !is NycListItem.SchoolItemUiModel) return@SchoolItem
+                val index = schoolItemUiModels.indexOf(schoolModel)
+                schoolItemUiModels[index] = schoolModel.copy(isSelected = schoolModel.isSelected)
+            })
+        }
     }
 }
 
@@ -82,11 +83,12 @@ fun SchoolItem(
     schoolItemUiModel: NycListItem.SchoolItemUiModel,
     onNycListItemSelected: ((NycListItem) -> Unit)? = null
 ) {
-    SchoolItemContent(modifier = Modifier
-        .padding(horizontal = 4.dp)
-        .clickable {
-            onNycListItemSelected?.invoke(schoolItemUiModel)
-        }, schoolItemUiModel = schoolItemUiModel
+    SchoolItemContent(
+        modifier = Modifier
+            .padding(horizontal = 4.dp)
+            .clickable {
+                onNycListItemSelected?.invoke(schoolItemUiModel)
+            }, schoolItemUiModel = schoolItemUiModel
     )
 }
 
@@ -96,25 +98,30 @@ fun SchoolItemContent(
     schoolItemUiModel: NycListItem.SchoolItemUiModel
 ) {
     Surface(modifier = modifier) {
-        ListItemWithUnderline {
-            Box(modifier = Modifier.height(50.dp)) {
-                Text(
-                    text = schoolItemUiModel.school.name,
-                    modifier = Modifier
-                        .fillMaxWidth()
-                        .padding(start = 16.dp)
-                        .padding(end = if (schoolItemUiModel.isLoading) 50.dp else 4.dp)
-                        .align(Alignment.CenterStart),
-                    style = MaterialTheme.typography.headlineSmall,
-                    maxLines = 1,
-                    overflow = TextOverflow.Ellipsis
-                )
-                if (schoolItemUiModel.isLoading) {
-                    CircularProgressIndicator(
+        Column {
+            ListItemWithUnderline {
+                Box(modifier = Modifier.height(50.dp)) {
+                    Text(
+                        text = schoolItemUiModel.school.name,
                         modifier = Modifier
-                            .align(Alignment.CenterEnd)
+                            .fillMaxWidth()
+                            .padding(start = 16.dp)
+                            .padding(end = if (schoolItemUiModel.isLoading) 50.dp else 4.dp)
+                            .align(Alignment.CenterStart),
+                        style = MaterialTheme.typography.headlineSmall,
+                        maxLines = 1,
+                        overflow = TextOverflow.Ellipsis
                     )
+                    if (schoolItemUiModel.isLoading) {
+                        CircularProgressIndicator(
+                            modifier = Modifier
+                                .align(Alignment.CenterEnd)
+                        )
+                    }
                 }
+            }
+            if (schoolItemUiModel.isSelected && schoolItemUiModel.satScoreData != null) {
+                ScoreCard(satScoreData = schoolItemUiModel.satScoreData)
             }
         }
     }
