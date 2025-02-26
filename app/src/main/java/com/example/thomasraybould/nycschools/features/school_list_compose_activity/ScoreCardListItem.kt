@@ -1,5 +1,6 @@
 package com.example.thomasraybould.nycschools.features.school_list_compose_activity
 
+import androidx.compose.animation.animateContentSize
 import androidx.compose.foundation.layout.Arrangement
 import androidx.compose.foundation.layout.Column
 import androidx.compose.foundation.layout.Row

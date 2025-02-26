@@ -1,6 +1,8 @@
 package com.example.thomasraybould.nycschools.features.school_list_compose_activity
 
+import androidx.compose.animation.animateContentSize
 import androidx.compose.foundation.clickable
+import androidx.compose.foundation.interaction.MutableInteractionSource
 import androidx.compose.foundation.layout.Box
 import androidx.compose.foundation.layout.Column
 import androidx.compose.foundation.layout.fillMaxWidth
@@ -86,7 +88,10 @@ fun SchoolItem(
     SchoolItemContent(
         modifier = Modifier
             .padding(horizontal = 4.dp)
-            .clickable {
+            .clickable(
+                interactionSource = remember { MutableInteractionSource() },
+                indication = null
+            ) {
                 onNycListItemSelected?.invoke(schoolItemUiModel)
             }, schoolItemUiModel = schoolItemUiModel
     )
@@ -97,7 +102,7 @@ fun SchoolItemContent(
     modifier: Modifier = Modifier,
     schoolItemUiModel: NycListItem.SchoolItemUiModel
 ) {
-    Surface(modifier = modifier) {
+    Surface(modifier = modifier.animateContentSize()) {
         Column {
             ListItemWithUnderline {
                 Box(modifier = Modifier.height(50.dp)) {

@@ -190,12 +190,6 @@ class ComposeSchoolListViewModelImpl @Inject constructor(
             return
         }
 
-        val scoreListItem = NycListItem.SatScoreDataUiModel(
-            borough = school.borough,
-            satScoreData = satScoreData,
-            webPageLink = school.webPageLink
-        )
-
         var targetIndex = 0
         getCurrentList().forEachIndexed { index, schoolListItemUiModel ->
             if (satDataResponse.satScoreData.dbn == (schoolListItemUiModel as? NycListItem.SchoolItemUiModel)?.school?.dbn) {
@@ -210,10 +204,10 @@ class ComposeSchoolListViewModelImpl @Inject constructor(
                     borough = school.borough,
                     school = school,
                     isSelected = true,
-                    isLoading = false
+                    isLoading = false,
+                    satScoreData = satScoreData
                 )
             )
-            add(targetIndex + 1, scoreListItem)
         }
 
         postUpdatedList(newList)

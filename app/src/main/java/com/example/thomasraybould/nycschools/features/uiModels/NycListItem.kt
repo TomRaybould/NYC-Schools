@@ -24,12 +24,6 @@ sealed class NycListItem(open val borough: Borough) {
         val satScoreData: SatScoreData? = null
     ) : NycListItem(borough)
 
-    data class SatScoreDataUiModel(
-        override val borough: Borough,
-        val satScoreData: SatScoreData,
-        val webPageLink: String
-    ) : NycListItem(borough)
-
     companion object {
         fun getImageForBorough(borough: Borough): Int {
             return when (borough.code) {
