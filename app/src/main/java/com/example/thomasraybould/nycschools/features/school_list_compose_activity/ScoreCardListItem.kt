@@ -1,12 +1,12 @@
 package com.example.thomasraybould.nycschools.features.school_list_compose_activity
 
-import androidx.compose.animation.animateContentSize
 import androidx.compose.foundation.layout.Arrangement
 import androidx.compose.foundation.layout.Column
 import androidx.compose.foundation.layout.Row
 import androidx.compose.foundation.layout.fillMaxWidth
 import androidx.compose.foundation.layout.height
 import androidx.compose.foundation.layout.padding
+import androidx.compose.foundation.shape.RoundedCornerShape
 import androidx.compose.material3.Card
 import androidx.compose.material3.MaterialTheme
 import androidx.compose.material3.Text
@@ -16,12 +16,10 @@ import androidx.compose.ui.Modifier
 import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.tooling.preview.Preview
 import androidx.compose.ui.unit.dp
-import com.example.thomasraybould.nycschools.entities.Borough
 import com.example.thomasraybould.nycschools.entities.SatScoreData
 import com.example.thomasraybould.nycschools.features.errorColor
 import com.example.thomasraybould.nycschools.features.neutralColor
 import com.example.thomasraybould.nycschools.features.successColor
-import com.example.thomasraybould.nycschools.features.uiModels.NycListItem
 
 @Preview
 @Composable
@@ -49,6 +47,7 @@ fun ScoreCardPreview() {
 @Composable
 fun ScoreCard(satScoreData: SatScoreData) {
     Card(
+        shape = RoundedCornerShape(0.dp, 0.dp, 10.dp, 0.dp),
         modifier = Modifier
             .fillMaxWidth()
             .height(70.dp)

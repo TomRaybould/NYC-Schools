@@ -67,8 +67,6 @@ fun SchoolPreview() {
         )
     )
 
-
-
     Column {
         schoolItemUiModels.forEach {
             SchoolItem(it, onNycListItemSelected = { schoolModel ->
