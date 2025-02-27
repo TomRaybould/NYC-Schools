@@ -37,30 +37,28 @@ fun SchoolPreview() {
     val schoolItemUiModels = mutableListOf(
         NycListItem.SchoolItemUiModel(
             borough = Borough.QUEENS,
-            school = School.newBuilder().name("Test school not expanded").build(),
+            school = School("","Test school not expanded", Borough.QUEENS),
             isLoading = false,
             isSelected = false,
             satScoreData = satScoreData
         ),
         NycListItem.SchoolItemUiModel(
             borough = Borough.QUEENS,
-            school = School.newBuilder()
-                .name("Test school long text not expanded, loading state").build(),
+            school = School("","Test school long text not expanded, loading state", Borough.QUEENS),
             isLoading = true,
             isSelected = false,
             satScoreData = satScoreData
         ),
         NycListItem.SchoolItemUiModel(
             borough = Borough.QUEENS,
-            school = School.newBuilder()
-                .name("Test school long text not expanded, not loading state").build(),
+            school = School("","Test school long text not expanded, not loading state", Borough.QUEENS),
             isLoading = false,
             isSelected = false,
             satScoreData = satScoreData
         ),
         NycListItem.SchoolItemUiModel(
             borough = Borough.QUEENS,
-            school = School.newBuilder().name("Test school expanded").build(),
+            school = School("","Test school expanded", Borough.QUEENS),
             isLoading = false,
             isSelected = true,
             satScoreData = satScoreData

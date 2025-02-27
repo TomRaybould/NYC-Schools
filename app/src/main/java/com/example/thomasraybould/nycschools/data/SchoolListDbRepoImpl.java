@@ -75,12 +75,7 @@ public class SchoolListDbRepoImpl implements SchoolListDbRepo {
                 String name     = cursor.getString(1);
                 String webpage  = cursor.getString(3);
 
-                School school = School.newBuilder()
-                        .dbn(dbn)
-                        .name(name)
-                        .borough(borough)
-                        .webpageLink(webpage)
-                        .build();
+                School school = new School(dbn, name, borough, webpage);
 
                 schoolList.add(school);
 

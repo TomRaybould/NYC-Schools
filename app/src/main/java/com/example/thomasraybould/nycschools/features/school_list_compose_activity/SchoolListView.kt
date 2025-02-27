@@ -33,9 +33,7 @@ fun SchoolListScreenPreview() {
 
     val schoolItemUiModel1 = NycListItem.SchoolItemUiModel(
         borough = Borough.QUEENS,
-        school = School.newBuilder()
-            .dbn("test1")
-            .name("Test Highschool1").build(),
+        school = School("test1", "Test Highschool1", Borough.BRONX),
         isLoading = false,
         isSelected = false,
         satScoreData = satScoreData
@@ -43,9 +41,7 @@ fun SchoolListScreenPreview() {
 
     val schoolItemUiModel2 = NycListItem.SchoolItemUiModel(
         borough = Borough.QUEENS,
-        school = School.newBuilder()
-            .dbn("test2")
-            .name("Test Highschool2").build(),
+        school = School("test2", "Test Highschool2", Borough.BRONX),
         isLoading = false,
         isSelected = false,
         satScoreData = satScoreData
