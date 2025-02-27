@@ -3,9 +3,11 @@ package com.example.thomasraybould.nycschools.features.school_list_compose_activ
 import androidx.arch.core.executor.testing.InstantTaskExecutorRule
 import com.example.thomasraybould.nycschools.CommonMocks
 import com.example.thomasraybould.nycschools.domain.get_sat_score_interactor.GetSatScoreDataInteractor
+import com.example.thomasraybould.nycschools.domain.get_sat_score_interactor.data.SatDataResponse
 import com.example.thomasraybould.nycschools.domain.get_school_list_interactor.GetSchoolListInteractor
 import com.example.thomasraybould.nycschools.domain.get_school_list_interactor.data.SchoolListResponse
 import com.example.thomasraybould.nycschools.entities.Borough
+import com.example.thomasraybould.nycschools.entities.SatScoreData
 import com.example.thomasraybould.nycschools.entities.School
 import com.example.thomasraybould.nycschools.features.uiModels.NycListItem
 import com.example.thomasraybould.nycschools.rx_util.SchedulerProvider
@@ -31,6 +33,7 @@ class ComposeSchoolListViewModelImplTest {
     fun setup() {
         CommonMocks.setupScheduleProvider(schedulerProvider)
         setupGetSchoolListInteractor(Borough.MANHATTAN)
+        setupSatScoreDataInteractor()
     }
 
     @Test
@@ -84,11 +87,11 @@ class ComposeSchoolListViewModelImplTest {
         )
         val viewModel = getViewModel()
 
-        var manhattan = viewModel.getSchoolList().value!!.schoolListItemUiModels.first { it.borough == Borough.MANHATTAN }
+        var manhattan = viewModel.getListOrThrow().first { it.borough == Borough.MANHATTAN }
         // click manhattan once, show the schools
         viewModel.onSchoolListItemSelected(manhattan)
 
-        manhattan = viewModel.getSchoolList().value!!.schoolListItemUiModels.first { it.borough == Borough.MANHATTAN }
+        manhattan = viewModel.getListOrThrow().first { it.borough == Borough.MANHATTAN }
         // click manhattan twice, hide the schools
         viewModel.onSchoolListItemSelected(manhattan)
 
@@ -111,21 +114,88 @@ class ComposeSchoolListViewModelImplTest {
         )
         val viewModel = getViewModel()
 
-        var manhattan = viewModel.getSchoolList().value!!.schoolListItemUiModels.first { it.borough == Borough.MANHATTAN }
+        var manhattan = viewModel.getListOrThrow().first { it.borough == Borough.MANHATTAN }
         // click manhattan once, show the schools
         viewModel.onSchoolListItemSelected(manhattan)
 
-        manhattan = viewModel.getSchoolList().value!!.schoolListItemUiModels.first { it.borough == Borough.MANHATTAN }
+        manhattan = viewModel.getListOrThrow().first { it.borough == Borough.MANHATTAN }
         // click manhattan twice, hide the schools
         viewModel.onSchoolListItemSelected(manhattan)
 
-        manhattan = viewModel.getSchoolList().value!!.schoolListItemUiModels.first { it.borough == Borough.MANHATTAN }
+        manhattan = viewModel.getListOrThrow().first { it.borough == Borough.MANHATTAN }
         // click manhattan three, show the schools
         viewModel.onSchoolListItemSelected(manhattan)
 
         val schoolList = viewModel.getSchoolList().value?.schoolListItemUiModels
 
         Assert.assertEquals(expected, schoolList)
+    }
+
+    @Test
+    fun `given the user clicks on the first school item in the list and the SAT data loads successfully then the expected list should be returned to the user`() {
+        val expected = listOf(
+            MANHATTAN_BOROUGH_ITEM.copy(isSelected = true),
+            MANHATTAN_SCHOOL_LIST_ITEM_1.copy(
+                isSelected = true,
+                satScoreData = TEST_SAT_DATA_SCHOOL_1
+            ),
+            MANHATTAN_SCHOOL_LIST_ITEM_2,
+            MANHATTAN_SCHOOL_LIST_ITEM_3,
+            BROOKLYN_BOROUGH_ITEM,
+            QUEEN_BOROUGH_ITEM,
+            STATEN_ISLAND_BOROUGH_ITEM,
+            BRONX_BOROUGH_ITEM,
+        )
+        val viewModel = getViewModel()
+
+        setupSatScoreDataInteractor(TEST_SAT_DATA_SCHOOL_1.dbn to TEST_SAT_DATA_SCHOOL_1)
+
+        val manhattan = viewModel.getListOrThrow().first { it.borough == Borough.MANHATTAN }
+        // click manhattan once, show the schools
+        viewModel.onSchoolListItemSelected(manhattan)
+
+        val firstSchool = viewModel.getListOrThrow()
+            .first { (it as? NycListItem.SchoolItemUiModel)?.school?.dbn == TEST_SCHOOL_1.dbn }
+        //click on the first school to show scores
+        viewModel.onSchoolListItemSelected(firstSchool)
+
+        Assert.assertEquals(expected, viewModel.getListOrThrow())
+    }
+
+    @Test
+    fun `given the user clicks on the first school item in the list twice and the SAT data loads successfully then the score item should not show`() {
+        val expected = listOf(
+            MANHATTAN_BOROUGH_ITEM.copy(isSelected = true),
+            MANHATTAN_SCHOOL_LIST_ITEM_1.copy(
+                isSelected = false, // score is not showing
+                satScoreData = TEST_SAT_DATA_SCHOOL_1
+            ),
+            MANHATTAN_SCHOOL_LIST_ITEM_2,
+            MANHATTAN_SCHOOL_LIST_ITEM_3,
+            BROOKLYN_BOROUGH_ITEM,
+            QUEEN_BOROUGH_ITEM,
+            STATEN_ISLAND_BOROUGH_ITEM,
+            BRONX_BOROUGH_ITEM,
+        )
+        val viewModel = getViewModel()
+
+        setupSatScoreDataInteractor(TEST_SAT_DATA_SCHOOL_1.dbn to TEST_SAT_DATA_SCHOOL_1)
+
+        val manhattan = viewModel.getListOrThrow().first { it.borough == Borough.MANHATTAN }
+        // click manhattan once, show the schools
+        viewModel.onSchoolListItemSelected(manhattan)
+
+        var firstSchool = viewModel.getListOrThrow()
+            .first { (it as? NycListItem.SchoolItemUiModel)?.school?.dbn == TEST_SCHOOL_1.dbn }
+        //click on the first school to show scores
+        viewModel.onSchoolListItemSelected(firstSchool)
+
+        firstSchool = viewModel.getListOrThrow()
+            .first { (it as? NycListItem.SchoolItemUiModel)?.school?.dbn == TEST_SCHOOL_1.dbn }
+        //click on the first school to show scores
+        viewModel.onSchoolListItemSelected(firstSchool)
+
+        Assert.assertEquals(expected, viewModel.getListOrThrow())
     }
 
     private fun getViewModel(): ComposeSchoolListViewModel {
@@ -144,13 +214,36 @@ class ComposeSchoolListViewModelImplTest {
         )
     }
 
+    private fun setupSatScoreDataInteractor(vararg scores: Pair<String, SatScoreData> = emptyArray()) {
+        scores.forEach { scorePair ->
+            val dbn = scorePair.first
+            val satScoreData = scorePair.second
+            every { getSatScoreDataInteractor.getSatScoreDataByDbn(dbn) } returns Single.just(
+                SatDataResponse.success(satScoreData)
+            )
+        }
+    }
+
+    private fun ComposeSchoolListViewModel.getListOrThrow(): List<NycListItem> {
+        return this.getSchoolList().value!!.schoolListItemUiModels
+    }
+
     companion object {
+
 
         val TEST_SCHOOL_1 = School.newBuilder()
             .dbn("326423")
             .name("test school 1")
             .borough(Borough.MANHATTAN)
             .webpageLink("www.test1.com")
+            .build()
+
+        val TEST_SAT_DATA_SCHOOL_1 = SatScoreData.newBuilder()
+            .dbn(TEST_SCHOOL_1.dbn)
+            .isDataAvailable(true)
+            .math(500)
+            .reading(500)
+            .writing(500)
             .build()
 
         val TEST_SCHOOL_2 = School.newBuilder()
