@@ -83,13 +83,13 @@ class ComposeSchoolListViewModelImplTest {
             BRONX_BOROUGH_ITEM,
         )
         val viewModel = getViewModel()
-        val schoolListItemUiModels = viewModel.getSchoolList().value?.schoolListItemUiModels
 
-        val manhattan = schoolListItemUiModels!!.first { it.borough == Borough.MANHATTAN }
-
-        // show the schools
+        var manhattan = viewModel.getSchoolList().value!!.schoolListItemUiModels.first { it.borough == Borough.MANHATTAN }
+        // click manhattan once, show the schools
         viewModel.onSchoolListItemSelected(manhattan)
-        // hide the schools
+
+        manhattan = viewModel.getSchoolList().value!!.schoolListItemUiModels.first { it.borough == Borough.MANHATTAN }
+        // click manhattan twice, hide the schools
         viewModel.onSchoolListItemSelected(manhattan)
 
         val schoolList = viewModel.getSchoolList().value?.schoolListItemUiModels
@@ -110,15 +110,17 @@ class ComposeSchoolListViewModelImplTest {
             BRONX_BOROUGH_ITEM,
         )
         val viewModel = getViewModel()
-        val schoolListItemUiModels = viewModel.getSchoolList().value?.schoolListItemUiModels
 
-        val manhattan = schoolListItemUiModels!!.first { it.borough == Borough.MANHATTAN }
+        var manhattan = viewModel.getSchoolList().value!!.schoolListItemUiModels.first { it.borough == Borough.MANHATTAN }
+        // click manhattan once, show the schools
+        viewModel.onSchoolListItemSelected(manhattan)
 
-        // show the schools
+        manhattan = viewModel.getSchoolList().value!!.schoolListItemUiModels.first { it.borough == Borough.MANHATTAN }
+        // click manhattan twice, hide the schools
         viewModel.onSchoolListItemSelected(manhattan)
-        // hide the schools
-        viewModel.onSchoolListItemSelected(manhattan)
-        // show the schools
+
+        manhattan = viewModel.getSchoolList().value!!.schoolListItemUiModels.first { it.borough == Borough.MANHATTAN }
+        // click manhattan three, show the schools
         viewModel.onSchoolListItemSelected(manhattan)
 
         val schoolList = viewModel.getSchoolList().value?.schoolListItemUiModels
