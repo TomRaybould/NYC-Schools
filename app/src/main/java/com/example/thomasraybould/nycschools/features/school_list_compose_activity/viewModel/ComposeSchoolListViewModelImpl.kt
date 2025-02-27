@@ -158,7 +158,6 @@ class ComposeSchoolListViewModelImpl @Inject constructor(
             val indexOfScore = indexOfSchool + 1
             if (indexOfScore <= nycListItems.lastIndex) {
                 val newList = getCurrentList().apply {
-                    removeAt(indexOfScore)
                     set(indexOfSchool, schoolItemUiModel.copy(isSelected = false, isLoading = false))
                 }
                 postUpdatedList(newList)
