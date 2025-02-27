@@ -73,6 +73,59 @@ class ComposeSchoolListViewModelImplTest {
         Assert.assertEquals(expected, schoolList)
     }
 
+    @Test
+    fun `given the user clicks on one of the boroughs 2 time then the schools for that borough should be hidden`() {
+        val expected = listOf(
+            MANHATTAN_BOROUGH_ITEM.copy(isSelected = false, isLoading = false),
+            BROOKLYN_BOROUGH_ITEM,
+            QUEEN_BOROUGH_ITEM,
+            STATEN_ISLAND_BOROUGH_ITEM,
+            BRONX_BOROUGH_ITEM,
+        )
+        val viewModel = getViewModel()
+        val schoolListItemUiModels = viewModel.getSchoolList().value?.schoolListItemUiModels
+
+        val manhattan = schoolListItemUiModels!!.first { it.borough == Borough.MANHATTAN }
+
+        // show the schools
+        viewModel.onSchoolListItemSelected(manhattan)
+        // hide the schools
+        viewModel.onSchoolListItemSelected(manhattan)
+
+        val schoolList = viewModel.getSchoolList().value?.schoolListItemUiModels
+
+        Assert.assertEquals(expected, schoolList)
+    }
+
+    @Test
+    fun `given the user clicks on one of the boroughs 3 time then the schools for that borough should be added to the list`() {
+        val expected = listOf(
+            MANHATTAN_BOROUGH_ITEM.copy(isSelected = true),
+            MANHATTAN_SCHOOL_LIST_ITEM_1,
+            MANHATTAN_SCHOOL_LIST_ITEM_2,
+            MANHATTAN_SCHOOL_LIST_ITEM_3,
+            BROOKLYN_BOROUGH_ITEM,
+            QUEEN_BOROUGH_ITEM,
+            STATEN_ISLAND_BOROUGH_ITEM,
+            BRONX_BOROUGH_ITEM,
+        )
+        val viewModel = getViewModel()
+        val schoolListItemUiModels = viewModel.getSchoolList().value?.schoolListItemUiModels
+
+        val manhattan = schoolListItemUiModels!!.first { it.borough == Borough.MANHATTAN }
+
+        // show the schools
+        viewModel.onSchoolListItemSelected(manhattan)
+        // hide the schools
+        viewModel.onSchoolListItemSelected(manhattan)
+        // show the schools
+        viewModel.onSchoolListItemSelected(manhattan)
+
+        val schoolList = viewModel.getSchoolList().value?.schoolListItemUiModels
+
+        Assert.assertEquals(expected, schoolList)
+    }
+
     private fun getViewModel(): ComposeSchoolListViewModel {
         return ComposeSchoolListViewModelImpl(
             getSchoolListInteractor,
