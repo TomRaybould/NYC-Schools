@@ -49,11 +49,11 @@ fun ScoreCardPreview() {
 @Composable
 fun ScoreCard(satScoreData: SatScoreData) {
     Card(
-        shape = RoundedCornerShape(0.dp, 0.dp, 10.dp, 0.dp),
+        shape = RoundedCornerShape(0.dp, 0.dp, 10.dp, 10.dp),
         modifier = Modifier
             .fillMaxWidth()
             .height(70.dp)
-            .padding(horizontal = 4.dp),
+            .padding(start = 4.dp),
     ) {
         Row(
             horizontalArrangement = Arrangement.SpaceEvenly,
