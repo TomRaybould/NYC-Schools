@@ -230,13 +230,12 @@ class ComposeSchoolListViewModelImplTest {
 
     companion object {
 
-
-        val TEST_SCHOOL_1 = School.newBuilder()
-            .dbn("326423")
-            .name("test school 1")
-            .borough(Borough.MANHATTAN)
-            .webpageLink("www.test1.com")
-            .build()
+        val TEST_SCHOOL_1 = School(
+            dbn = "326423",
+            name = "Test school 1",
+            borough = Borough.MANHATTAN,
+            webPageLink = "www.test1.com"
+        )
 
         val TEST_SAT_DATA_SCHOOL_1 = SatScoreData.newBuilder()
             .dbn(TEST_SCHOOL_1.dbn)
@@ -246,19 +245,19 @@ class ComposeSchoolListViewModelImplTest {
             .writing(500)
             .build()
 
-        val TEST_SCHOOL_2 = School.newBuilder()
-            .dbn("65437")
-            .name("test school 1")
-            .borough(Borough.MANHATTAN)
-            .webpageLink("www.test1.com")
-            .build()
+        val TEST_SCHOOL_2 = School(
+            dbn = "65437",
+            name = "Test school 2",
+            borough = Borough.MANHATTAN,
+            webPageLink = "www.test2.com"
+        )
 
-        val TEST_SCHOOL_3 = School.newBuilder()
-            .dbn("236547")
-            .name("test school 1")
-            .borough(Borough.MANHATTAN)
-            .webpageLink("www.test1.com")
-            .build()
+        val TEST_SCHOOL_3 = School(
+            dbn = "236547",
+            name = "Test school 3",
+            borough = Borough.MANHATTAN,
+            webPageLink = "www.test3.com"
+        )
 
         val MANHATTAN_SCHOOLS = listOf(
             TEST_SCHOOL_1,
