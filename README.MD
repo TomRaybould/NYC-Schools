@@ -1,7 +1,8 @@
 # NYC Schools
 <p>
-    Original done for an interview coding challenge, I now use 
-    this project to practice using technologies in Android.
+    Originally done for an interview coding challenge, I now 
+    use this project to practice using technologies in 
+    Android.
 </p>
 
 ## User overview
