@@ -81,7 +81,7 @@ fun SchoolListScreen(
             schoolListViewModel.onSchoolListItemSelected(nycListItem)
         },
         { schoolItemUiModel ->
-            schoolItemUiModel.websiteLink?.let { websiteLink ->
+            schoolItemUiModel.school.webPageLink?.let { websiteLink ->
                 schoolListViewModel.onLinkClicked(websiteLink)
             }
         })

@@ -21,7 +21,8 @@ class ComposeSchoolListViewModelImpl @Inject constructor(
     val schedulerProvider: SchedulerProvider
 ) : BaseViewModel(), ComposeSchoolListViewModel {
 
-    private val composeSchoolListUiModelLiveData: MutableLiveData<ComposeSchoolListUiModel> = MutableLiveData()
+    private val composeSchoolListUiModelLiveData: MutableLiveData<ComposeSchoolListUiModel> =
+        MutableLiveData()
     override val goToWebsite = MutableLiveData<String>()
 
     private val pendingDownloads = HashMap<String, Disposable>()
@@ -157,7 +158,10 @@ class ComposeSchoolListViewModelImpl @Inject constructor(
             val indexOfScore = indexOfSchool + 1
             if (indexOfScore <= nycListItems.lastIndex) {
                 val newList = getCurrentList().apply {
-                    set(indexOfSchool, schoolItemUiModel.copy(isSelected = false, isLoading = false))
+                    set(
+                        indexOfSchool,
+                        schoolItemUiModel.copy(isSelected = false, isLoading = false)
+                    )
                 }
                 postUpdatedList(newList)
             }
@@ -203,8 +207,7 @@ class ComposeSchoolListViewModelImpl @Inject constructor(
                     school = school,
                     isSelected = true,
                     isLoading = false,
-                    satScoreData = satScoreData,
-                    websiteLink = school.webPageLink
+                    satScoreData = satScoreData
                 )
             )
         }

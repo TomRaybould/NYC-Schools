@@ -267,7 +267,7 @@ class ComposeSchoolListViewModelImplTest {
 
         val MANHATTAN_SCHOOL_LIST_ITEM_1 = NycListItem.SchoolItemUiModel(
             borough = TEST_SCHOOL_1.borough,
-            school = TEST_SCHOOL_1
+            school = TEST_SCHOOL_1,
         )
 
         val MANHATTAN_SCHOOL_LIST_ITEM_2 = NycListItem.SchoolItemUiModel(

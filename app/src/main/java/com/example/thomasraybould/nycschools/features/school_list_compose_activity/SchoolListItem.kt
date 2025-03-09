@@ -136,7 +136,7 @@ fun SchoolItemContent(
             if (schoolItemUiModel.isSelected && schoolItemUiModel.satScoreData != null) {
                 ScoreCard(
                     satScoreData = schoolItemUiModel.satScoreData,
-                    websiteLink = schoolItemUiModel.websiteLink,
+                    websiteLink = schoolItemUiModel.school.webPageLink,
                     onLinkClicked = { onLinkClicked?.invoke() }
                 )
             }

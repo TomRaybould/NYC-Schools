@@ -21,8 +21,7 @@ sealed class NycListItem(open val borough: Borough) {
         val school: School,
         var isLoading: Boolean = false,
         var isSelected: Boolean = false,
-        val satScoreData: SatScoreData? = null,
-        val websiteLink: String? = null
+        val satScoreData: SatScoreData? = null
     ) : NycListItem(borough)
 
     companion object {
