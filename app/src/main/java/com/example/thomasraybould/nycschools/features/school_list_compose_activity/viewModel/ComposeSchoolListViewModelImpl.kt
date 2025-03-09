@@ -22,7 +22,7 @@ class ComposeSchoolListViewModelImpl @Inject constructor(
 ) : BaseViewModel(), ComposeSchoolListViewModel {
 
     private val composeSchoolListUiModelLiveData: MutableLiveData<ComposeSchoolListUiModel> = MutableLiveData()
-    override val toasts = MutableLiveData<String>()
+    override val goToWebsite = MutableLiveData<String>()
 
     private val pendingDownloads = HashMap<String, Disposable>()
 
@@ -55,7 +55,7 @@ class ComposeSchoolListViewModelImpl @Inject constructor(
     }
 
     override fun onLinkClicked(websiteLink: String) {
-        toasts.postValue(websiteLink)
+        goToWebsite.postValue(websiteLink)
     }
 
 

@@ -1,5 +1,7 @@
 package com.example.thomasraybould.nycschools.features.school_list_compose_activity
 
+import android.content.Intent
+import android.net.Uri
 import android.os.Bundle
 import android.widget.Toast
 import androidx.activity.compose.setContent
@@ -9,6 +11,7 @@ import com.example.thomasraybould.nycschools.features.school_list_compose_activi
 import com.example.thomasraybould.nycschools.features.school_list_compose_activity.viewModel.ComposeSchoolListViewModelImpl
 import dagger.android.AndroidInjection
 import javax.inject.Inject
+
 
 class SchoolListComposeActivity : AppCompatActivity() {
 
@@ -31,6 +34,11 @@ class SchoolListComposeActivity : AppCompatActivity() {
             schoolListUiModel.errorMessage?.let {
                 toast(it)
             }
+        }
+
+        schoolListViewModel.goToWebsite.observe(this) { webpageLink ->
+            val myIntent = Intent(Intent.ACTION_VIEW, Uri.parse("https://$webpageLink"))
+            startActivity(myIntent)
         }
 
         setContent {
