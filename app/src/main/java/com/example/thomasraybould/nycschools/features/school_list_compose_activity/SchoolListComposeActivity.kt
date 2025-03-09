@@ -5,14 +5,12 @@ import android.widget.Toast
 import androidx.activity.compose.setContent
 import androidx.appcompat.app.AppCompatActivity
 import androidx.lifecycle.ViewModelProvider
-import com.example.thomasraybould.nycschools.adapters.school_list_adapter.OnNycListItemSelectedListener
 import com.example.thomasraybould.nycschools.features.school_list_compose_activity.viewModel.ComposeSchoolListViewModel
 import com.example.thomasraybould.nycschools.features.school_list_compose_activity.viewModel.ComposeSchoolListViewModelImpl
-import com.example.thomasraybould.nycschools.features.uiModels.NycListItem
 import dagger.android.AndroidInjection
 import javax.inject.Inject
 
-class SchoolListComposeActivity : AppCompatActivity(), OnNycListItemSelectedListener {
+class SchoolListComposeActivity : AppCompatActivity() {
 
     @Inject
     lateinit var factory: ViewModelProvider.Factory
@@ -27,8 +25,7 @@ class SchoolListComposeActivity : AppCompatActivity(), OnNycListItemSelectedList
         AndroidInjection.inject(this)
 
         schoolListViewModel =
-            ViewModelProvider(this, factory).get(ComposeSchoolListViewModelImpl::class.java)
-                ?: return
+            ViewModelProvider(this, factory)[ComposeSchoolListViewModelImpl::class.java]
 
         schoolListViewModel.getSchoolList().observe(this) { schoolListUiModel ->
             schoolListUiModel.errorMessage?.let {
@@ -44,10 +41,6 @@ class SchoolListComposeActivity : AppCompatActivity(), OnNycListItemSelectedList
 
     private fun toast(message: String) {
         Toast.makeText(this, message, Toast.LENGTH_SHORT).show()
-    }
-
-    override fun onNycListItemSelected(schoolItemUiModel: NycListItem) {
-        schoolListViewModel.onSchoolListItemSelected(schoolItemUiModel)
     }
 
 }

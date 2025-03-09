@@ -5,6 +5,8 @@ import com.example.thomasraybould.nycschools.features.school_list_compose_activi
 import com.example.thomasraybould.nycschools.features.uiModels.NycListItem
 
 interface ComposeSchoolListViewModel {
+    val toasts : LiveData<String>
     fun getSchoolList(): LiveData<ComposeSchoolListUiModel>
     fun onSchoolListItemSelected(nycListItem: NycListItem)
+    fun onLinkClicked(websiteLink: String)
 }

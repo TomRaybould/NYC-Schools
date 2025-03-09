@@ -65,7 +65,7 @@ fun SchoolListScreenPreview() {
             set(index, it.copy(isSelected = !it.isSelected))
         }.toList()
         uiModel.value = ComposeSchoolListUiModel(newList)
-    })
+    }, {})
 }
 
 
@@ -75,14 +75,24 @@ fun SchoolListScreen(
 ) {
     val state =
         schoolListViewModel.getSchoolList().observeAsState(ComposeSchoolListUiModel(emptyList()))
-    SchoolListView(state.value) { schoolListViewModel.onSchoolListItemSelected(it) }
+    SchoolListView(
+        state.value,
+        { nycListItem ->
+            schoolListViewModel.onSchoolListItemSelected(nycListItem)
+        },
+        { schoolItemUiModel ->
+            schoolItemUiModel.websiteLink?.let { websiteLink ->
+                schoolListViewModel.onLinkClicked(websiteLink)
+            }
+        })
 }
 
 
 @Composable
 fun SchoolListView(
     composeSchoolListUiModel: ComposeSchoolListUiModel,
-    onNycListItemSelected: ((NycListItem) -> Unit)? = null
+    onNycListItemSelected: ((NycListItem) -> Unit),
+    onLinkClicked: ((NycListItem.SchoolItemUiModel) -> Unit)
 ) {
     Surface(
         Modifier
@@ -94,7 +104,10 @@ fun SchoolListView(
                 if (nycListItem is NycListItem.BoroughItemUiModel) {
                     BoroughItem(nycListItem, onNycListItemSelected)
                 } else if (nycListItem is NycListItem.SchoolItemUiModel) {
-                    SchoolItem(nycListItem, onNycListItemSelected)
+                    SchoolItem(
+                        nycListItem,
+                        onNycListItemSelected,
+                        { onLinkClicked.invoke(nycListItem) })
                 }
             }
         }

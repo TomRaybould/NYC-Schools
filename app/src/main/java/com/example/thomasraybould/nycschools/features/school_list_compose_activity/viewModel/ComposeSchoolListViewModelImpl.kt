@@ -22,6 +22,7 @@ class ComposeSchoolListViewModelImpl @Inject constructor(
 ) : BaseViewModel(), ComposeSchoolListViewModel {
 
     private val composeSchoolListUiModelLiveData: MutableLiveData<ComposeSchoolListUiModel> = MutableLiveData()
+    override val toasts = MutableLiveData<String>()
 
     private val pendingDownloads = HashMap<String, Disposable>()
 
@@ -52,6 +53,11 @@ class ComposeSchoolListViewModelImpl @Inject constructor(
             onSchoolSelected(nycListItem)
         }
     }
+
+    override fun onLinkClicked(websiteLink: String) {
+        toasts.postValue(websiteLink)
+    }
+
 
     private fun onBoroughSelected(boroughItemUiModel: NycListItem.BoroughItemUiModel) {
         val borough = boroughItemUiModel.borough
@@ -129,13 +135,6 @@ class ComposeSchoolListViewModelImpl @Inject constructor(
     }
 
     private fun failedToLoadList(borough: Borough) {
-        val newList = getCurrentList().map {
-            if (it is NycListItem.BoroughItemUiModel && it.borough == borough) {
-                it.isLoading = false
-                it
-            }
-        }
-
         postWithError("Failed to load schools")
     }
 
@@ -204,7 +203,8 @@ class ComposeSchoolListViewModelImpl @Inject constructor(
                     school = school,
                     isSelected = true,
                     isLoading = false,
-                    satScoreData = satScoreData
+                    satScoreData = satScoreData,
+                    websiteLink = school.webPageLink
                 )
             )
         }

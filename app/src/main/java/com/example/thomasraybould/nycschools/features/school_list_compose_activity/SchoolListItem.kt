@@ -37,28 +37,36 @@ fun SchoolPreview() {
     val schoolItemUiModels = mutableListOf(
         NycListItem.SchoolItemUiModel(
             borough = Borough.QUEENS,
-            school = School("","Test school not expanded", Borough.QUEENS),
+            school = School("", "Test school not expanded", Borough.QUEENS),
             isLoading = false,
             isSelected = false,
             satScoreData = satScoreData
         ),
         NycListItem.SchoolItemUiModel(
             borough = Borough.QUEENS,
-            school = School("","Test school long text not expanded, loading state", Borough.QUEENS),
+            school = School(
+                "",
+                "Test school long text not expanded, loading state",
+                Borough.QUEENS
+            ),
             isLoading = true,
             isSelected = false,
             satScoreData = satScoreData
         ),
         NycListItem.SchoolItemUiModel(
             borough = Borough.QUEENS,
-            school = School("","Test school long text not expanded, not loading state", Borough.QUEENS),
+            school = School(
+                "",
+                "Test school long text not expanded, not loading state",
+                Borough.QUEENS
+            ),
             isLoading = false,
             isSelected = false,
             satScoreData = satScoreData
         ),
         NycListItem.SchoolItemUiModel(
             borough = Borough.QUEENS,
-            school = School("","Test school expanded", Borough.QUEENS),
+            school = School("", "Test school expanded", Borough.QUEENS),
             isLoading = false,
             isSelected = true,
             satScoreData = satScoreData
@@ -79,7 +87,8 @@ fun SchoolPreview() {
 @Composable
 fun SchoolItem(
     schoolItemUiModel: NycListItem.SchoolItemUiModel,
-    onNycListItemSelected: ((NycListItem) -> Unit)? = null
+    onNycListItemSelected: ((NycListItem) -> Unit)? = null,
+    onLinkClicked: (() -> Unit)? = null
 ) {
     SchoolItemContent(
         modifier = Modifier
@@ -89,14 +98,17 @@ fun SchoolItem(
                 indication = null
             ) {
                 onNycListItemSelected?.invoke(schoolItemUiModel)
-            }, schoolItemUiModel = schoolItemUiModel
+            },
+        schoolItemUiModel = schoolItemUiModel,
+        onLinkClicked = onLinkClicked
     )
 }
 
 @Composable
 fun SchoolItemContent(
     modifier: Modifier = Modifier,
-    schoolItemUiModel: NycListItem.SchoolItemUiModel
+    schoolItemUiModel: NycListItem.SchoolItemUiModel,
+    onLinkClicked: (() -> Unit)? = null
 ) {
     Surface(modifier = modifier.animateContentSize()) {
         Column {
@@ -122,7 +134,11 @@ fun SchoolItemContent(
                 }
             }
             if (schoolItemUiModel.isSelected && schoolItemUiModel.satScoreData != null) {
-                ScoreCard(satScoreData = schoolItemUiModel.satScoreData)
+                ScoreCard(
+                    satScoreData = schoolItemUiModel.satScoreData,
+                    websiteLink = schoolItemUiModel.websiteLink,
+                    onLinkClicked = { onLinkClicked?.invoke() }
+                )
             }
         }
     }
