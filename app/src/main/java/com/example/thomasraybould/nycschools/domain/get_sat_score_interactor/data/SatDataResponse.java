@@ -1,6 +1,5 @@
 package com.example.thomasraybould.nycschools.domain.get_sat_score_interactor.data;
 
-import com.example.thomasraybould.nycschools.domain.get_sat_score_interactor.SatScoreDataDbRepo;
 import com.example.thomasraybould.nycschools.entities.SatScoreData;
 
 public class SatDataResponse {
