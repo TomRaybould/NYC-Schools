@@ -237,13 +237,13 @@ class ComposeSchoolListViewModelImplTest {
             webPageLink = "www.test1.com"
         )
 
-        val TEST_SAT_DATA_SCHOOL_1 = SatScoreData.newBuilder()
-            .dbn(TEST_SCHOOL_1.dbn)
-            .isDataAvailable(true)
-            .math(500)
-            .reading(500)
-            .writing(500)
-            .build()
+        val TEST_SAT_DATA_SCHOOL_1 = SatScoreData(
+            dbn = TEST_SCHOOL_1.dbn,
+            dataAvailable = true,
+            math = 500,
+            reading = 200,
+            writing = 250
+        )
 
         val TEST_SCHOOL_2 = School(
             dbn = "65437",
