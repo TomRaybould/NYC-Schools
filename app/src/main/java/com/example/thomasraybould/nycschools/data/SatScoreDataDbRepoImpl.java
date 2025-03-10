@@ -15,7 +15,7 @@ import javax.inject.Inject;
 import io.reactivex.Completable;
 import io.reactivex.Single;
 
-public class SatScoreDataDbRepoImpl implements SatScoreDataDbRepo{
+public class SatScoreDataDbRepoImpl implements SatScoreDataDbRepo {
 
     private final OpenDbHelper openDbHelper;
     private final SchedulerProvider schedulerProvider;
@@ -29,44 +29,44 @@ public class SatScoreDataDbRepoImpl implements SatScoreDataDbRepo{
     @Override
     public Single<SatDataResponse> getSatScoreDataByDbn(String dbn) {
 
-       return Single.fromCallable(() -> {
+        return Single.fromCallable(() -> {
 
-           String query = "SELECT * FROM " + OpenDbHelper.SCORE_DATA_TABLE
-                   + " WHERE " + OpenDbHelper.SCORE_DATA_DBN + " = " + "\"" + dbn + "\"";
+            String query = "SELECT * FROM " + OpenDbHelper.SCORE_DATA_TABLE
+                    + " WHERE " + OpenDbHelper.SCORE_DATA_DBN + " = " + "\"" + dbn + "\"";
 
-           SQLiteDatabase readableDatabase = openDbHelper.getReadableDatabase();
+            SQLiteDatabase readableDatabase = openDbHelper.getReadableDatabase();
 
-           Cursor cursor = readableDatabase.rawQuery(query, null);
+            Cursor cursor = readableDatabase.rawQuery(query, null);
 
-           SatScoreData satScoreData = null;
+            SatScoreData satScoreData = null;
 
-           if(cursor.moveToFirst()){
+            if (cursor.moveToFirst()) {
 
-               String dbnFromDb    = cursor.getString(0);
-               boolean isAvailable = cursor.getInt(1) == 1;
-               int math            = cursor.getInt(2);
-               int reading         = cursor.getInt(3);
-               int writing         = cursor.getInt(4);
+                String dbnFromDb = cursor.getString(0);
+                boolean isAvailable = cursor.getInt(1) == 1;
+                int math = cursor.getInt(2);
+                int reading = cursor.getInt(3);
+                int writing = cursor.getInt(4);
 
-               satScoreData = SatScoreData.newBuilder()
-                       .dbn(dbnFromDb)
-                       .isDataAvailable(isAvailable)
-                       .math(isAvailable ? math : -1)
-                       .reading(isAvailable ? reading : -1)
-                       .writing(isAvailable ? writing : -1)
-                       .build();
+                satScoreData =
+                        new SatScoreData(
+                                dbn,
+                                isAvailable,
+                                isAvailable ? math : -1,
+                                isAvailable ? reading : -1,
+                                isAvailable ? writing : -1
+                        );
+            }
 
-           }
+            cursor.close();
+            readableDatabase.close();
 
-           cursor.close();
-           readableDatabase.close();
+            if (satScoreData == null) {
+                return SatDataResponse.failure();
+            }
+            return SatDataResponse.success(satScoreData);
 
-           if(satScoreData == null){
-               return SatDataResponse.failure();
-           }
-           return SatDataResponse.success(satScoreData);
-
-       }).subscribeOn(schedulerProvider.db());
+        }).subscribeOn(schedulerProvider.db());
 
     }
 
@@ -75,18 +75,17 @@ public class SatScoreDataDbRepoImpl implements SatScoreDataDbRepo{
         return Completable.fromAction(() -> {
             ContentValues contentValues = new ContentValues();
 
-            contentValues.put(OpenDbHelper.SCORE_DATA_DBN,          satScoreData.getDbn());
-            contentValues.put(OpenDbHelper.SCORE_DATA_IS_AVAILABLE, satScoreData.isDataAvailable() ? 1 : 2);
-            contentValues.put(OpenDbHelper.SCORE_DATA_MATH,         satScoreData.getMath());
-            contentValues.put(OpenDbHelper.SCORE_DATA_READING,      satScoreData.getReading());
-            contentValues.put(OpenDbHelper.SCORE_DATA_WRITING,      satScoreData.getWriting());
+            contentValues.put(OpenDbHelper.SCORE_DATA_DBN, satScoreData.getDbn());
+            contentValues.put(OpenDbHelper.SCORE_DATA_IS_AVAILABLE, satScoreData.getDataAvailable() ? 1 : 2);
+            contentValues.put(OpenDbHelper.SCORE_DATA_MATH, satScoreData.getMath());
+            contentValues.put(OpenDbHelper.SCORE_DATA_READING, satScoreData.getReading());
+            contentValues.put(OpenDbHelper.SCORE_DATA_WRITING, satScoreData.getWriting());
 
             SQLiteDatabase writableDatabase = openDbHelper.getWritableDatabase();
 
             try {
                 writableDatabase.insertWithOnConflict(OpenDbHelper.SCORE_DATA_TABLE, null, contentValues, SQLiteDatabase.CONFLICT_ROLLBACK);
-            }
-            catch (Exception e){
+            } catch (Exception e) {
                 e.printStackTrace();
             }
 

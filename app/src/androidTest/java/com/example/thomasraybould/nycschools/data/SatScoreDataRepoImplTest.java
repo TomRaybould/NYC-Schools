@@ -37,8 +37,8 @@ public class SatScoreDataRepoImplTest {
         satScoreDataRepo.getSatScoreDataByDbn(dbn)
                 .test()
                 .assertValue(SatDataResponse::isSuccessful)
-                .assertValue(satDataResponse -> satDataResponse.getSatScoreData().getDbn().equals(dbn))
-                .assertValue(satDataResponse -> satDataResponse.getSatScoreData().isDataAvailable())
+                .assertValue(satDataResponse -> satDataResponse.getSatScoreData().dbn.equals(dbn))
+                .assertValue(satDataResponse -> satDataResponse.getSatScoreData().isDataAvailable)
                 .assertComplete();
 
     }
@@ -52,8 +52,8 @@ public class SatScoreDataRepoImplTest {
         satScoreDataRepo.getSatScoreDataByDbn(dbn)
                 .test()
                 .assertValue(SatDataResponse::isSuccessful)
-                .assertValue(satDataResponse -> satDataResponse.getSatScoreData().getDbn().equals(dbn))
-                .assertValue(satDataResponse -> !satDataResponse.getSatScoreData().isDataAvailable())
+                .assertValue(satDataResponse -> satDataResponse.getSatScoreData().dbn.equals(dbn))
+                .assertValue(satDataResponse -> !satDataResponse.getSatScoreData().isDataAvailable)
                 .assertComplete();
 
     }
@@ -67,8 +67,8 @@ public class SatScoreDataRepoImplTest {
         satScoreDataRepo.getSatScoreDataByDbn(dbn)
                 .test()
                 .assertValue(SatDataResponse::isSuccessful)
-                .assertValue(satDataResponse -> satDataResponse.getSatScoreData().getDbn().equals(dbn))
-                .assertValue(satDataResponse -> !satDataResponse.getSatScoreData().isDataAvailable())
+                .assertValue(satDataResponse -> satDataResponse.getSatScoreData().dbn.equals(dbn))
+                .assertValue(satDataResponse -> !satDataResponse.getSatScoreData().isDataAvailable)
                 .assertComplete();
 
     }

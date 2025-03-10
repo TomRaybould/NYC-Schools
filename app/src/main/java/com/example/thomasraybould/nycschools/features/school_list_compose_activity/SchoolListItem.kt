@@ -28,11 +28,13 @@ import com.example.thomasraybould.nycschools.features.uiModels.NycListItem
 @Composable
 fun SchoolPreview() {
 
-    val satScoreData = SatScoreData.newBuilder()
-        .math(300)
-        .reading(400)
-        .writing(500)
-        .build()
+    val satScoreData = SatScoreData(
+        dbn = "",
+        dataAvailable = true,
+        math = 300,
+        reading = 400,
+        writing = 500
+    )
 
     val schoolItemUiModels = mutableListOf(
         NycListItem.SchoolItemUiModel(

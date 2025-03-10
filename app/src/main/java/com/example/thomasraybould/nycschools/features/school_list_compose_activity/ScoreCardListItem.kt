@@ -30,16 +30,20 @@ import com.example.thomasraybould.nycschools.features.successColor
 fun ScoreCardPreview() {
     Column {
 
-        val satScoreData1 = SatScoreData.newBuilder()
-            .math(0)
-            .reading(400)
-            .writing(800)
-            .build()
-        val satScoreData2 = SatScoreData.newBuilder()
-            .math(100)
-            .reading(400)
-            .writing(800)
-            .build()
+        val satScoreData1 = SatScoreData(
+            dbn = "",
+            dataAvailable = true,
+            math = 300,
+            reading = 400,
+            writing = 500
+        )
+        val satScoreData2 = SatScoreData(
+            dbn = "",
+            dataAvailable = true,
+            math = 300,
+            reading = 400,
+            writing = 500
+        )
 
 
         ScoreCard(satScoreData1)

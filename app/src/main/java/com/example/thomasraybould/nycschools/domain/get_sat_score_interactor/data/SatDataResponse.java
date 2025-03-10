@@ -21,23 +21,16 @@ public class SatDataResponse {
         return isSuccessful;
     }
 
-    public static SatDataResponse failure(){
-        return new SatDataResponse(false, SatScoreData.newBuilder().build());
+    public static SatDataResponse failure() {
+        return new SatDataResponse(false, new SatScoreData("", false, -1, -1, -1));
     }
 
-    public static SatDataResponse success(SatScoreData satScoreData){
+    public static SatDataResponse success(SatScoreData satScoreData) {
         return new SatDataResponse(true, satScoreData);
     }
 
     public static SatDataResponse noDataAvailable(String dbn) {
-        SatScoreData satScoreData = SatScoreData.newBuilder()
-                .dbn(dbn)
-                .isDataAvailable(false)
-                .math(-1)
-                .reading(-1)
-                .writing(-1)
-                .build();
-
+        SatScoreData satScoreData = new SatScoreData(dbn, false, -1, -1, -1);
         return SatDataResponse.success(satScoreData);
     }
 }
