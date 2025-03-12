@@ -1,5 +1,7 @@
 package com.example.thomasraybould.nycschools.features.school_list_compose_activity
 
+import android.content.Context
+import android.content.Intent
 import android.os.Bundle
 import android.widget.Toast
 import androidx.activity.compose.setContent
@@ -47,6 +49,15 @@ class SchoolListComposeActivity : AppCompatActivity() {
 
     private fun toast(message: String) {
         Toast.makeText(this, message, Toast.LENGTH_SHORT).show()
+    }
+
+    companion object {
+
+        fun startActivity(context: Context){
+            val intent = Intent(context, SchoolListComposeActivity::class.java)
+            context.startActivity(intent)
+        }
+
     }
 
 }

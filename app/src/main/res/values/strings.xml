@@ -5,4 +5,12 @@
     <string name="reading">Reading</string>
     <string name="visit_website">Visit Website</string>
     <string name="no_score_available">N/A</string>
+
+    //Selector activity
+
+    <string name="selector_activity_title">Tech Stack Selector</string>
+    <string name="selector_activity_subtitle">Choose an activity below to see the app built using that tech:</string>
+    <string name="rx_constraint_layout">Rx Java with Constraint Layout</string>
+    <string name="rx_compose">Rx Java with JetPack Compose</string>
+
 </resources>

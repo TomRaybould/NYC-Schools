@@ -1,5 +1,7 @@
 package com.example.thomasraybould.nycschools.features.school_list_activity
 
+import android.content.Context
+import android.content.Intent
 import android.os.Bundle
 import android.widget.Toast
 import androidx.appcompat.app.AppCompatActivity
@@ -10,6 +12,7 @@ import com.example.thomasraybould.nycschools.R
 import com.example.thomasraybould.nycschools.adapters.school_list_adapter.OnSchoolListItemSelectedListener
 import com.example.thomasraybould.nycschools.adapters.school_list_adapter.SchoolListAdapter
 import com.example.thomasraybould.nycschools.adapters.school_list_adapter.SchoolListItemUiModel
+import com.example.thomasraybould.nycschools.features.school_list_compose_activity.SchoolListComposeActivity
 import dagger.android.AndroidInjection
 import javax.inject.Inject
 
@@ -53,5 +56,14 @@ class SchoolListActivity : AppCompatActivity(), OnSchoolListItemSelectedListener
         schoolListItemUiModel?.let {
             schoolListViewModel?.onSchoolListItemSelected(it)
         }
+    }
+
+    companion object {
+
+        fun startActivity(context: Context){
+            val intent = Intent(context, SchoolListActivity::class.java)
+            context.startActivity(intent)
+        }
+
     }
 }
