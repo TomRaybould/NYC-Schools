@@ -17,11 +17,12 @@ class WebViewActivity : AppCompatActivity() {
         val webView = findViewById<WebView>(R.id.webView)
 
         webView.webViewClient = WebViewClient()
+
         intent.getStringExtra(URL_KEY)
             ?.let { webpageUrl ->
-                if (webpageUrl.contains("http")) {
-                    webView.loadUrl(webpageUrl)
-                }else{
+                if (webpageUrl.contains("http") && !webpageUrl.contains("https")) {
+                    webView.loadUrl(webpageUrl.replace("http", "https"))
+                } else {
                     webView.loadUrl("https://$webpageUrl")
                 }
             }
