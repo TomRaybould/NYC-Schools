@@ -13,6 +13,8 @@ import com.example.thomasraybould.nycschools.R
 import com.example.thomasraybould.nycschools.adapters.school_list_adapter.OnSchoolListItemSelectedListener
 import com.example.thomasraybould.nycschools.adapters.school_list_adapter.SchoolListAdapter
 import com.example.thomasraybould.nycschools.adapters.school_list_adapter.SchoolListItemUiModel
+import com.example.thomasraybould.nycschools.features.school_list_activity.viewModel.SchoolListViewModel
+import com.example.thomasraybould.nycschools.features.school_list_activity.viewModel.SchoolListViewModelImpl
 import com.example.thomasraybould.nycschools.features.school_list_compose_activity.SchoolListComposeActivity
 import dagger.android.AndroidInjection
 import javax.inject.Inject

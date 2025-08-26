@@ -1,4 +1,4 @@
-package com.example.thomasraybould.nycschools.features.school_list_activity
+package com.example.thomasraybould.nycschools.features.school_list_activity.viewModel
 
 import androidx.lifecycle.LiveData
 import androidx.lifecycle.MutableLiveData
@@ -11,15 +11,13 @@ import com.example.thomasraybould.nycschools.domain.get_school_list_interactor.d
 import com.example.thomasraybould.nycschools.entities.Borough
 import com.example.thomasraybould.nycschools.entities.SatScoreData
 import com.example.thomasraybould.nycschools.entities.School
-import com.example.thomasraybould.nycschools.rx_util.SchedulerProvider
 import com.example.thomasraybould.nycschools.features.base.BaseViewModel
-
+import com.example.thomasraybould.nycschools.features.school_list_activity.SchoolListUiModel
+import com.example.thomasraybould.nycschools.rx_util.SchedulerProvider
+import io.reactivex.disposables.Disposable
 import java.util.ArrayList
 import java.util.HashMap
-
 import javax.inject.Inject
-
-import io.reactivex.disposables.Disposable
 
 class SchoolListViewModelImpl @Inject constructor(
     private val getSchoolListInteractor: GetSchoolListInteractor,

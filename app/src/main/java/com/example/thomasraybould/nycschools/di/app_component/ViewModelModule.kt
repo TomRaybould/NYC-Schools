@@ -2,7 +2,7 @@ package com.example.thomasraybould.nycschools.di.app_component
 
 import androidx.lifecycle.ViewModel
 import androidx.lifecycle.ViewModelProvider
-import com.example.thomasraybould.nycschools.features.school_list_activity.SchoolListViewModelImpl
+import com.example.thomasraybould.nycschools.features.school_list_activity.viewModel.SchoolListViewModelImpl
 import com.example.thomasraybould.nycschools.features.school_list_compose_activity.viewModel.ComposeSchoolListViewModelImpl
 import dagger.Binds
 import dagger.MapKey
