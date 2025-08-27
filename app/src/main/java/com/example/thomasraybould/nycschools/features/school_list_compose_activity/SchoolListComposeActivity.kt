@@ -8,6 +8,7 @@ import androidx.activity.compose.setContent
 import androidx.appcompat.app.AppCompatActivity
 import androidx.lifecycle.ViewModelProvider
 import com.example.thomasraybould.nycschools.R
+import com.example.thomasraybould.nycschools.features.school_list_compose_activity.view.SchoolListScreen
 import com.example.thomasraybould.nycschools.features.school_list_compose_activity.viewModel.ComposeSchoolListViewModel
 import com.example.thomasraybould.nycschools.features.school_list_compose_activity.viewModel.ComposeSchoolListViewModelImpl
 import com.example.thomasraybould.nycschools.features.web_view_activity.WebViewActivity

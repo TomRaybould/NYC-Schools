@@ -1,4 +1,4 @@
-package com.example.thomasraybould.nycschools.features.school_list_compose_activity
+package com.example.thomasraybould.nycschools.features.school_list_compose_activity.view
 
 import androidx.compose.foundation.BorderStroke
 import androidx.compose.foundation.Image
@@ -54,15 +54,16 @@ fun BoroughItem(
     boroughItemUiModel: NycListItem.BoroughItemUiModel,
     onNycListItemSelected: ((NycListItem) -> Unit)? = null
 ) {
-    ListItemWithUnderline(modifier = Modifier
-        .clickable(
-            interactionSource = remember { MutableInteractionSource() },
-            indication = null
-        ) {
-            onNycListItemSelected?.invoke(
-                boroughItemUiModel
-            )
-        }) {
+    ListItemWithUnderline(
+        modifier = Modifier
+            .clickable(
+                interactionSource = remember { MutableInteractionSource() },
+                indication = null
+            ) {
+                onNycListItemSelected?.invoke(
+                    boroughItemUiModel
+                )
+            }) {
         BoroughContent(boroughItemUiModel)
     }
 }

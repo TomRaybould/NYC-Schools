@@ -1,4 +1,4 @@
-package com.example.thomasraybould.nycschools.features.school_list_compose_activity
+package com.example.thomasraybould.nycschools.features.school_list_compose_activity.view
 
 import androidx.compose.animation.animateContentSize
 import androidx.compose.foundation.clickable
