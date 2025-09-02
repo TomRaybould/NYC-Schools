@@ -76,7 +76,7 @@ mockk = { module = "io.mockk:mockk", version.ref = "mockk" }
 androidx-core-testing = { module = "androidx.arch.core:core-testing", version.ref = "androidx-core-testing" }
 
 [plugins]
-
-#compose
-org-jetbrains-kotlin-android = { id = "org.jetbrains.kotlin.android", version.ref = "kotlin" }
+# Add these lines
+android-application = { id = "com.android.application", version.ref = "gradle" }
+jetbrains-kotlin-android = { id = "org.jetbrains.kotlin.android", version.ref = "kotlin" }
 compose-compiler = { id = "org.jetbrains.kotlin.plugin.compose", version.ref = "kotlin" }
