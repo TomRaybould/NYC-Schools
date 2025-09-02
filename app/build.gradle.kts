@@ -7,11 +7,11 @@ plugins {
 
 android {
     namespace = "com.example.thomasraybould.nycschools"
-    compileSdk = 35
+    compileSdk = 36
     defaultConfig {
         applicationId = "com.example.thomasraybould.nycschools"
-        minSdkVersion(21)
-        targetSdkVersion(33)
+        minSdk = 21
+        targetSdk = 33
         versionCode = 1
         versionName = "1.0"
         testInstrumentationRunner = "androidx.test.runner.AndroidJUnitRunner"
