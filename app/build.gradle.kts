@@ -1,0 +1,90 @@
+plugins {
+    alias(libs.plugins.compose.compiler)
+    id("com.android.application")
+    id("kotlin-android")
+    id("kotlin-kapt")
+}
+
+android {
+    namespace = "com.example.thomasraybould.nycschools"
+    compileSdk = 35
+    defaultConfig {
+        applicationId = "com.example.thomasraybould.nycschools"
+        minSdkVersion(21)
+        targetSdkVersion(33)
+        versionCode = 1
+        versionName = "1.0"
+        testInstrumentationRunner = "androidx.test.runner.AndroidJUnitRunner"
+    }
+    buildTypes {
+        release {
+            isMinifyEnabled = false
+            proguardFiles(getDefaultProguardFile("proguard-android.txt"), "proguard-rules.pro")
+        }
+    }
+    compileOptions {
+        sourceCompatibility = JavaVersion.VERSION_17
+        targetCompatibility = JavaVersion.VERSION_17
+    }
+    kotlinOptions {
+        jvmTarget = JavaVersion.VERSION_17.toString()
+    }
+    dataBinding {
+        isEnabled = true
+    }
+    buildFeatures {
+        compose = true
+    }
+}
+
+dependencies {
+    implementation(libs.androidxAppCompat)
+    implementation(libs.androidxAppCompatActivityCompose)
+    implementation(libs.androidxConstraintLayout)
+    implementation(libs.androidxRecyclerView)
+    implementation(libs.androidxCoreKtx)
+    implementation(libs.androidxLifecycleViewModel)
+    implementation(libs.androidxComposeRuntimeLivedata)
+    testImplementation(libs.junit)
+    androidTestImplementation(libs.androidxTestRunner)
+    androidTestImplementation(libs.espressoCore)
+
+    // Dagger Dependencies
+    implementation(libs.dagger)
+    implementation(libs.daggerAndroidSupport)
+    kapt(libs.daggerCompiler)
+    kapt(libs.daggerAndroidProcessor)
+
+    // RxJava
+    implementation(libs.rxJava)
+    implementation(libs.rxAndroid)
+
+    // Networking
+    implementation(libs.okhttp)
+
+    // Image Loading
+    implementation(libs.glide)
+
+    // Kotlin Standard Library
+    implementation(libs.kotlinStdlib)
+
+    //compose
+    implementation(libs.composeBom)
+    androidTestImplementation(libs.composeBom)
+
+    // Material Design 3
+    implementation(libs.material3)
+
+    // Android Studio Preview support
+    implementation(libs.uiToolingPreview)
+    debugImplementation(libs.uiTooling)
+
+    // UI Tests
+    androidTestImplementation(libs.uiTestJUnit4)
+    debugImplementation(libs.uiTestManifest)
+
+
+    // Testing
+    testImplementation(libs.mockk)
+    testImplementation(libs.androidx.core.testing)
+}
